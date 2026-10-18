@@ -161,10 +161,10 @@ const TRACKED_CASE_SETTINGS = {
         commit: 'abc2ca544734957f5d58d8125f53eaef21d4d989',
         filterIds: [2, 3, 4, 17, 18, 19, 20, 21, 22, 208, 216, 217, 238, 255, 256, 257, 259],
     },
-    'sochi-camera-234715': {
-        version: '5.4.3.83',
-        commit: 'ac94c3d327ac366f3cd04d78955560bb8e916a78',
-        filterIds: [1, 2, 10],
+    'r10-net-238417': {
+        version: '5.4.3.127',
+        commit: 'd2d32b70f7df1f4cd3f27b6031529b7fef0ab706',
+        filterIds: [2, 10, 13],
     },
 } as const;
 

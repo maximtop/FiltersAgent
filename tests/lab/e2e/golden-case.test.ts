@@ -264,11 +264,11 @@ describe('golden E2E case loading', () => {
             '5.4.3.91',
         ],
         [
-            'sochi-camera-234715',
-            234715,
-            'f51fe5e9300fa9e3acac5999514ad81f4fa0454c12d0f348bbc67bd44ef035ee',
-            'e741a790d92e7f4e326195bd2fbac3d1a567f434',
-            '5.4.3.83',
+            'r10-net-238417',
+            238417,
+            'bcbbd4fa2cb8585680b14f2985a8cf0cd9a697a88529fea5b4b60f10fbe7c4c3',
+            '21e4fea1d1764052318d0034b35d6450e9840340',
+            '5.4.3.127',
         ],
     ] as const)(
         'loads tracked v3 case %s and its separate human oracle',
