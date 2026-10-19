@@ -4,17 +4,18 @@
 #
 # Dispatch it from the default branch. `ref` names the branch, tag or commit whose code and cases
 # run, so a branch cut before this workflow existed runs too, as long as it has the series options
-# of `pnpm test:e2e` (`--output-root`, `--knowledge-base-sha`) and
-# lab/benchmark/redact-diagnostics.ts; the v1.x tags have neither. The plan job pins `ref` to one
-# commit and one KnowledgeBase commit, and every case job runs exactly those: a series never mixes
-# agent revisions. The model is reached through the Anthropic Messages API with the
-# BENCHMARK_ANTHROPIC_KEY secret. In a public repository the logs and the artifacts are public:
+# of `pnpm test:e2e` (`--output-root`, `--knowledge-base-sha`); the v1.x tags do not. The plan job
+# pins `ref` to one commit and one KnowledgeBase commit, and every case job runs exactly those: a
+# series never mixes agent revisions. The model is reached through the Anthropic Messages API with
+# the BENCHMARK_ANTHROPIC_KEY secret. In a public repository the logs and the artifacts are public:
 # they hold the agent's reports and screenshots of the case sites.
 #
-# A case job fails when `pnpm test:e2e` exits 3: the case ended as `infrastructure_failure` or
-# `site_unreachable`. Re-run a failed job only when its record says `transient` or
-# `site_unreachable`: `provider_rejected` and `intake_skipped` count against the model, and a re-run
-# overwrites that counted failure. Nothing retries on its own: every repeat is paid for.
+# A case job fails when `pnpm test:e2e` exits 3 (the case ended as `infrastructure_failure` or
+# `site_unreachable`) or when the command failed before it wrote a record. Re-run case jobs one by
+# one, not with "Re-run failed jobs": a record that says `provider_rejected` or `intake_skipped` is
+# a failure counted against the model, and a re-run overwrites it. Re-run a job whose record says
+# `transient` or `site_unreachable`, or that wrote no record, and then the summary job. Nothing
+# retries on its own: every repeat is paid for.
 name: Benchmark series
 
 run-name: Benchmark ${{ inputs.model }} on ${{ inputs.ref }}
@@ -48,10 +49,12 @@ on:
                 description: Full KnowledgeBase commit; empty pins its current master
                 type: string
                 default: ''
-            # One Sonnet case reads about 13,000-51,000 uncached input tokens a minute (sonnet-5.5
-            # series r3 and r4), so five cases stay within a low-tier rate limit. A 429 that outlasts
-            # the request retries ends the case as an infrastructure failure after it was paid for.
-            # Raise it as far as the key's tier allows: 20 cases take about 41 minutes at 5 and
+            # Only uncached and cache-write input tokens count toward the input rate limit. One
+            # Sonnet case spends 33,000-116,000 of them per minute of its run, median 53,000
+            # (sonnet-5.5 series r4), so five cases peak under 600,000 a minute: well inside the
+            # 2,000,000 that Sonnet and Opus 5.5 get from the Start tier up, and about Fable's
+            # 500,000 there. A 429 that outlasts the request retries ends the case as an
+            # infrastructure failure after it was paid for. 20 cases take about 41 minutes at 5 and
             # about 24 at 10.
             max-parallel:
                 description: Cases running at the same time; keep within the key's rate limit
@@ -254,7 +257,7 @@ jobs:
                       | pnpm -s exec tsx lab/benchmark/redact-diagnostics.ts \
                       | tee "tmp/series/logs/$CASE.log"
 
-            # `overwrite` lets "Re-run failed jobs" replace the record of the attempt it repeats.
+            # `overwrite` lets a re-run of a case job replace the record of the attempt it repeats.
             - name: Upload the evaluation
               if: ${{ always() }}
               uses: actions/upload-artifact@v7
