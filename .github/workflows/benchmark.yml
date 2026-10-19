@@ -51,11 +51,9 @@ on:
                 default: ''
             # Only uncached and cache-write input tokens count toward the input rate limit. One
             # Sonnet case spends 33,000-116,000 of them per minute of its run, median 53,000
-            # (sonnet-5.5 series r4), so five cases peak under 600,000 a minute: well inside the
-            # 2,000,000 that Sonnet and Opus 5.5 get from the Start tier up, and about Fable's
-            # 500,000 there. A 429 that outlasts the request retries ends the case as an
-            # infrastructure failure after it was paid for. 20 cases take about 41 minutes at 5 and
-            # about 24 at 10.
+            # (sonnet-5.5 series r4), so five cases peak under 600,000 a minute; size it to the
+            # key's tier. A 429 that outlasts the request retries ends the case as an infrastructure
+            # failure after it was paid for. 20 cases take about 41 minutes at 5 and about 24 at 10.
             max-parallel:
                 description: Cases running at the same time; keep within the key's rate limit
                 type: number
