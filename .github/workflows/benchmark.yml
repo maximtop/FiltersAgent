@@ -6,9 +6,14 @@
 # run, so a branch cut before this workflow existed runs too, as long as it has the series options
 # of `pnpm test:e2e` (`--output-root`, `--knowledge-base-sha`); the v1.x tags do not. The plan job
 # pins `ref` to one commit and one KnowledgeBase commit, and every case job runs exactly those: a
-# series never mixes agent revisions. The model is reached through the Anthropic Messages API with
-# the BENCHMARK_ANTHROPIC_KEY secret. In a public repository the logs and the artifacts are public:
+# series never mixes agent revisions. In a public repository the logs and the artifacts are public:
 # they hold the agent's reports and screenshots of the case sites.
+#
+# `provider` picks the model endpoint: `anthropic` is the Anthropic Messages API with the
+# BENCHMARK_ANTHROPIC_KEY secret; `gateway` is an OpenAI-compatible endpoint whose URL and key come
+# only from the BENCHMARK_GATEWAY_URL and BENCHMARK_GATEWAY_KEY secrets. The gateway URL must never
+# be published, its host included: every job masks both first, the case log passes the diagnostics
+# redactor, and every artifact is redacted and checked for the host before it is uploaded.
 #
 # A case job fails when `pnpm test:e2e` exits 3 (the case ended as `infrastructure_failure` or
 # `site_unreachable`) or when the command failed before it wrote a record. Re-run case jobs one by
@@ -27,12 +32,23 @@ on:
                 description: Branch, tag or commit whose code and cases run; v1.x tags cannot run
                 type: string
                 default: master
+            provider:
+                description: Model endpoint
+                type: choice
+                options:
+                    - anthropic
+                    - gateway
+                default: anthropic
             model:
-                description: Anthropic model id; it must be in BENCHMARK_PRICING below
+                description: Model id; it must be in BENCHMARK_PRICING below
                 type: string
                 default: claude-sonnet-5-5
-            # Nothing checks the two limits against the model: a value above the model's own limit
-            # fails every request with HTTP 400, in every case job.
+            vision-model:
+                description: Vision model id, empty for the model itself; it must be priced too
+                type: string
+                default: ''
+            # Nothing checks the limits against the models: a value above a model's own limit fails
+            # every request with HTTP 400, in every case job.
             context-window-tokens:
                 description: LLM_CONTEXT_WINDOW_TOKENS; must match the model's context window
                 type: number
@@ -41,6 +57,10 @@ on:
                 description: LLM_MAX_OUTPUT_TOKENS; must match the model's full completion limit
                 type: number
                 default: 128000
+            vision-max-output-tokens:
+                description: LLM_VISION_MAX_OUTPUT_TOKENS; required when the vision model differs
+                type: string
+                default: ''
             cases:
                 description: Case directory names separated by spaces, or all
                 type: string
@@ -78,7 +98,7 @@ env:
     # it stops the series in the plan job: a series without costs cannot be compared.
     BENCHMARK_PRICING: |
         {
-            "source": "Anthropic list prices, checked 2026-10-19; cache writes at the 5-minute rate (1.25x input). claude-haiku-5-5 is priced for prompts up to 100,000 tokens and costs 5x above that, which this table cannot express, so its cost is a lower bound.",
+            "source": "Claude models: Anthropic list prices, checked 2026-10-19; cache writes at the 5-minute rate (1.25x input). claude-haiku-5-5 is priced for prompts up to 100,000 tokens and costs 5x above that, which this table cannot express, so its cost is a lower bound. deepseek-flash and gemini-3.7-flash: models.dev catalog rates of 2026-10-14.",
             "models": {
                 "claude-fable-5-1": {
                     "inputUsdPerMillionTokens": 10,
@@ -103,14 +123,26 @@ env:
                     "outputUsdPerMillionTokens": 0.5,
                     "cachedInputUsdPerMillionTokens": 0.01,
                     "cacheWriteUsdPerMillionTokens": 0.125
+                },
+                "deepseek-flash": {
+                    "inputUsdPerMillionTokens": 0.15,
+                    "outputUsdPerMillionTokens": 0.6,
+                    "cachedInputUsdPerMillionTokens": 0.02,
+                    "cacheWriteUsdPerMillionTokens": 0.15
+                },
+                "gemini-3.7-flash": {
+                    "inputUsdPerMillionTokens": 0.75,
+                    "outputUsdPerMillionTokens": 3.75,
+                    "cachedInputUsdPerMillionTokens": 0.075,
+                    "cacheWriteUsdPerMillionTokens": 0.79167
                 }
             }
         }
 
 jobs:
-    # Checks the key, the model's price, the case names and the KnowledgeBase commit before any case
-    # job starts, so a typo in them costs one short job and no model call. The token limits are not
-    # checked here.
+    # Checks the provider's secrets, the models' prices, the case names and the KnowledgeBase commit
+    # before any case job starts, so a mistake in them costs one short job and no model call. The
+    # token limits are not checked here.
     plan:
         name: Plan the series
         runs-on: ubuntu-latest
@@ -120,17 +152,61 @@ jobs:
             cases: ${{ steps.cases.outputs.cases }}
             knowledge-base-sha: ${{ steps.knowledge-base.outputs.sha }}
         steps:
-            - name: Check the model key and price
+            # Masks are per job, so every job starts with this step. GitHub masks the secret itself,
+            # but an error such as a DNS failure names the host alone. The host is also kept for the
+            # artifact check below.
+            - &mask-gateway
+              name: Mask the gateway endpoint
               env:
-                  LLM_API_KEY: ${{ secrets.BENCHMARK_ANTHROPIC_KEY }}
-                  MODEL: ${{ inputs.model }}
+                  GATEWAY_URL: ${{ secrets.BENCHMARK_GATEWAY_URL }}
               run: |
-                  if [ -z "$LLM_API_KEY" ]; then
-                      echo "::error::Secret BENCHMARK_ANTHROPIC_KEY is not set in this repository."
+                  if [ -z "$GATEWAY_URL" ]; then
+                      exit 0
+                  fi
+                  host="${GATEWAY_URL#*://}"
+                  host="${host%%/*}"
+                  host="${host##*@}"
+                  host="${host%%:*}"
+                  if [ -z "$host" ]; then
+                      echo "::error::Secret BENCHMARK_GATEWAY_URL has no host."
                       exit 1
                   fi
-                  if ! jq -e --arg model "$MODEL" '.models | has($model)' <<<"$BENCHMARK_PRICING" >/dev/null; then
-                      echo "::error::Model $MODEL has no price in BENCHMARK_PRICING."
+                  echo "::add-mask::$GATEWAY_URL"
+                  echo "::add-mask::$host"
+                  printf '%s' "$host" > "$RUNNER_TEMP/gateway-host"
+
+            - name: Check the provider and the prices
+              env:
+                  PROVIDER: ${{ inputs.provider }}
+                  ANTHROPIC_KEY: ${{ secrets.BENCHMARK_ANTHROPIC_KEY }}
+                  GATEWAY_URL: ${{ secrets.BENCHMARK_GATEWAY_URL }}
+                  GATEWAY_KEY: ${{ secrets.BENCHMARK_GATEWAY_KEY }}
+                  MODEL: ${{ inputs.model }}
+                  VISION_MODEL: ${{ inputs.vision-model }}
+                  VISION_MAX_OUTPUT_TOKENS: ${{ inputs.vision-max-output-tokens }}
+              run: |
+                  missing=()
+                  case "$PROVIDER" in
+                      anthropic)
+                          [ -n "$ANTHROPIC_KEY" ] || missing+=(BENCHMARK_ANTHROPIC_KEY)
+                          ;;
+                      gateway)
+                          [ -n "$GATEWAY_URL" ] || missing+=(BENCHMARK_GATEWAY_URL)
+                          [ -n "$GATEWAY_KEY" ] || missing+=(BENCHMARK_GATEWAY_KEY)
+                          ;;
+                  esac
+                  if [ ${#missing[@]} -gt 0 ]; then
+                      echo "::error::Provider $PROVIDER needs secrets this repository lacks: ${missing[*]}."
+                      exit 1
+                  fi
+                  for model in "$MODEL" ${VISION_MODEL:+"$VISION_MODEL"}; do
+                      if ! jq -e --arg model "$model" '.models | has($model)' <<<"$BENCHMARK_PRICING" >/dev/null; then
+                          echo "::error::Model $model has no price in BENCHMARK_PRICING."
+                          exit 1
+                      fi
+                  done
+                  if [ -n "$VISION_MODEL" ] && [ "$VISION_MODEL" != "$MODEL" ] && [ -z "$VISION_MAX_OUTPUT_TOKENS" ]; then
+                      echo "::error::vision-max-output-tokens is required when vision-model differs from model."
                       exit 1
                   fi
 
@@ -204,6 +280,8 @@ jobs:
             matrix:
                 case: ${{ fromJSON(needs.plan.outputs.cases) }}
         steps:
+            - *mask-gateway
+
             - name: Check out the pinned commit
               uses: actions/checkout@v6
               with:
@@ -237,11 +315,17 @@ jobs:
             # `git status`, and an untracked file would mark the run dirty. The log becomes a public
             # artifact, so it passes the diagnostics redactor first: GitHub masks secrets in the job
             # log only.
+            # The provider's endpoint and key are chosen here and the other secrets are unset, so
+            # the run holds only the key it uses. The optional vision variables are exported only
+            # when given: an empty LLM_VISION_MAX_OUTPUT_TOKENS reads as 0.
             - name: Run the case
               env:
-                  LLM_API: anthropic-messages
-                  LLM_BASE_URL: https://api.anthropic.com
-                  LLM_API_KEY: ${{ secrets.BENCHMARK_ANTHROPIC_KEY }}
+                  PROVIDER: ${{ inputs.provider }}
+                  ANTHROPIC_KEY: ${{ secrets.BENCHMARK_ANTHROPIC_KEY }}
+                  GATEWAY_URL: ${{ secrets.BENCHMARK_GATEWAY_URL }}
+                  GATEWAY_KEY: ${{ secrets.BENCHMARK_GATEWAY_KEY }}
+                  VISION_MODEL: ${{ inputs.vision-model }}
+                  VISION_MAX_OUTPUT_TOKENS: ${{ inputs.vision-max-output-tokens }}
                   LLM_MODEL: ${{ inputs.model }}
                   LLM_CONTEXT_WINDOW_TOKENS: ${{ inputs.context-window-tokens }}
                   LLM_MAX_OUTPUT_TOKENS: ${{ inputs.max-output-tokens }}
@@ -249,6 +333,23 @@ jobs:
                   CASE: ${{ matrix.case }}
                   KNOWLEDGE_BASE_SHA: ${{ needs.plan.outputs.knowledge-base-sha }}
               run: |
+                  case "$PROVIDER" in
+                      anthropic)
+                          export LLM_API=anthropic-messages LLM_BASE_URL=https://api.anthropic.com
+                          export LLM_API_KEY="$ANTHROPIC_KEY"
+                          ;;
+                      gateway)
+                          export LLM_API=openai-completions LLM_BASE_URL="$GATEWAY_URL"
+                          export LLM_API_KEY="$GATEWAY_KEY"
+                          ;;
+                  esac
+                  unset ANTHROPIC_KEY GATEWAY_URL GATEWAY_KEY
+                  if [ -n "$VISION_MODEL" ]; then
+                      export LLM_VISION_MODEL="$VISION_MODEL"
+                  fi
+                  if [ -n "$VISION_MAX_OUTPUT_TOKENS" ]; then
+                      export LLM_VISION_MAX_OUTPUT_TOKENS="$VISION_MAX_OUTPUT_TOKENS"
+                  fi
                   export LLM_PRICING_FILE="$RUNNER_TEMP/pricing.json"
                   printf '%s' "$BENCHMARK_PRICING" > "$LLM_PRICING_FILE"
                   mkdir -p tmp/series/logs
@@ -257,9 +358,45 @@ jobs:
                       | pnpm -s exec tsx lab/benchmark/redact-diagnostics.ts \
                       | tee "tmp/series/logs/$CASE.log"
 
+            # Artifacts are files: GitHub's masking never touches them. Every text file loses the
+            # secrets and the gateway host, and any file that still holds one of them, binaries
+            # included, blocks every upload of the job. A run file changed here no longer matches
+            # its run manifest; that is the price of not publishing the endpoint.
+            - &redact-artifacts
+              name: Redact the secrets from the artifacts
+              id: redact
+              if: ${{ always() }}
+              env:
+                  ANTHROPIC_KEY: ${{ secrets.BENCHMARK_ANTHROPIC_KEY }}
+                  GATEWAY_URL: ${{ secrets.BENCHMARK_GATEWAY_URL }}
+                  GATEWAY_KEY: ${{ secrets.BENCHMARK_GATEWAY_KEY }}
+              run: |
+                  if [ ! -d tmp/series ]; then
+                      exit 0
+                  fi
+                  GATEWAY_HOST="$(cat "$RUNNER_TEMP/gateway-host" 2>/dev/null || true)"
+                  export GATEWAY_HOST
+                  # grep exits 1 when there is no text file at all; only 2 is an error.
+                  text_files="$RUNNER_TEMP/redacted-files"
+                  listed=0
+                  grep -rlI --null '' tmp/series > "$text_files" || listed=$?
+                  if [ "$listed" -gt 1 ]; then
+                      exit "$listed"
+                  fi
+                  # The Perl program reads the secrets from %ENV; nothing in it is for the shell.
+                  # Its warnings are fatal: a file it cannot rewrite fails the step.
+                  # shellcheck disable=SC2016
+                  xargs -0 -r perl -pi -e 'BEGIN { $SIG{__WARN__} = sub { die @_ }; @secrets = grep { length } @ENV{qw(GATEWAY_URL GATEWAY_KEY ANTHROPIC_KEY GATEWAY_HOST)} } for my $secret (@secrets) { s/\Q$secret\E/[redacted]/g }' < "$text_files"
+                  for name in GATEWAY_URL GATEWAY_KEY ANTHROPIC_KEY GATEWAY_HOST; do
+                      if [ -n "${!name}" ] && grep -rqF -- "${!name}" tmp/series; then
+                          echo "::error::An artifact still holds $name; nothing is uploaded."
+                          exit 1
+                      fi
+                  done
+
             # `overwrite` lets a re-run of a case job replace the record of the attempt it repeats.
             - name: Upload the evaluation
-              if: ${{ always() }}
+              if: ${{ always() && steps.redact.outcome == 'success' }}
               uses: actions/upload-artifact@v7
               with:
                   name: evaluation-${{ matrix.case }}
@@ -269,7 +406,7 @@ jobs:
                   overwrite: true
 
             - name: Upload the run and its log
-              if: ${{ always() }}
+              if: ${{ always() && steps.redact.outcome == 'success' }}
               uses: actions/upload-artifact@v7
               with:
                   name: run-${{ matrix.case }}
@@ -290,6 +427,8 @@ jobs:
         runs-on: ubuntu-latest
         timeout-minutes: 15
         steps:
+            - *mask-gateway
+
             - name: Check out the pinned commit
               uses: actions/checkout@v6
               with:
@@ -353,8 +492,10 @@ jobs:
                   # each plain line on its own line instead of merging them into one paragraph.
                   sed 's/$/  /' tmp/series/summary.txt >> "$GITHUB_STEP_SUMMARY"
 
+            - *redact-artifacts
+
             - name: Upload the summary
-              if: ${{ always() }}
+              if: ${{ always() && steps.redact.outcome == 'success' }}
               uses: actions/upload-artifact@v7
               with:
                   name: summary
