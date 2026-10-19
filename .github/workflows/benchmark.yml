@@ -198,7 +198,9 @@ jobs:
         strategy:
             # One case's failure says nothing about the others: every case runs to its own end.
             fail-fast: false
-            max-parallel: ${{ inputs.max-parallel }}
+            # `fromJSON` makes the input an integer. Given the input as it is, GitHub creates no
+            # job at all, with no error and no annotation.
+            max-parallel: ${{ fromJSON(inputs.max-parallel) }}
             matrix:
                 case: ${{ fromJSON(needs.plan.outputs.cases) }}
         steps:
