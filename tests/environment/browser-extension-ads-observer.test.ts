@@ -1,3 +1,8 @@
+import type { runPhase } from '../../src/validator/phase-capture';
+import { SelectorSource } from '../../src/types/overruled-selector';
+import { BrowserFallbackReason } from '../../src/types/browser-fallback-reason';
+import { EnvironmentAdapterLimitationCode } from '../../src/environment/filtering-environment';
+import { pino } from 'pino';
 import { createHash } from 'node:crypto';
 import { mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
@@ -24,12 +29,16 @@ const visionStub = {
 } as unknown as SingleShotClient;
 import type { ReproProfile } from '../../src/types/repro-profile';
 import type { FullPageVisualCaptureResult } from '../../src/analyzer/full-page-capture-inspection';
-import type { StructuralSnapshot } from '../../src/types/validation';
+import { PhaseLabel, type StructuralSnapshot } from '../../src/types/validation';
+import { ReporterSymptomPresence } from '../../src/types/reporter-symptom-presence';
 import { BrowserExtensionAdsObserver } from '../../src/environment/browser-extension-ads-observer';
+import { SymptomKind } from '../../src/validator/symptom-rubric';
 import { runAdsEnvironmentExperiment } from '../../src/validator/phase-orchestrator';
+import { AdsEnvironmentExperimentVerdict } from '../../src/validator/ads-environment-experiment-result';
 import { deriveCandidateNetworkScope } from '../../src/validator/candidate-network-scope';
 import {
     CandidateVisualReviewSchema,
+    CandidateVisualVerdict,
     deriveCandidateVisualIntegrityBasis,
     deriveCandidateVisualSymptomBasis,
     deriveCandidateVisualVerdict,
@@ -91,6 +100,158 @@ function recorderStub(): TraceRecorder {
 }
 
 describe('BrowserExtensionAdsObserver', () => {
+    it('reports a page the phase browser could not load as a navigation failure', async () => {
+        const artifactsDir = mkdtempSync(join(tmpdir(), 'ads-observer-navigation-'));
+        roots.push(artifactsDir);
+        const session = {
+            artifactsDir,
+            isClosed: false,
+            getPage: () => ({}) as Page,
+            close: async () => undefined,
+            getNetworkLog: () => [],
+            resetNetworkLog: () => undefined,
+            getConsoleLog: () => [],
+            consoleCoverage: ConsoleCoverage.BrowserLogOnly,
+        } as unknown as IBrowserSession;
+        const observer = new BrowserExtensionAdsObserver({
+            candidateRule: 'example.test##.ad',
+            trustedValidationContext: {
+                reportedUrl: 'https://example.test/',
+                existingRules: [],
+                baselineHash: 'b'.repeat(64),
+            },
+            profile: PROFILE,
+            recorder: recorderStub(),
+            artifactsDir,
+            logger: pino({ level: 'silent' }),
+            vision: visionStub,
+            reporterSymptom: 'an ad banner',
+            attemptNumber: 1,
+            noSandbox: false,
+            dependencies: {
+                runPhase: async () => ({
+                    phase: 'A' as const,
+                    url: 'https://example.test/',
+                    screenshotArtifactId: '',
+                    harArtifactId: '',
+                    domArtifactId: '',
+                    appliedRules: [],
+                    ruleApplications: [],
+                    antiAdblockDetected: false,
+                    error: 'main document returned HTTP 403',
+                    navigationFallbackReason: BrowserFallbackReason.HttpBlocked,
+                }),
+            },
+        });
+
+        const completion = await observer.observe({
+            phase: 'A',
+            phaseTokenId: 'token-a',
+            session,
+            proof: {
+                leaseId: 'lease-a',
+                adapterStateDigest: 'a'.repeat(64),
+                phase: 'A',
+                filteringState: 'disabled',
+                sessionId: 'session-a',
+                actualContext: {
+                    kind: 'browser_extension',
+                    product: 'AdGuard Browser Extension',
+                    browser: 'CloakBrowser Chromium',
+                    productVersion: '5.0.0',
+                },
+                baselineDigest: null,
+                candidateDigest: null,
+                extension: null,
+            },
+        });
+
+        expect(completion).toMatchObject({
+            kind: 'failed',
+            limitation: {
+                code: EnvironmentAdapterLimitationCode.PhaseNavigationFailed,
+                detail: expect.stringContaining('HTTP 403'),
+            },
+            navigationFallbackReason: BrowserFallbackReason.HttpBlocked,
+        });
+    });
+    it('hands every phase a lazy-content pass to run before its captures', async () => {
+        const artifactsDir = mkdtempSync(join(tmpdir(), 'ads-observer-materialize-'));
+        roots.push(artifactsDir);
+        const phaseConfigs: Parameters<typeof runPhase>[0][] = [];
+        const session = {
+            artifactsDir,
+            isClosed: false,
+            getPage: () => ({}) as Page,
+            close: async () => undefined,
+            getNetworkLog: () => [],
+            resetNetworkLog: () => undefined,
+            getConsoleLog: () => [],
+            consoleCoverage: ConsoleCoverage.BrowserLogOnly,
+        } as unknown as IBrowserSession;
+        const observer = new BrowserExtensionAdsObserver({
+            candidateRule: 'example.test##.ad',
+            trustedValidationContext: {
+                reportedUrl: 'https://example.test/',
+                existingRules: [],
+                baselineHash: 'b'.repeat(64),
+            },
+            profile: PROFILE,
+            recorder: recorderStub(),
+            artifactsDir,
+            logger: pino({ level: 'silent' }),
+            vision: visionStub,
+            reporterSymptom: 'an ad banner',
+            attemptNumber: 1,
+            noSandbox: false,
+            dependencies: {
+                runPhase: async (_input, config) => {
+                    phaseConfigs.push(config);
+                    return {
+                        phase: 'A' as const,
+                        url: 'https://example.test/',
+                        screenshotArtifactId: '',
+                        harArtifactId: '',
+                        domArtifactId: '',
+                        appliedRules: [],
+                        ruleApplications: [],
+                        antiAdblockDetected: false,
+                        error: 'main document returned HTTP 403',
+                        navigationFallbackReason: BrowserFallbackReason.HttpBlocked,
+                    };
+                },
+            },
+        });
+
+        const completion = await observer.observe({
+            phase: 'A',
+            phaseTokenId: 'token-a',
+            session,
+            proof: {
+                leaseId: 'lease-a',
+                adapterStateDigest: 'a'.repeat(64),
+                phase: 'A',
+                filteringState: 'disabled',
+                sessionId: 'session-a',
+                actualContext: {
+                    kind: 'browser_extension',
+                    product: 'AdGuard Browser Extension',
+                    browser: 'CloakBrowser Chromium',
+                    productVersion: '5.0.0',
+                },
+                baselineDigest: null,
+                candidateDigest: null,
+                extension: null,
+            },
+        });
+
+        // Without the pass the phases are captured wherever the site's lazy loading happened to be.
+        expect(completion.kind).toBe('failed');
+        expect(phaseConfigs).toHaveLength(1);
+        expect(phaseConfigs[0]!.materialize).toBeTypeOf('function');
+        await expect(phaseConfigs[0]!.materialize!()).resolves.toHaveProperty('settled');
+    });
+
     it('hands the inventory a capture carrying all three screenshot identities', async () => {
         const artifactsDir = mkdtempSync(join(tmpdir(), 'ads-observer-'));
         roots.push(artifactsDir);
@@ -116,6 +277,7 @@ describe('BrowserExtensionAdsObserver', () => {
             profile: PROFILE,
             recorder,
             artifactsDir,
+            logger: pino({ level: 'silent' }),
             vision: visionStub,
             reporterSymptom: 'an ad banner',
             attemptNumber: 1,
@@ -249,6 +411,7 @@ describe('BrowserExtensionAdsObserver', () => {
             profile: PROFILE,
             recorder,
             artifactsDir,
+            logger: pino({ level: 'silent' }),
             vision: visionStub,
             reporterSymptom: 'the video player never loads',
             symptomKind: 'incorrect_blocking',
@@ -350,7 +513,27 @@ describe('BrowserExtensionAdsObserver', () => {
         expect(completion).toMatchObject({ targetObservation: { symptomPresent: true } });
     });
 
-    it('reads a breakage symptom from the probed element relative to the unfiltered control', async () => {
+    /**
+     * Build an observer for an incorrect-blocking candidate whose bound element renders the given
+     * number of its five matches per phase.
+     *
+     * @param visibleByPhase - Visible matches the structural probe reports in each phase.
+     * @param candidate - Candidate rule and, for a network rule, the element it is about.
+     * @param visionByPhase - What vision reads of the defect in each phase. By default it calls the
+     *   defect present in every phase: vision inverts absence symptoms, recognising the element the
+     *   reporter named.
+     * @returns The observer and a function observing one of its phases.
+     */
+    function breakageObserver(
+        visibleByPhase: Record<string, number>,
+        candidate: { candidateRule: string; adElementSelector?: string } = {
+            candidateRule: 'example.test#@#.ad-sidebar',
+        },
+        visionByPhase: Record<string, ReporterSymptomPresence> = {
+            [PhaseLabel.A]: ReporterSymptomPresence.Present,
+            [PhaseLabel.B]: ReporterSymptomPresence.Present,
+        },
+    ) {
         const artifactsDir = mkdtempSync(join(tmpdir(), 'ads-observer-breakage-'));
         roots.push(artifactsDir);
         const recorder = recorderStub();
@@ -364,12 +547,9 @@ describe('BrowserExtensionAdsObserver', () => {
             getConsoleLog: () => [],
             consoleCoverage: ConsoleCoverage.BrowserLogOnly,
         } as unknown as IBrowserSession;
-        // The site itself hides two of the five matches in every phase; only the three the
-        // unfiltered control renders are content the candidate must restore.
-        const visibleByPhase: Record<string, number> = { A: 3, B: 0, C: 3 };
         let probedPhase: 'A' | 'B' | 'C' = 'A';
         const observer = new BrowserExtensionAdsObserver({
-            candidateRule: 'example.test#@#.ad-sidebar',
+            ...candidate,
             trustedValidationContext: {
                 reportedUrl: 'https://example.test/',
                 existingRules: [],
@@ -378,6 +558,7 @@ describe('BrowserExtensionAdsObserver', () => {
             profile: PROFILE,
             recorder,
             artifactsDir,
+            logger: pino({ level: 'silent' }),
             vision: visionStub,
             reporterSymptom: 'the left navigation rail is missing',
             symptomKind: 'incorrect_blocking',
@@ -441,10 +622,8 @@ describe('BrowserExtensionAdsObserver', () => {
                         bytes: 2,
                     });
                     return {
-                        // Vision inverts absence symptoms: it recognises the element the reporter
-                        // named and calls the defect present in every state.
                         inventory: {
-                            reporterSymptomPresence: 'present',
+                            reporterSymptomPresence: visionByPhase[input.phase]!,
                         } as FullPageVisualCaptureResult['inventory'],
                         artifactId,
                         artifactPath: join(artifactsDir, `${artifactId}.json`),
@@ -486,6 +665,14 @@ describe('BrowserExtensionAdsObserver', () => {
                 },
             });
 
+        return { observer, observe };
+    }
+
+    it('reads a breakage symptom from the probed element relative to the unfiltered control', async () => {
+        // The site itself hides two of the five matches in every phase; only the three the
+        // unfiltered control renders are content the candidate must restore.
+        const { observer, observe } = breakageObserver({ A: 3, B: 0, C: 3 });
+
         const control = await observe('A');
         const baseline = await observe('B');
 
@@ -493,6 +680,54 @@ describe('BrowserExtensionAdsObserver', () => {
         // defect; the baseline rendering fewer of them is.
         expect(control).toMatchObject({ targetObservation: { symptomPresent: false } });
         expect(baseline).toMatchObject({ targetObservation: { symptomPresent: true } });
+        expect(observer.baselineVisionOverruledSelector()).toBeNull();
+    });
+
+    it.each([
+        {
+            candidate: { candidateRule: 'example.test#@#.ad-sidebar' },
+            expected: { selector: '.ad-sidebar', source: SelectorSource.Rule },
+        },
+        {
+            candidate: {
+                candidateRule: '@@||player.example.org^$domain=example.test',
+                adElementSelector: 'iframe.player',
+            },
+            expected: { selector: 'iframe.player', source: SelectorSource.AdElementSelector },
+        },
+    ])(
+        'names the selector whose geometry called a broken baseline healthy: $expected.source',
+        async ({ candidate, expected }) => {
+            // okteve.com: the anti-adblock wall drew inside an embedded player the selector named,
+            // and the player stayed as visible as on the unfiltered page.
+            const { observer, observe } = breakageObserver({ A: 3, B: 3, C: 3 }, candidate);
+
+            await observe('A');
+            const baseline = await observe('B');
+
+            expect(baseline).toMatchObject({ targetObservation: { symptomPresent: false } });
+            expect(observer.baselineVisionOverruledSelector()).toEqual(expected);
+        },
+    );
+
+    it('reads a breakage symptom vision separates from the control even when the element renders', async () => {
+        // An anti-adblock wall drawn inside a player iframe: the iframe renders in both phases,
+        // and only vision sees the wall that filtering brought.
+        const { observer, observe } = breakageObserver(
+            { [PhaseLabel.A]: 3, [PhaseLabel.B]: 3, [PhaseLabel.C]: 3 },
+            { candidateRule: 'example.test#@#.ad-sidebar' },
+            {
+                [PhaseLabel.A]: ReporterSymptomPresence.Absent,
+                [PhaseLabel.B]: ReporterSymptomPresence.Present,
+            },
+        );
+
+        const control = await observe(PhaseLabel.A);
+        const baseline = await observe(PhaseLabel.B);
+
+        expect(control).toMatchObject({ targetObservation: { symptomPresent: false } });
+        expect(baseline).toMatchObject({ targetObservation: { symptomPresent: true } });
+        expect(observer.baselineVisionOverruledSelector()).toBeNull();
     });
 
     it('bounds phase C tile capture to the window measured while the symptom was visible', async () => {
@@ -524,6 +759,7 @@ describe('BrowserExtensionAdsObserver', () => {
             profile: PROFILE,
             recorder,
             artifactsDir,
+            logger: pino({ level: 'silent' }),
             vision: visionStub,
             reporterSymptom: 'an ad banner',
             attemptNumber: 1,
@@ -721,6 +957,17 @@ interface ExtensionExperimentOptions {
     probeSucceeded?: boolean;
 
     /**
+     * Matches of the candidate's selector the probe finds rendered in each phase, out of one; the
+     * one match renders in every phase when omitted.
+     */
+    visibleMatches?: (phase: PhaseLabel) => number;
+
+    /**
+     * Problem class the review judges; ads when omitted.
+     */
+    symptomKind?: SymptomKind;
+
+    /**
      * Reveal steps apply_rule received, with how each phase's page answers them; none when omitted.
      */
     reveal?: {
@@ -819,8 +1066,10 @@ async function runExtensionExperiment(
         profile: PROFILE,
         recorder,
         artifactsDir,
+        logger: pino({ level: 'silent' }),
         vision: visionStub,
         reporterSymptom: 'injected advertising banners above the lyrics',
+        ...(options.symptomKind ? { symptomKind: options.symptomKind } : {}),
         attemptNumber: 1,
         noSandbox: false,
         ...(options.reveal ? { interactionPlan: options.reveal.plan } : {}),
@@ -869,12 +1118,12 @@ async function runExtensionExperiment(
                     antiAdblockDetected: false,
                 };
             },
-            probeStructuralSnapshot: async (_input, _evaluator, selector) => {
+            probeStructuralSnapshot: async (input, _evaluator, selector) => {
                 options.seen?.probedSelectors.push(selector);
                 return {
                     probeSucceeded: options.probeSucceeded ?? true,
                     targetCount: 1,
-                    targetVisibleCount: 1,
+                    targetVisibleCount: options.visibleMatches?.(input.phase) ?? 1,
                 } as StructuralSnapshot;
             },
             inspectFullPageVisualCapture: async (input, inventoryOptions) => {
@@ -1128,6 +1377,47 @@ function scriptRequest(url: string, statusCode = 200): NetworkRequestEntry {
         responseHeaders: {},
     };
 }
+
+describe('an extension experiment over a breakage the named element renders through', () => {
+    it.each([
+        {
+            candidateVision: ReporterSymptomPresence.Absent,
+            verdict: AdsEnvironmentExperimentVerdict.Verified,
+        },
+        {
+            candidateVision: ReporterSymptomPresence.Present,
+            verdict: AdsEnvironmentExperimentVerdict.Inconclusive,
+        },
+    ])(
+        'holds the candidate to vision that separates it from the unfiltered page: $candidateVision',
+        async ({ candidateVision, verdict }) => {
+            // A wall inside a player the selector names: the player renders in every phase but
+            // the filtered baseline, so its geometry calls the candidate restored, and the review
+            // compares B and C only. Vision calling the unfiltered page clean and the candidate
+            // broken still keeps the candidate unverified.
+            const seen: ExperimentSeams = { probedSelectors: [] };
+            const experiment = await runExtensionExperiment('sarkisozleri.bbs.tr#@#.player', {
+                symptomKind: SymptomKind.Breakage,
+                symptomPresence: (phase) => {
+                    if (phase === PhaseLabel.A) {
+                        return ReporterSymptomPresence.Absent;
+                    }
+                    return phase === PhaseLabel.B
+                        ? ReporterSymptomPresence.Present
+                        : candidateVision;
+                },
+                visibleMatches: (phase) => (phase === PhaseLabel.B ? 0 : 1),
+                modelOutput: { ...CLEAN_UNCLEAR_OUTPUT, pageIntegrity: 'intact' },
+                seen,
+            });
+
+            expect(seen.applyRuleResult).toMatchObject({
+                visualReview: { verdict: CandidateVisualVerdict.Verified },
+            });
+            expect(experiment.verdict).toBe(verdict);
+        },
+    );
+});
 
 describe('an extension experiment over a tracker nothing shows', () => {
     const TRACKER_RULE = '||alaphoid.com^$domain=sarkisozleri.bbs.tr';
@@ -1442,6 +1732,7 @@ describe('an extension experiment on a page too tall for one full-page capture',
             profile: PROFILE,
             recorder,
             artifactsDir,
+            logger: pino({ level: 'silent' }),
             vision: { ...visionStub, structured } as unknown as SingleShotClient,
             reporterSymptom: 'an empty advertising placeholder',
             attemptNumber: 1,

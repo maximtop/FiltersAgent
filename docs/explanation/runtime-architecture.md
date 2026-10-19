@@ -68,15 +68,39 @@ can send the same candidate again with DOM checks: read-only expressions held
 to the `evaluate_js` rules, each with the claim it should prove. The runner
 evaluates them in phases B and C on the page loads the screenshots come from,
 records the bounded answers in the factual validation and the `apply_rule`
-answer, and hands them to the review as untrusted page data. Blank space a
-check proves to be an empty transparent grid track or the page's own margins
-counts as layout; an emptied container that still paints a background or keeps
-a reserved height counts as residue; no check outweighs visible advertising.
+answer, and hands them to the review as untrusted page data. A check proves
+layout only when it names the element that holds the space and shows the space
+is not kept for the ad; blank space proved that way to be an empty transparent
+grid track or the page's own margins counts as layout. Geometry that is merely
+the same before and after proves nothing: hiding an ad that sits out of flow,
+or whose slot was already empty, leaves exactly that, so where the baseline
+showed the symptom such a check weighs nothing. An emptied container that still
+paints a background or keeps a reserved height counts as residue; no check
+outweighs visible advertising.
 Code never reads what a check means. New checks make a new experiment of the
 same candidate, which spends no candidate attempt but counts toward the three
 runs one candidate gets in all, shared with retries after an inconclusive
 review and with new reveal steps. Each check gets a few seconds on the page;
 one that does not settle fails, and the phase skips the checks after it.
+
+Every phase scrolls through the page and waits for its height to settle before
+its reveal steps and captures, so the states the review compares were taken
+after the same lazy loading rather than at whatever point a news feed had
+reached. The reveal steps run after the scroll, so it cannot close a menu or an
+overlay they opened. A page that never settles, such as an endless feed, is
+captured anyway and the trace records why.
+
+When a phase browser cannot load the reported page at all, the experiment stops
+there and the `apply_rule` answer names the phase and the error. The environment
+stays selected: the page stopped the phase, not the environment. The answer
+follows who stopped it. A site refusal, such as HTTP 403, or a cause nothing
+recorded separates may pass on one more experiment, and a rule whose
+experiments fail to load the page twice gets no third. The runner's own
+refusal, such as a redirect off the reported origin, closes the rule after one
+experiment. When the unfiltered and baseline phases loaded and only the phase
+with the candidate left the origin, the candidate most likely caused the
+redirect, so the model is asked to change the rule; otherwise it is asked to
+finish.
 
 The review judges a candidate by what changed between the two states, so what
 both states share does not count against it. The original-resolution tiles
@@ -241,9 +265,11 @@ mismatched ownership, manifest, or visibility state. There is no cleanup CLI.
   their model-facing guidance. A tool name is declared once in `ToolName` and the guidance map is
   total over it, so a new tool or a typo is a compile error; `tool-factory.ts` and
   `tool-registry.ts` build the per-mode surfaces from them.
-- `src/validator/` — `rule-applicator.ts` (pattern and selector extraction, rule-kind dispatch),
+- `src/validator/` — `candidate-selector.ts` (the selector a candidate's evidence is bound to),
   `anti-adblock-check.ts` (anti-adblock wall detection through `evaluate_js`) and
-  `phase-orchestrator.ts` (three-phase A/B/C validation returning `FactualValidationResult`); the
+  `phase-orchestrator.ts` (the A/B/C experiment over blocker-established filtering states),
+  `phase-capture.ts` (the capture of one phase) and `structural-snapshot.ts` (the target and
+  landmark structure probe); the blocker, never the validator, applies the rules. The
   `apply_rule` tool is registered in `src/agent/tool-factory.ts`.
 - `src/analyzer/site-analyzer.ts` — `SiteAnalyzer`, the findings accumulator the `report_finding`
   tool fills; `src/types/site-analysis.ts` holds its Valibot schemas.

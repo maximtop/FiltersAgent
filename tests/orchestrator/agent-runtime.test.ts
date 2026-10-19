@@ -1,3 +1,4 @@
+import { BrowserFallbackReason } from '../../src/types/browser-fallback-reason';
 import { APPLY_RULE_TOOL_DEADLINE_MS } from '../../src/orchestrator/browser-tool-deadlines';
 import { MAX_CANDIDATE_ATTEMPTS } from '../../src/orchestrator/agent-runtime-candidate-context';
 import { MAX_DOM_CHECKS, type DomCheckRecord } from '../../src/types/dom-check';
@@ -64,6 +65,10 @@ import type {
     FilteringEnvironmentAdapterState,
     FilteringEnvironmentExecution,
     ValidatorPhaseCompletion,
+} from '../../src/environment/filtering-environment';
+import {
+    EnvironmentAdapterLimitationCode,
+    EnvironmentLimitationStage,
 } from '../../src/environment/filtering-environment';
 import {
     ExtensionManifestVersion,
@@ -3331,6 +3336,126 @@ describe('AgentRuntime', () => {
         }
     });
 
+    it('tells the model which phase could not load the page and stops after the limit', async () => {
+        // investing.com: the unfiltered phase loaded, the filtered baseline got HTTP 403 from the
+        // site, and the model saw only "inconclusive" four experiments in a row.
+        const observeEnvironmentPhase = vi.fn(
+            async (input: AdsEnvironmentPhaseObservationInput): Promise<ValidatorPhaseCompletion> =>
+                input.phase === 'B'
+                    ? {
+                          kind: 'failed',
+                          sessionId: input.proof.sessionId,
+                          limitation: {
+                              code: EnvironmentAdapterLimitationCode.PhaseNavigationFailed,
+                              stage: EnvironmentLimitationStage.Phase,
+                              detail:
+                                  'Phase B navigation failed (http_blocked): main document ' +
+                                  'returned HTTP 403',
+                          },
+                          navigationFallbackReason: BrowserFallbackReason.HttpBlocked,
+                      }
+                    : {
+                          kind: 'observed',
+                          sessionId: input.proof.sessionId,
+                          targetUrl: 'https://nettg.pl/',
+                          targetObservation: { symptomPresent: true, pageUsable: true },
+                          navigationVerified: true,
+                          artifacts: [],
+                          vision: null,
+                          candidateValidation: null,
+                          rejectedCandidates: [],
+                      },
+        );
+        const { runtime, cleanupFixture } =
+            await baselineSymptomAbsentHarness(observeEnvironmentPhase);
+        try {
+            const candidateRule = 'nettg.pl##.ad-slot';
+
+            const first = await runtime.registry.dispatch('apply_rule', { candidateRule });
+            expect(first).toMatchObject({
+                validationSkipped: true,
+                errorKind: 'phase_navigation_failed',
+                failedPhase: 'B',
+                detail: expect.stringContaining('HTTP 403'),
+                retryable: true,
+            });
+            // The site refused a phase; the environment that ran it stays selected.
+            expect(runtime.getEnvironmentSelection()?.state).not.toBe('capability_limited');
+
+            const second = await runtime.registry.dispatch('apply_rule', { candidateRule });
+            expect(second).toMatchObject({
+                errorKind: 'phase_navigation_failed',
+                retryable: false,
+                requiredAction: 'finish_fix_analysis_only',
+            });
+
+            const callsAfterTwoExperiments = observeEnvironmentPhase.mock.calls.length;
+            const third = await runtime.registry.dispatch('apply_rule', { candidateRule });
+            expect(third).toMatchObject({
+                errorKind: 'phase_navigation_failed_exhausted',
+                retryable: false,
+                requiredAction: 'finish_fix_analysis_only',
+            });
+            expect(observeEnvironmentPhase.mock.calls.length).toBe(callsAfterTwoExperiments);
+        } finally {
+            cleanupFixture();
+        }
+    });
+
+    it('ends at once when the runner itself refused the baseline navigation', async () => {
+        // An anti-adblock redirect off the reported origin: the runner does not follow it, so the
+        // same experiment can only meet the same refusal.
+        const observeEnvironmentPhase = vi.fn(
+            async (input: AdsEnvironmentPhaseObservationInput): Promise<ValidatorPhaseCompletion> =>
+                input.phase === 'B'
+                    ? {
+                          kind: 'failed',
+                          sessionId: input.proof.sessionId,
+                          limitation: {
+                              code: EnvironmentAdapterLimitationCode.PhaseNavigationFailed,
+                              stage: EnvironmentLimitationStage.Phase,
+                              detail: 'Phase B navigation failed (navigation_off_origin)',
+                          },
+                          navigationFallbackReason: BrowserFallbackReason.NavigationOffOrigin,
+                      }
+                    : {
+                          kind: 'observed',
+                          sessionId: input.proof.sessionId,
+                          targetUrl: 'https://nettg.pl/',
+                          targetObservation: { symptomPresent: true, pageUsable: true },
+                          navigationVerified: true,
+                          artifacts: [],
+                          vision: null,
+                          candidateValidation: null,
+                          rejectedCandidates: [],
+                      },
+        );
+        const { runtime, cleanupFixture } =
+            await baselineSymptomAbsentHarness(observeEnvironmentPhase);
+        try {
+            const candidateRule = 'nettg.pl##.ad-slot';
+
+            const first = await runtime.registry.dispatch('apply_rule', { candidateRule });
+            expect(first).toMatchObject({
+                errorKind: 'phase_navigation_failed',
+                failedPhase: 'B',
+                retryable: false,
+                requiredAction: 'finish_fix_analysis_only',
+            });
+
+            const callsAfterOneExperiment = observeEnvironmentPhase.mock.calls.length;
+            const second = await runtime.registry.dispatch('apply_rule', { candidateRule });
+            expect(second).toMatchObject({
+                errorKind: 'phase_navigation_failed_exhausted',
+                retryable: false,
+                requiredAction: 'finish_fix_analysis_only',
+            });
+            expect(observeEnvironmentPhase.mock.calls.length).toBe(callsAfterOneExperiment);
+        } finally {
+            cleanupFixture();
+        }
+    });
+
     it('answers a repeated apply_rule after an environment failure as that failure, unrun', async () => {
         // money.pl: the baseline phase failed its observation, and the second identical call got
         // the same sticky limitation without any phase running, in an answer that read as a fresh
@@ -4474,35 +4599,50 @@ describe('AgentRuntime', () => {
         });
     });
 
-    it("counts a landing on the site's own host as navigation, and another site's as none", async () => {
-        // AdguardFilters#241312: google.com loads as www.google.com. Comparing origins refused the
-        // landing, so the run could neither inspect the page it had loaded nor finish.
-        const analysisOnly: FixOutcome = {
-            outcome: 'analysis_only',
-            reasoning: 'The reported card is absent from the loaded page.',
-        };
-        const verdicts = new Map<string, string | undefined>();
-        for (const landingUrl of ['https://www.nettg.pl/', 'https://nettg-login.com/']) {
+    it.each([
+        ["the site's own host", 'https://nettg.pl/', 'https://www.nettg.pl/', true],
+        ['another domain', 'https://nettg.pl/', 'https://nettg-login.com/', false],
+        ['a sibling host', 'https://www.nettg.pl/', 'https://shop.nettg.pl/', false],
+        ['another tenant of a shared host', 'https://a.github.io/', 'https://b.github.io/', false],
+    ] as const)(
+        'counts a landing on %s as navigation only when it stays on the site',
+        async (_name, targetUrl, landingUrl, sameSite) => {
+            // AdguardFilters#241312: google.com loads as www.google.com. Comparing origins refused
+            // the landing, so the run could neither inspect the page it had loaded nor finish.
+            const analysisOnly: FixOutcome = {
+                outcome: 'analysis_only',
+                reasoning: 'The reported card is absent from the loaded page.',
+            };
             const runtime = await walledPageRuntime(
                 `landing-${landingUrl}`,
                 landingUrl,
                 'none',
                 'The reported page is fully visible.',
-                { ...runtimeOptions(), issueAttachmentArtifactIds: [] },
+                {
+                    ...runtimeOptions(),
+                    allowedTargetUrls: [targetUrl],
+                    issueAttachmentArtifactIds: [],
+                },
             );
             await fetchRuntimeIssue(runtime);
             await runtime.registry.dispatch('launch_browser', {
                 extension: 'none',
-                targetUrl: 'https://nettg.pl/',
+                targetUrl,
                 profile: browserProfile,
             });
-            await runtime.registry.dispatch('open_page', { url: 'https://nettg.pl/' });
-            verdicts.set(landingUrl, runtime.validateTerminalOutcome(analysisOnly)?.errorKind);
-        }
 
-        expect(verdicts.get('https://www.nettg.pl/')).not.toBe('browser_first_evidence_required');
-        expect(verdicts.get('https://nettg-login.com/')).toBe('browser_first_evidence_required');
-    });
+            const opened = await runtime.registry.dispatch('open_page', { url: targetUrl });
+
+            const errorKind = runtime.validateTerminalOutcome(analysisOnly)?.errorKind;
+            if (sameSite) {
+                expect(opened).not.toHaveProperty('redirectedTo');
+                expect(errorKind).not.toBe('browser_first_evidence_required');
+            } else {
+                expect(opened).toMatchObject({ redirectedTo: landingUrl });
+                expect(errorKind).toBe('browser_first_evidence_required');
+            }
+        },
+    );
 
     it('lets the run launch on the page a reported URL redirected to on another site', async () => {
         // A dco.ink short link landed on the article on another site.

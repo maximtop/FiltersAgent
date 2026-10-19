@@ -27,8 +27,9 @@ The format is based on [Keep a Changelog], and this project adheres to
 - Added `domChecks` to `apply_rule`: after a review rejects a candidate only
   for ad layout residue, the agent can send it again with read-only DOM
   checks, which run on the baseline and candidate pages the screenshots come
-  from and let the review count blank space the page's own layout leaves as
-  layout instead of residue.
+  from and let the review count blank space as layout instead of residue when
+  a check names the element that holds it and shows it is not kept for the
+  ad; geometry that is only the same before and after proves nothing.
 
 ### Changed
 
@@ -72,11 +73,44 @@ The format is based on [Keep a Changelog], and this project adheres to
 
 ### Fixed
 
+- Fixed two benchmark cases started at once on a fresh `--output-root`
+  failing with `EEXIST` while creating the shared output directory.
+- Fixed `###id` element-hiding rules being validated against the selector
+  without its `#`, so the experiment never found the element the rule hides.
+- Fixed `apply_rule` answering only `inconclusive` when a phase browser could
+  not load the reported page; the answer now names the phase and the error,
+  such as HTTP 403, and a candidate gets no third such experiment.
+- Fixed `apply_rule` on a breakage report blaming the symptom description when
+  the `adElementSelector` element stayed visible while the review saw the
+  breakage; the answer now names the selector.
+- Fixed the baseline and candidate phases being captured at different points
+  of a page's lazy loading, which made a correct rule look like it emptied
+  parts of a news feed.
+- Fixed refused and failed `open_page` navigations and full-page screenshot
+  failures missing from the run log.
+- Fixed a model response that stops streaming after it opened ending the
+  whole run as `request_deadline_exceeded`: the request is now retried within
+  `LLM_REQUEST_MAX_ATTEMPTS`, and a run whose retries are spent ends as
+  `llm_error`.
+- Fixed incorrect-blocking experiments ending as `baseline_symptom_absent`
+  when the named element still renders with the breakage inside it, such as
+  an anti-adblock wall in a player iframe: a baseline or candidate phase that
+  vision finds broken while the unfiltered page is not now counts as showing
+  the symptom, so such a candidate also stays unverified even when the
+  element renders again.
 - Fixed benchmark failures before the filters checkout being reported as a
   filters-base mismatch instead of the original error.
 - Fixed benchmark cases ending as infrastructure failures, and
   `pnpm benchmark:case:add` rejecting issues, when the reporter's settings
   import link carries `&amp;` separators.
+- Fixed sites that redirect within themselves (`www.example.com` to
+  `example.com`, `http` to `https`): `interact_page` no longer reports
+  `external_destination` for steps that stay on the site, and a verified
+  candidate is no longer refused because its phases landed on the redirected
+  address. `open_page` now treats a redirect to a sibling host
+  (`shop.example.com`) or another tenant of a shared host (`a.github.io` to
+  `b.github.io`) as another site, and the agent opens the landing page in a
+  new session.
 - Fixed `launch_browser` refusing the reported page when the issue writes its
   URL with `&amp;` separators, and binding the session to a copy with broken
   query parameters instead.
@@ -87,6 +121,8 @@ The format is based on [Keep a Changelog], and this project adheres to
 - Fixed CSS injection (`#$#`) candidates getting no structural facts in
   `apply_rule`: the probe now measures the rule's selector without its style
   block.
+- Fixed browser-verified CSS injection (`#$#`, `#$?#`) rules being reported
+  as unverified candidates instead of proposed patches.
 - Fixed full-page visual review on Claude vision models: screenshots longer
   than 8000 px are now scaled to the provider's image limits instead of being
   rejected, and a provider rejection of a vision request is reported as a

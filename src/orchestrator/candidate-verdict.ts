@@ -11,6 +11,7 @@ import * as v from 'valibot';
 import { FixOutcomeKind, ReproductionStatus, type FixOutcome } from '../types/fix-outcome';
 import { planRepositoryEdit } from '../repo/repository-edit';
 import { normalizeRule } from '../repo/rule-normalizer';
+import { isSameSiteUrl } from '../browser/site-identity';
 import { appliedRulesMatch } from './applied-rules-match';
 import type { DeclaredPlacementSet } from '../types/declared-placement';
 import { RepositoryEditKind } from '../types/repository-edit-kind';
@@ -30,7 +31,6 @@ import {
 } from './candidate-validation-selection';
 import {
     RuleApplicationFactSchema,
-    ValidationViewportPositionSchema,
     type PhaseResult,
     type RuleApplicationFact,
 } from '../types/validation';
@@ -98,9 +98,8 @@ function parseRuleApplications(phase: Record<string, unknown>): RuleApplicationF
 /**
  * Check that one phase ledger is an exact, duplicate-free partition of trusted input rules.
  *
- * `ruleApplications` retains the exact input order and explicitly accounts for safely unsupported
- * rules; `appliedRules` must name exactly its applied entries, in whatever order the producing
- * route ran them (`appliedRulesMatch`).
+ * `ruleApplications` retains the exact input order; `appliedRules` must name exactly its applied
+ * entries, in whatever order the producing route ran them (`appliedRulesMatch`).
  *
  * @param phase - Untrusted factual phase record.
  * @param expectedRules - Exact trusted rules supplied to the phase.
@@ -310,12 +309,16 @@ export function candidatePatchVerificationRefusal(
     if (!phaseA || !phaseB || !phaseC) {
         return 'a phase record is missing from the factual validation';
     }
-    if (
-        phaseA.url !== expectedContext.reportedUrl ||
-        phaseB.url !== expectedContext.reportedUrl ||
-        phaseC.url !== expectedContext.reportedUrl
-    ) {
-        return 'a phase URL differs from the trusted reported URL';
+    // A phase opens the reported URL and records where the browser landed. The site's own redirect
+    // (`www` to the bare domain, `http` to `https`) keeps the reported page; another site does not.
+    const strayPhase = [phaseA, phaseB, phaseC].find(
+        (phase) => !isSameSiteUrl(String(phase.url), expectedContext.reportedUrl),
+    );
+    if (strayPhase) {
+        return (
+            `phase ${String(strayPhase.phase)} landed on ${String(strayPhase.url)}, outside the ` +
+            `site of the trusted ${expectedContext.reportedUrl}`
+        );
     }
     if (phaseA.error || phaseB.error || phaseC.error) {
         return 'a phase recorded an error';
@@ -350,42 +353,10 @@ export function candidatePatchVerificationRefusal(
         return 'phase C changed the baseline rule applications of phase B';
     }
 
-    const controlViewportId = phaseC.sameDocumentControlScreenshotArtifactId;
-    const controlFullPageId = phaseC.sameDocumentControlFullPageScreenshotArtifactId;
-    const hasAnySameDocumentControl =
-        typeof controlViewportId === 'string' || typeof controlFullPageId === 'string';
-    let beforeViewportId = phaseB.screenshotArtifactId;
-    let beforeFullPageId = phaseB.fullPageScreenshotArtifactId;
-    if (hasAnySameDocumentControl) {
-        const parsedControlViewport = v.safeParse(
-            ValidationViewportPositionSchema,
-            phaseC.sameDocumentControlViewport,
-        );
-        const parsedCandidateViewport = v.safeParse(
-            ValidationViewportPositionSchema,
-            phaseC.candidateViewport,
-        );
-        if (
-            phaseC.sameDocumentControlError ||
-            typeof controlViewportId !== 'string' ||
-            controlViewportId.length === 0 ||
-            typeof controlFullPageId !== 'string' ||
-            controlFullPageId.length === 0 ||
-            !parsedControlViewport.success ||
-            !parsedCandidateViewport.success ||
-            Math.abs(parsedControlViewport.output.x - parsedCandidateViewport.output.x) > 1 ||
-            Math.abs(parsedControlViewport.output.y - parsedCandidateViewport.output.y) > 1
-        ) {
-            return 'the same-document control capture is incomplete or misaligned';
-        }
-        beforeViewportId = controlViewportId;
-        beforeFullPageId = controlFullPageId;
-    }
-
     if (
-        review.beforeViewportArtifactId !== beforeViewportId ||
+        review.beforeViewportArtifactId !== phaseB.screenshotArtifactId ||
         review.afterViewportArtifactId !== phaseC.screenshotArtifactId ||
-        review.beforeFullPageArtifactId !== (beforeFullPageId ?? null) ||
+        review.beforeFullPageArtifactId !== (phaseB.fullPageScreenshotArtifactId ?? null) ||
         review.afterFullPageArtifactId !== (phaseC.fullPageScreenshotArtifactId ?? null)
     ) {
         return 'the visual review screenshots are not the phase artifacts';
