@@ -98,7 +98,7 @@ env:
     # it stops the series in the plan job: a series without costs cannot be compared.
     BENCHMARK_PRICING: |
         {
-            "source": "Claude models: Anthropic list prices, checked 2026-10-19; cache writes at the 5-minute rate (1.25x input). claude-haiku-5-5 is priced for prompts up to 100,000 tokens and costs 5x above that, which this table cannot express, so its cost is a lower bound. deepseek-flash and gemini-3.7-flash: models.dev catalog rates of 2026-10-14.",
+            "source": "Claude models: Anthropic list prices, checked 2026-10-19; cache writes at the 5-minute rate (1.25x input). claude-haiku-5-5 is priced for prompts up to 100,000 tokens and costs 5x above that, which this table cannot express, so its cost is a lower bound. deepseek-flash and gemini-3.7-flash: lab pricing file of 2026-10-14.",
             "models": {
                 "claude-fable-5-1": {
                     "inputUsdPerMillionTokens": 10,
@@ -153,7 +153,9 @@ jobs:
             knowledge-base-sha: ${{ steps.knowledge-base.outputs.sha }}
         steps:
             # Masks are per job, so every job starts with this step. GitHub masks the secret itself,
-            # but an error such as a DNS failure names the host alone. The host is also kept for the
+            # but an error such as a DNS failure names the host alone, in the form Node writes it:
+            # lowercase, punycode, IPv6 without brackets. A mask matches exact text, so the step
+            # refuses a secret whose host is not already in that form. The host is also kept for the
             # artifact check below.
             - &mask-gateway
               name: Mask the gateway endpoint
@@ -163,16 +165,23 @@ jobs:
                   if [ -z "$GATEWAY_URL" ]; then
                       exit 0
                   fi
+                  echo "::add-mask::$GATEWAY_URL"
                   host="${GATEWAY_URL#*://}"
                   host="${host%%/*}"
                   host="${host##*@}"
                   host="${host%%:*}"
-                  if [ -z "$host" ]; then
-                      echo "::error::Secret BENCHMARK_GATEWAY_URL has no host."
+                  # Node's reading of the same URL; one it cannot parse yields nothing and prints
+                  # nothing, so its error never shows the URL.
+                  canonical="$(node -e 'try { process.stdout.write(new URL(process.env.GATEWAY_URL).hostname); } catch { process.exitCode = 1; }' || true)"
+                  for value in "$host" "$canonical"; do
+                      if [ -n "$value" ]; then
+                          echo "::add-mask::$value"
+                      fi
+                  done
+                  if [ -z "$host" ] || [ "$host" != "$canonical" ] || ! [[ "$host" =~ ^[a-z0-9.-]+$ ]]; then
+                      echo "::error::Secret BENCHMARK_GATEWAY_URL needs an absolute URL whose host is only lowercase ASCII letters, digits, dots and hyphens."
                       exit 1
                   fi
-                  echo "::add-mask::$GATEWAY_URL"
-                  echo "::add-mask::$host"
                   printf '%s' "$host" > "$RUNNER_TEMP/gateway-host"
 
             - name: Check the provider and the prices
@@ -359,9 +368,10 @@ jobs:
                       | tee "tmp/series/logs/$CASE.log"
 
             # Artifacts are files: GitHub's masking never touches them. Every text file loses the
-            # secrets and the gateway host, and any file that still holds one of them, binaries
-            # included, blocks every upload of the job. A run file changed here no longer matches
-            # its run manifest; that is the price of not publishing the endpoint.
+            # secrets and the gateway host in any letter case, and any file that still holds one of
+            # them, binaries included, blocks every upload of the job and is named in the log. A run
+            # file changed here no longer matches its run manifest; that is the price of not
+            # publishing the endpoint.
             - &redact-artifacts
               name: Redact the secrets from the artifacts
               id: redact
@@ -386,10 +396,12 @@ jobs:
                   # The Perl program reads the secrets from %ENV; nothing in it is for the shell.
                   # Its warnings are fatal: a file it cannot rewrite fails the step.
                   # shellcheck disable=SC2016
-                  xargs -0 -r perl -pi -e 'BEGIN { $SIG{__WARN__} = sub { die @_ }; @secrets = grep { length } @ENV{qw(GATEWAY_URL GATEWAY_KEY ANTHROPIC_KEY GATEWAY_HOST)} } for my $secret (@secrets) { s/\Q$secret\E/[redacted]/g }' < "$text_files"
+                  xargs -0 -r perl -pi -e 'BEGIN { $SIG{__WARN__} = sub { die @_ }; @secrets = grep { length } @ENV{qw(GATEWAY_URL GATEWAY_KEY ANTHROPIC_KEY GATEWAY_HOST)} } for my $secret (@secrets) { s/\Q$secret\E/[redacted]/gi }' < "$text_files"
+                  # A path can hold the host too; the mask hides it in these lines.
                   for name in GATEWAY_URL GATEWAY_KEY ANTHROPIC_KEY GATEWAY_HOST; do
-                      if [ -n "${!name}" ] && grep -rqF -- "${!name}" tmp/series; then
+                      if [ -n "${!name}" ] && grep -rqiF -- "${!name}" tmp/series; then
                           echo "::error::An artifact still holds $name; nothing is uploaded."
+                          grep -rliF -- "${!name}" tmp/series | sed 's/^/::error::still holds a secret: /'
                           exit 1
                       fi
                   done
