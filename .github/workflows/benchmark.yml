@@ -3,15 +3,18 @@
 # machine sleeps or runs out of disk; here it takes as long as its slowest case.
 #
 # Dispatch it from the default branch. `ref` names the branch, tag or commit whose code and cases
-# run, so a branch cut before this workflow existed runs too. The plan job pins `ref` to one commit
-# and one KnowledgeBase commit, and every case job runs exactly those: a series never mixes agent
-# revisions. The model is reached through the Anthropic Messages API with the
+# run, so a branch cut before this workflow existed runs too, as long as it has the series options
+# of `pnpm test:e2e` (`--output-root`, `--knowledge-base-sha`) and
+# lab/benchmark/redact-diagnostics.ts; the v1.x tags have neither. The plan job pins `ref` to one
+# commit and one KnowledgeBase commit, and every case job runs exactly those: a series never mixes
+# agent revisions. The model is reached through the Anthropic Messages API with the
 # BENCHMARK_ANTHROPIC_KEY secret. In a public repository the logs and the artifacts are public:
 # they hold the agent's reports and screenshots of the case sites.
 #
-# A case job fails when its case measured no agent work (`infrastructure_failure` or
-# `site_unreachable`, exit code 3 of `pnpm test:e2e`); "Re-run failed jobs" repeats exactly those
-# cases and the summary. Nothing retries on its own: every repeat is paid for.
+# A case job fails when `pnpm test:e2e` exits 3: the case ended as `infrastructure_failure` or
+# `site_unreachable`. Re-run a failed job only when its record says `transient` or
+# `site_unreachable`: `provider_rejected` and `intake_skipped` count against the model, and a re-run
+# overwrites that counted failure. Nothing retries on its own: every repeat is paid for.
 name: Benchmark series
 
 run-name: Benchmark ${{ inputs.model }} on ${{ inputs.ref }}
@@ -20,19 +23,21 @@ on:
     workflow_dispatch:
         inputs:
             ref:
-                description: Branch, tag or commit whose code and cases run
+                description: Branch, tag or commit whose code and cases run; v1.x tags cannot run
                 type: string
                 default: master
             model:
                 description: Anthropic model id; it must be in BENCHMARK_PRICING below
                 type: string
                 default: claude-sonnet-5-5
+            # Nothing checks the two limits against the model: a value above the model's own limit
+            # fails every request with HTTP 400, in every case job.
             context-window-tokens:
-                description: LLM_CONTEXT_WINDOW_TOKENS, the model's context window
+                description: LLM_CONTEXT_WINDOW_TOKENS; must match the model's context window
                 type: number
                 default: 1000000
             max-output-tokens:
-                description: LLM_MAX_OUTPUT_TOKENS, the model's full completion limit
+                description: LLM_MAX_OUTPUT_TOKENS; must match the model's full completion limit
                 type: number
                 default: 128000
             cases:
@@ -43,10 +48,15 @@ on:
                 description: Full KnowledgeBase commit; empty pins its current master
                 type: string
                 default: ''
+            # One Sonnet case reads about 13,000-51,000 uncached input tokens a minute (sonnet-5.5
+            # series r3 and r4), so five cases stay within a low-tier rate limit. A 429 that outlasts
+            # the request retries ends the case as an infrastructure failure after it was paid for.
+            # Raise it as far as the key's tier allows: 20 cases take about 41 minutes at 5 and
+            # about 24 at 10.
             max-parallel:
-                description: Cases running at the same time
+                description: Cases running at the same time; keep within the key's rate limit
                 type: number
-                default: 20
+                default: 5
 
 permissions:
     contents: read
@@ -57,6 +67,11 @@ defaults:
         shell: bash
 
 env:
+    # `cloakbrowser install` downloads the build the locked package pins, then starts an update
+    # check that can fetch a newer one; jobs of one series start minutes apart and must all run the
+    # same browser build. The benchmark CLI defaults it to false too, but the install step runs
+    # before it.
+    CLOAKBROWSER_AUTO_UPDATE: 'false'
     # USD per million tokens for LLM_PRICING_FILE (docs/guides/benchmark.md#count-the-cost). It
     # lives here rather than in the tree so that any `ref` is priced the same. A model missing from
     # it stops the series in the plan job: a series without costs cannot be compared.
@@ -92,8 +107,9 @@ env:
         }
 
 jobs:
-    # Every check of the series runs here, before any case job starts: a typo costs one short job
-    # and no model call.
+    # Checks the key, the model's price, the case names and the KnowledgeBase commit before any case
+    # job starts, so a typo in them costs one short job and no model call. The token limits are not
+    # checked here.
     plan:
         name: Plan the series
         runs-on: ubuntu-latest
@@ -215,7 +231,9 @@ jobs:
               run: pnpm exec cloakbrowser install
 
             # The series stays under the git-ignored tmp/: the record's agent revision reads
-            # `git status`, and an untracked file would mark the run dirty.
+            # `git status`, and an untracked file would mark the run dirty. The log becomes a public
+            # artifact, so it passes the diagnostics redactor first: GitHub masks secrets in the job
+            # log only.
             - name: Run the case
               env:
                   LLM_API: anthropic-messages
@@ -232,7 +250,9 @@ jobs:
                   printf '%s' "$BENCHMARK_PRICING" > "$LLM_PRICING_FILE"
                   mkdir -p tmp/series/logs
                   pnpm -s test:e2e -- --case "$CASE" --output-root tmp/series \
-                      --knowledge-base-sha "$KNOWLEDGE_BASE_SHA" 2>&1 | tee "tmp/series/logs/$CASE.log"
+                      --knowledge-base-sha "$KNOWLEDGE_BASE_SHA" 2>&1 \
+                      | pnpm -s exec tsx lab/benchmark/redact-diagnostics.ts \
+                      | tee "tmp/series/logs/$CASE.log"
 
             # `overwrite` lets "Re-run failed jobs" replace the record of the attempt it repeats.
             - name: Upload the evaluation
@@ -300,33 +320,42 @@ jobs:
                   REF: ${{ inputs.ref }}
                   COMMIT: ${{ needs.plan.outputs.commit }}
                   KNOWLEDGE_BASE_SHA: ${{ needs.plan.outputs.knowledge-base-sha }}
+              # The heading and the cases without a record go out first, so they reach the job
+              # summary even when no case wrote a record and there is nothing to summarize.
               run: |
+                  mkdir -p tmp/series/evaluations
                   missing="$(jq -r '.[]' <<<"$CASES" | while read -r name; do
                       [ -f "tmp/series/evaluations/$name/benchmark-record.json" ] || echo "$name"
                   done)"
-                  pnpm -s benchmark:summarize -- tmp/series --csv tmp/series/summary.csv \
-                      | tee tmp/series/summary.txt
-                  # The summary prints Markdown tables followed by plain lines; two trailing spaces keep
-                  # each plain line on its own line instead of merging them into one paragraph.
                   {
                       echo "### $MODEL on $REF"
                       echo
                       echo "Commit \`$COMMIT\`, KnowledgeBase \`$KNOWLEDGE_BASE_SHA\`."
                       echo
-                      sed 's/$/  /' tmp/series/summary.txt
                       if [ -n "$missing" ]; then
-                          echo
                           echo "No record, the job stopped before writing one: $(tr '\n' ' ' <<<"$missing")"
+                          echo
                       fi
                   } >> "$GITHUB_STEP_SUMMARY"
                   if [ -n "$missing" ]; then
                       echo "::warning::No record for: $(tr '\n' ' ' <<<"$missing")"
                   fi
+                  if [ -z "$(find tmp/series/evaluations -name benchmark-record.json)" ]; then
+                      echo "::error::No case wrote a record; nothing to summarize."
+                      exit 1
+                  fi
+                  pnpm -s benchmark:summarize -- tmp/series --csv tmp/series/summary.csv \
+                      | tee tmp/series/summary.txt
+                  # The summary prints Markdown tables followed by plain lines; two trailing spaces keep
+                  # each plain line on its own line instead of merging them into one paragraph.
+                  sed 's/$/  /' tmp/series/summary.txt >> "$GITHUB_STEP_SUMMARY"
 
             - name: Upload the summary
+              if: ${{ always() }}
               uses: actions/upload-artifact@v7
               with:
                   name: summary
                   path: tmp/series
+                  if-no-files-found: warn
                   retention-days: 90
                   overwrite: true
