@@ -15,6 +15,7 @@ import { SingleShotResultKind } from '../pi/single-shot-types';
 import { SingleShotMessageRole, type SingleShotMessage } from '../pi/single-shot-input';
 import {
     COMPARISON_OBSTRUCTION_INVENTORY_RUBRIC,
+    INSTANCE_FOOTPRINT_RUBRIC,
     PRE_EXISTING_BLANK_PANELS,
     PRE_EXISTING_DAMAGE_PREFIX,
     REPORTER_SCOPE_RUBRIC,
@@ -24,8 +25,9 @@ import {
     isBreakageSymptom,
 } from './symptom-rubric';
 import { TraceEventType } from '../types/trace';
-import { CandidateVisualInstanceSchema } from '../types/candidate-visual-review';
+import { CandidateVisualInstanceSchema } from '../types/candidate-visual-instance';
 import {
+    ArtifactIdSchema,
     FullPageOverviewMode,
     type CandidateVisualFullPageOverviewEvidence,
 } from '../types/full-page-overview-evidence';
@@ -36,6 +38,7 @@ import type {
     CandidateVisualVerifierOptions,
 } from './candidate-visual-evidence';
 import {
+    CANDIDATE_VISUAL_INSTANCE_FOOTPRINT_VALUES,
     CandidateVisualEvidenceSource,
     MAX_SYMPTOM_SCOPE_CHARS,
     boundedModel,
@@ -85,11 +88,25 @@ const CandidateVisualTileBatchOutputSchema = v.object({
     coverageObserved: v.boolean(),
     symptomScope: v.pipe(v.string(), v.minLength(1), v.maxLength(MAX_SYMPTOM_SCOPE_CHARS)),
     instances: v.pipe(
-        v.array(CandidateVisualInstanceSchema),
+        v.array(
+            v.object({
+                ...CandidateVisualInstanceSchema.entries,
+                footprint: v.picklist(CANDIDATE_VISUAL_INSTANCE_FOOTPRINT_VALUES),
+            }),
+        ),
         v.maxLength(MAX_TILE_BATCH_INSTANCES),
     ),
     observedDamage: v.pipe(
-        v.array(v.pipe(v.string(), v.minLength(1), v.maxLength(MAX_OBSERVED_DAMAGE_ENTRY_CHARS))),
+        v.array(
+            v.object({
+                artifactId: ArtifactIdSchema,
+                description: v.pipe(
+                    v.string(),
+                    v.minLength(1),
+                    v.maxLength(MAX_OBSERVED_DAMAGE_ENTRY_CHARS),
+                ),
+            }),
+        ),
         v.maxLength(MAX_OBSERVED_DAMAGE_ENTRIES),
     ),
     rationale: v.pipe(v.string(), v.minLength(1), v.maxLength(MAX_RATIONALE_CHARS)),
@@ -186,15 +203,18 @@ async function inventoryImages(
     const output = result.value;
     const observedDamage =
         request.state === CaptureState.Before
-            ? output.observedDamage.map((entry) => `${PRE_EXISTING_DAMAGE_PREFIX} ${entry}`)
+            ? output.observedDamage.map((entry) => ({
+                  artifactId: entry.artifactId,
+                  description: `${PRE_EXISTING_DAMAGE_PREFIX} ${entry.description}`,
+              }))
             : output.observedDamage;
     const model = boundedModel(options.vision.modelId);
     const artifactIds = request.images.map((image) => image.id);
     const allowedIds = new Set(artifactIds);
-    for (const instance of output.instances) {
-        if (!allowedIds.has(instance.artifactId)) {
+    for (const cited of [...output.instances, ...output.observedDamage]) {
+        if (!allowedIds.has(cited.artifactId)) {
             throw new Error(
-                `Vision cited a ${request.state} ${request.citationScope}: ${instance.artifactId}`,
+                `Vision cited a ${request.state} ${request.citationScope}: ${cited.artifactId}`,
             );
         }
     }
@@ -252,7 +272,8 @@ function pageDamageRubric(kind: SymptomKind): string[] {
     ].join(', ');
     return [
         'List in observedDamage every visible rendering flaw of the page apart from the',
-        `reporter-defined defect itself — ${flaws} — each naming its landmark.`,
+        `reporter-defined defect itself — ${flaws} — each naming its landmark and citing the`,
+        'labelled artifact ID of the image it is visible in.',
     ];
 }
 
@@ -294,6 +315,7 @@ export async function inventoryTileState(
                         'image lacks enough visible page content to inspect that supplied region.',
                         ...COMPARISON_OBSTRUCTION_INVENTORY_RUBRIC,
                         ...pageDamageRubric(options.symptomKind ?? SymptomKind.Ads),
+                        ...INSTANCE_FOOTPRINT_RUBRIC,
                     ].join(' '),
                     userContext: [
                         `Candidate rule: ${options.candidateRule.slice(0, MAX_CANDIDATE_RULE_CHARS)}`,
@@ -363,6 +385,7 @@ export async function inventoryOverviewImage(
             ...inventoryResidueRubric(options.symptomKind ?? SymptomKind.Ads),
             ...COMPARISON_OBSTRUCTION_INVENTORY_RUBRIC,
             ...pageDamageRubric(options.symptomKind ?? SymptomKind.Ads),
+            ...INSTANCE_FOOTPRINT_RUBRIC,
             'Set coverageObserved=false only when this image is technically unreadable for',
             'its stated overview purpose.',
         ].join(' '),

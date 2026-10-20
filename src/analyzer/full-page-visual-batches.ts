@@ -9,7 +9,7 @@ import type { TraceRecorder } from '../tracer/trace-recorder';
 import {
     CandidateVisualInstanceSchema,
     type CandidateVisualInstance,
-} from '../types/candidate-visual-review';
+} from '../types/candidate-visual-instance';
 import {
     ReporterSymptomPresence,
     ReporterSymptomPresenceSchema,

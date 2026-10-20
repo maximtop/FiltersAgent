@@ -18,12 +18,14 @@ import {
     CANDIDATE_VISUAL_AD_LAYOUT_RESIDUE_VALUES,
     CANDIDATE_VISUAL_SYMPTOM_VALUES,
     CandidateInstanceDisposition,
-    CandidateVisualInstanceSchema,
     CandidateVisualReviewModelOutputSchema,
-    type CandidateVisualInstance,
     type CandidateVisualInventoryReconciliation,
     type CandidateVisualReviewModelOutput,
 } from '../types/candidate-visual-review';
+import {
+    CandidateVisualInstanceSchema,
+    type CandidateVisualInstance,
+} from '../types/candidate-visual-instance';
 import { CaptureState } from '../types/validation';
 import { MAX_RATIONALE_CHARS } from './candidate-visual-inventory';
 import {
@@ -32,6 +34,10 @@ import {
 } from './candidate-visual-context';
 import type { CandidateVisualVerifierOptions } from './candidate-visual-evidence';
 import { SymptomKind } from './symptom-rubric';
+import {
+    assertConsistentSynthesis,
+    type SynthesisConsistency,
+} from './candidate-visual-consistency';
 import {
     buildAfterDismissalAuditMessage,
     buildFinalSynthesisRepairMessage,
@@ -220,6 +226,7 @@ function assertAdditionalInstanceBindings(
  * @param allowedBeforeArtifactIds - Runner-owned before-state identifiers the model may cite.
  * @param allowedAfterArtifactIds - Runner-owned after-state identifiers the model may cite.
  * @param runnerCoverageComplete - Whether the tile capture mechanically covered both documents.
+ * @param consistency - Which summary fields must rest on a reconciled observation.
  * @returns Strict semantic observations plus an auditable runner-bound reconciliation.
  */
 function normalizeModelOutput(
@@ -229,6 +236,7 @@ function normalizeModelOutput(
     allowedBeforeArtifactIds: ReadonlySet<string>,
     allowedAfterArtifactIds: ReadonlySet<string>,
     runnerCoverageComplete: boolean,
+    consistency: SynthesisConsistency,
 ): NormalizedCandidateVisualOutput {
     assertCompleteInventoryReconciliation(
         'before',
@@ -294,6 +302,14 @@ function normalizeModelOutput(
         rationale: output.rationale,
         observedDamage: output.observedDamage,
     });
+    assertConsistentSynthesis(
+        semanticOutput,
+        consistency,
+        afterInventory.observations.reduce(
+            (count, observation) => count + observation.observedDamage.length,
+            0,
+        ),
+    );
     return {
         semanticOutput,
         inventoryReconciliation: {
@@ -405,6 +421,7 @@ function recordFinalSynthesisAttempt(
  * @param allowedAfterArtifactIds - Runner-owned after screenshot identifiers.
  * @param runnerCoverageComplete - Whether capture and inventory coverage were complete.
  * @param model - Bounded vision-model identifier.
+ * @param consistency - Which summary fields must rest on a reconciled observation.
  * @returns Normalized semantic result and complete reconciliation audit trail.
  */
 export async function synthesizeFinalReview(
@@ -416,6 +433,7 @@ export async function synthesizeFinalReview(
     allowedAfterArtifactIds: ReadonlySet<string>,
     runnerCoverageComplete: boolean,
     model: string,
+    consistency: SynthesisConsistency,
 ): Promise<NormalizedCandidateVisualOutput> {
     let messages = baseMessages;
     let lastValidationError = 'unknown final synthesis validation failure';
@@ -476,6 +494,7 @@ export async function synthesizeFinalReview(
                 allowedBeforeArtifactIds,
                 allowedAfterArtifactIds,
                 runnerCoverageComplete,
+                consistency,
             );
             const dismissedAfterObservationIndices = untrustedOutput.afterInventoryReconciliation
                 .filter((item) => item.disposition === CandidateInstanceDisposition.NotSameSymptom)

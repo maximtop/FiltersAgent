@@ -14,7 +14,7 @@ import {
     MAX_INSTANCE_DESCRIPTION_CHARS,
     MAX_INSTANCE_LANDMARK_CHARS,
     type CandidateVisualInstance,
-} from '../types/candidate-visual-review';
+} from '../types/candidate-visual-instance';
 import {
     MAX_ARTIFACT_ID_CHARS,
     type CandidateVisualFullPageOverviewEvidence,
@@ -167,6 +167,60 @@ export type CandidateVisualEvidenceSource =
     (typeof CandidateVisualEvidenceSource)[keyof typeof CandidateVisualEvidenceSource];
 
 /**
+ * What one inventory instance shows, so the runner knows which instances it may ever set aside.
+ */
+export const CandidateVisualInstanceFootprint = {
+    /**
+     * Only empty space: no creative, ad label, frame or placeholder block is visible in it.
+     */
+    BlankSpace: 'blank_space',
+
+    /**
+     * Something visible: advertising, an ad label, a frame, a placeholder block, or broken content.
+     */
+    Visible: 'visible',
+} as const;
+
+/**
+ * CandidateVisualInstanceFootprint value.
+ */
+export type CandidateVisualInstanceFootprint =
+    (typeof CandidateVisualInstanceFootprint)[keyof typeof CandidateVisualInstanceFootprint];
+
+/**
+ * Every footprint value, for the inventory output schema.
+ */
+export const CANDIDATE_VISUAL_INSTANCE_FOOTPRINT_VALUES = Object.values(
+    CandidateVisualInstanceFootprint,
+);
+
+/**
+ * One inventory instance with what the vision pass said it shows.
+ */
+export type CandidateVisualInventoryInstance = CandidateVisualInstance & {
+    /**
+     * Whether the instance is only blank space or shows something.
+     */
+    footprint: CandidateVisualInstanceFootprint;
+};
+
+/**
+ * One visible rendering flaw an inventory request reported, tied to the image it is in.
+ */
+export interface CandidateVisualDamageEntry {
+    /**
+     * Runner-owned artifact of the image the flaw is visible in.
+     */
+    artifactId: string;
+
+    /**
+     * The flaw and its landmark, as the request described it; BEFORE entries carry the pre-existing
+     * prefix.
+     */
+    description: string;
+}
+
+/**
  * Compact provenance for one bounded visual-observation request.
  */
 export interface CandidateVisualInventoryObservation {
@@ -198,7 +252,7 @@ export interface CandidateVisualInventoryObservation {
     /**
      * Bounded visible-damage observations produced by this request.
      */
-    observedDamage: string[];
+    observedDamage: CandidateVisualDamageEntry[];
 
     /**
      * Bounded model rationale for the visual observation.
@@ -218,7 +272,7 @@ export interface CandidateVisualTileInventory {
     /**
      * Every model-observed occurrence tied to a runner-owned tile.
      */
-    instances: CandidateVisualInstance[];
+    instances: CandidateVisualInventoryInstance[];
 
     /**
      * Every image request that produced this inventory, with the symptom scope, damage and

@@ -47,6 +47,9 @@ import {
     type FittedTileInventoryContext,
 } from './candidate-visual-context';
 import { planFullPageOverview } from './candidate-visual-planning';
+import { settleAfterInventory } from './candidate-visual-settlement';
+import { synthesisConsistency } from './candidate-visual-consistency';
+import type { CandidateVisualSettlement } from '../types/candidate-visual-settlement';
 import { inconclusiveModelOutput, synthesizeFinalReview } from './candidate-visual-synthesis';
 import type { CandidateVisualVerifierOptions } from './candidate-visual-evidence';
 
@@ -127,17 +130,48 @@ function domCheckContext(options: CandidateVisualVerifierOptions): string[] {
 }
 
 /**
+ * Present what the runner set aside from the AFTER inventory, or nothing when it set nothing aside.
+ *
+ * The batch rationales still describe what was set aside, so the synthesis is told those items are
+ * settled rather than left to rediscover them there.
+ *
+ * @param settlement - What the runner set aside.
+ * @returns Context lines for the final text-only request.
+ */
+function settlementContext(settlement: CandidateVisualSettlement): string[] {
+    if (settlement.observations.length === 0 && settlement.damage.length === 0) {
+        return [];
+    }
+    return [
+        'Runner-settled AFTER items, taken out of the AFTER inventory before this synthesis ' +
+            'because a BEFORE tile shows them unchanged or an agent DOM check proves the blank ' +
+            'space is page layout. They are settled: never count them as remaining, residue or ' +
+            'damage, whatever a batch rationale says about them.',
+        JSON.stringify({
+            observations: settlement.observations.map((item) => ({
+                ground: item.ground,
+                landmark: item.instance.landmark,
+                description: item.instance.description,
+            })),
+            damage: settlement.damage.map((item) => item.description),
+        }),
+    ];
+}
+
+/**
  * Build the final text-only request after every evidence image was inspected in bounded calls.
  *
  * @param options - Trusted review options containing candidate and runner context.
  * @param inventoryContext - Every visual observation from the same vision model, within the limit.
  * @param fullPageOverviewEvidence - Provenance for original or omitted full-page overviews.
+ * @param settlement - What the runner set aside from the AFTER inventory.
  * @returns Ordered text messages containing the complete before/after observation inventory.
  */
 function buildReviewMessages(
     options: CandidateVisualVerifierOptions,
     inventoryContext: FittedTileInventoryContext,
     fullPageOverviewEvidence: CandidateVisualFullPageOverviewEvidencePair,
+    settlement: CandidateVisualSettlement,
 ): SingleShotMessage[] {
     const symptomKind = options.symptomKind ?? SymptomKind.Ads;
     const system: SingleShotMessage = {
@@ -216,6 +250,7 @@ function buildReviewMessages(
             ...domCheckContext(options),
             'Runner-bound image inventory (vision observations plus explicit overview omissions):',
             inventoryContext.text,
+            ...settlementContext(settlement),
             'Runner-owned full-page overview provenance:',
             JSON.stringify(fullPageOverviewEvidence),
             `Runner capture coverage: before=${options.evidence.beforeCoverageComplete}, ` +
@@ -298,6 +333,7 @@ export async function reviewCandidateVisually(
     let semanticOutput: CandidateVisualReviewModelOutput;
     let inventoryReconciliation: CandidateVisualInventoryReconciliation | undefined;
     let fullPageOverviewEvidence: CandidateVisualFullPageOverviewEvidencePair | undefined;
+    let settlement: CandidateVisualSettlement | undefined;
     try {
         fullPageOverviewEvidence = {
             before: planFullPageOverview(
@@ -369,10 +405,17 @@ export async function reviewCandidateVisually(
             [beforeTileInventory, beforeViewportInventory, beforeFullPageInventory],
             CaptureState.Before,
         );
-        const afterInventory = combineStateInventories(
-            [afterTileInventory, afterViewportInventory, afterFullPageInventory],
-            CaptureState.After,
+        const settled = await settleAfterInventory(
+            options,
+            beforeInventory,
+            combineStateInventories(
+                [afterTileInventory, afterViewportInventory, afterFullPageInventory],
+                CaptureState.After,
+            ),
+            limiter,
         );
+        const afterInventory = settled.after;
+        settlement = settled.settlement;
         const inventoryContext = renderTileInventoryContext(beforeInventory, afterInventory);
         options.recorder.record(TraceEventType.Decision, {
             phase: SYNTHESIS_CONTEXT_DECISION_PHASE,
@@ -390,7 +433,12 @@ export async function reviewCandidateVisually(
                     `${inventoryContext.limitChars}.`,
             );
         }
-        const messages = buildReviewMessages(options, inventoryContext, fullPageOverviewEvidence);
+        const messages = buildReviewMessages(
+            options,
+            inventoryContext,
+            fullPageOverviewEvidence,
+            settlement,
+        );
         const allowedBeforeArtifactIds = new Set([
             options.evidence.beforeViewport.id,
             ...(options.evidence.beforeFullPage ? [options.evidence.beforeFullPage.id] : []),
@@ -413,6 +461,11 @@ export async function reviewCandidateVisually(
                 beforeInventory.coverageObserved &&
                 afterInventory.coverageObserved,
             model,
+            synthesisConsistency(
+                options.symptomKind ?? SymptomKind.Ads,
+                reviewNetworkScope(options),
+                options.candidateRule,
+            ),
         );
         semanticOutput = normalized.semanticOutput;
         inventoryReconciliation = normalized.inventoryReconciliation;
@@ -467,6 +520,7 @@ export async function reviewCandidateVisually(
         rationale: semanticOutput.rationale,
         observedDamage: semanticOutput.observedDamage,
         ...(inventoryReconciliation === undefined ? {} : { inventoryReconciliation }),
+        ...(settlement === undefined ? {} : { settlement }),
     });
     const artifact = persistReview(review, candidateShortHash, options);
     return { review, ...artifact };

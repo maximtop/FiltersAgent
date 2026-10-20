@@ -183,22 +183,28 @@ export function planFullPageOverview(
  * Split page tiles into count- and byte-bounded provider requests without omitting any image.
  *
  * @param tiles - Complete ordered tile list for one page state.
+ * @param maxTiles - Most tiles one batch may hold; the request limit unless other images join it.
+ * @param reservedBytes - Bytes each request already spends on images sent beside the batch.
  * @returns Ordered batches containing at most the configured image limit.
  */
-export function tileBatches(tiles: CandidateVisualEvidenceTile[]): CandidateVisualEvidenceTile[][] {
+export function tileBatches(
+    tiles: CandidateVisualEvidenceTile[],
+    maxTiles = MAX_TILES_PER_VISION_BATCH,
+    reservedBytes = 0,
+): CandidateVisualEvidenceTile[][] {
     const batches: CandidateVisualEvidenceTile[][] = [];
     let current: CandidateVisualEvidenceTile[] = [];
-    let currentBytes = 0;
+    let currentBytes = reservedBytes;
     for (const tile of tiles) {
         const bytes = evidenceImageBytes(tile);
         if (
             current.length > 0 &&
-            (current.length >= MAX_TILES_PER_VISION_BATCH ||
+            (current.length >= maxTiles ||
                 currentBytes + bytes > MAX_VISION_IMAGE_BYTES_PER_REQUEST)
         ) {
             batches.push(current);
             current = [];
-            currentBytes = 0;
+            currentBytes = reservedBytes;
         }
         current.push(tile);
         currentBytes += bytes;
