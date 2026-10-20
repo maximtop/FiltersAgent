@@ -96,7 +96,8 @@ const MAX_HOLDER_CHARS = 300;
 
 /**
  * DOM calls whose first string argument selects an element, and what that argument is shorthand
- * for: an ID or a class name stands for the selector a querySelector call would take.
+ * for: an ID or a class name stands for the selector a querySelector call would take, so either
+ * spelling names the element.
  */
 const SELECTOR_CALLS = {
     querySelector: '',
@@ -177,7 +178,8 @@ export interface AdjudicationItem {
  * Every selector a check's expression queries through a DOM call with a literal argument.
  *
  * @param expression - The check's expression.
- * @returns The selectors, IDs and class names written as the selector they stand for.
+ * @returns The selectors, with every ID and class name both as written and as the selector it
+ *   stands for.
  */
 function queriedSelectors(expression: string): Set<string> {
     const selectors = new Set<string>();
@@ -186,6 +188,7 @@ function queriedSelectors(expression: string): Set<string> {
             continue;
         }
         const shorthand = SELECTOR_CALLS[call as keyof typeof SELECTOR_CALLS];
+        selectors.add(literal.trim());
         selectors.add(`${shorthand}${literal.trim()}`);
     }
     return selectors;

@@ -150,10 +150,12 @@ left open goes to one narrow request with the agent's DOM checks, held to the
 same bar as the synthesis: the check must name the element that holds the
 space and show it is not kept for the ad. The runner acts on a layout answer
 only when the cited check measured both page loads and its expression queries
-the named selector, through `querySelector`, `closest` or a similar call.
+the named element with a literal selector, ID or class name, through
+`querySelector`, `getElementById` or a similar call.
 Visible advertising, labels and frames are never set aside. The review
-records everything it set aside, with its ground, under `settlement`, and the
-trace records every answer the code refused and why.
+records everything it set aside, with its ground, under `settlement`. The
+trace counts the attribution answers the code refused by reason, and lists
+each answer of the DOM-check request with the reason it was refused.
 
 The synthesis must back its summary with what it reconciled. In an ads review
 an unresolved symptom needs an AFTER observation it kept as remaining, and

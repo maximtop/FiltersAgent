@@ -153,8 +153,8 @@ export function assertConsistentSynthesis(
             'pageIntegrity=regressed needs a flaw the AFTER inventory lists or non-target ' +
                 'content named in missingContent, and there is neither: the runner set aside ' +
                 'every flaw the page shows unchanged without the candidate. Name the non-target ' +
-                'content the AFTER state lacks in missingContent, or report unclear when the ' +
-                'evidence cannot tell.',
+                'content the AFTER state lacks in missingContent, report intact when nothing else ' +
+                'is visibly broken, or unclear when the evidence cannot tell.',
         );
     }
 }

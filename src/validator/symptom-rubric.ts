@@ -277,22 +277,30 @@ export function afterDismissalGrounds(kind: SymptomKind): string[] {
 /**
  * The bar a DOM check must clear to prove blank space is page layout, shared word for word by the
  * synthesis that weighs checks and the request whose layout findings the code acts on.
+ *
+ * Only where the symptom sat is named for each reader: the synthesis decides which BEFORE
+ * observations it retains, while the request is handed the BEFORE observations of the symptom.
+ *
+ * @param symptomSite - Which BEFORE observation marks where the symptom sat, for this reader.
+ * @returns Prompt lines stating the bar.
  */
-const DOM_CHECK_LAYOUT_BAR = [
-    'A check proves page layout only when it names the element whose box holds the space — its',
-    'margin, padding, height or grid track — and shows that element is not an ad container and',
-    'the space is not reserved for the advertising, such as a margin or height the page applies',
-    'only while an ad slot is present or that matches the slot. Blank space a check proves that',
-    "way to be an empty track of a transparent grid or flex container, or the page's own margins",
-    'or background, is page layout, not residue. Geometry that measures the same before and',
-    'after proves nothing by itself: hiding an ad that sits out of flow, or whose slot was',
-    'already empty, leaves the geometry unchanged, so where a BEFORE observation of the',
-    'reporter-defined symptom sat, a check that shows only unchanged geometry weighs nothing.',
-    'Blank space a check shows is an emptied container that still paints its own background,',
-    'border or shadow, or a slot that keeps a reserved height, is residue. A check that does not',
-    'measure the region of the observation, or whose result does not support its claim, weighs',
-    'nothing.',
-];
+function domCheckLayoutBar(symptomSite: string): string[] {
+    return [
+        'A check proves page layout only when it names the element whose box holds the space —',
+        'its margin, padding, height or grid track — and shows that element is not an ad',
+        'container and the space is not reserved for the advertising, such as a margin or height',
+        'the page applies only while an ad slot is present or that matches the slot. Blank space',
+        'a check proves that way to be an empty track of a transparent grid or flex container, or',
+        "the page's own margins or background, is page layout, not residue. Geometry that",
+        'measures the same before and after proves nothing by itself: hiding an ad that sits out',
+        'of flow, or whose slot was already empty, leaves the geometry unchanged, so where',
+        `${symptomSite} sat, a check that shows only unchanged geometry weighs nothing.`,
+        'Blank space a check shows is an emptied container that still paints its own background,',
+        'border or shadow, or a slot that keeps a reserved height, is residue. A check that does',
+        'not measure the region of the observation, or whose result does not support its claim,',
+        'weighs nothing.',
+    ];
+}
 
 /**
  * Rubric lines weighing the DOM checks the agent attached to `apply_rule`.
@@ -314,7 +322,7 @@ const DOM_CHECK_LAYOUT_BAR = [
 const DOM_CHECK_RESIDUE_RUBRIC = [
     'When agent DOM checks are supplied, weigh them for blank space at a removed advertising',
     'region.',
-    ...DOM_CHECK_LAYOUT_BAR,
+    ...domCheckLayoutBar('a BEFORE observation you retain as same_symptom'),
     'Reconcile blank space a check proves to be page layout as not_same_symptom and leave it out',
     'of adLayoutResidue. A check never dismisses visible advertising, and where no check weighs,',
     'the images decide.',
@@ -323,16 +331,16 @@ const DOM_CHECK_RESIDUE_RUBRIC = [
 /**
  * Rubric of the request that binds agent DOM checks to blank AFTER observations.
  *
- * It carries the bar of {@link DOM_CHECK_RESIDUE_RUBRIC} word for word: what the code acts on and
- * what the synthesis weighs are the same judgment. A layout finding also quotes the selector the
- * check queries for the element holding the space, so the code can see the check measured that
- * element.
+ * It carries the bar of {@link DOM_CHECK_RESIDUE_RUBRIC} word for word, apart from where the
+ * symptom sat: what the code acts on and what the synthesis weighs are the same judgment. A layout
+ * finding also quotes the selector the check queries for the element holding the space, so the code
+ * can see the check measured that element.
  */
 export const DOM_CHECK_ADJUDICATION_RUBRIC = [
     'Agent DOM checks were measured on the BEFORE and AFTER page loads of a candidate filter rule.',
     'For every numbered AFTER observation of blank space, decide whether one check proves that',
     'space is page layout.',
-    ...DOM_CHECK_LAYOUT_BAR,
+    ...domCheckLayoutBar('a BEFORE observation of the reporter-defined symptom'),
     'Answer finding=layout when a check proves the blank space is page layout, with that check',
     "number in domCheckIndex and in holder the selector the check's expression queries for the",
     'element holding the space, exactly as the expression spells it; finding=residue when a check',

@@ -269,7 +269,8 @@ export interface AttributionAnswers {
     matches: Map<string, AttributionMatch>;
 
     /**
-     * Keys of blank-space items that sit where BEFORE showed the symptom; none is asked again.
+     * Keys of blank-space items that sit where BEFORE showed the symptom, as the model placed it or
+     * as the BEFORE inventory records it on the cited image; none is asked again.
      */
     atSymptom: Set<string>;
 
@@ -337,6 +338,7 @@ export function readAnswers(
             }
             if (symptomImageIds.has(answer.comparisonArtifactId)) {
                 refuse(AttributionRefusal.SymptomOnComparison);
+                atSymptom.add(item.key);
                 continue;
             }
         }
