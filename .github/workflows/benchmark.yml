@@ -98,7 +98,7 @@ env:
     # it stops the series in the plan job: a series without costs cannot be compared.
     BENCHMARK_PRICING: |
         {
-            "source": "Claude models: Anthropic list prices, checked 2026-10-19; cache writes at the 5-minute rate (1.25x input). claude-haiku-5-5 is priced for prompts up to 100,000 tokens and costs 5x above that, which this table cannot express, so its cost is a lower bound. deepseek-flash and gemini-3.7-flash: lab pricing file of 2026-10-14.",
+            "source": "Claude models: Anthropic list prices, checked 2026-10-19; cache writes at the 5-minute rate (1.25x input). claude-haiku-5-5 is priced for prompts up to 100,000 tokens and costs 5x above that, which this table cannot express, so its cost is a lower bound. deepseek-flash and gemini-3.7-flash: lab pricing file of 2026-10-14. The other gateway models: the gateway's model catalog, checked 2026-10-20; gpt-6.1-sol and gpt-6-luna cost more from 272,000 prompt tokens, which is their whole context window, so their only reachable rate is listed.",
             "models": {
                 "claude-fable-5-1": {
                     "inputUsdPerMillionTokens": 10,
@@ -135,6 +135,48 @@ env:
                     "outputUsdPerMillionTokens": 3.75,
                     "cachedInputUsdPerMillionTokens": 0.075,
                     "cacheWriteUsdPerMillionTokens": 0.79167
+                },
+                "gpt-6.1-sol": {
+                    "inputUsdPerMillionTokens": 1,
+                    "outputUsdPerMillionTokens": 5,
+                    "cachedInputUsdPerMillionTokens": 0.05,
+                    "cacheWriteUsdPerMillionTokens": 1.25
+                },
+                "gpt-6-luna": {
+                    "inputUsdPerMillionTokens": 0.05,
+                    "outputUsdPerMillionTokens": 0.25,
+                    "cachedInputUsdPerMillionTokens": 0.005,
+                    "cacheWriteUsdPerMillionTokens": 0.0625
+                },
+                "kimi-k3": {
+                    "inputUsdPerMillionTokens": 3,
+                    "outputUsdPerMillionTokens": 15,
+                    "cachedInputUsdPerMillionTokens": 0.3,
+                    "cacheWriteUsdPerMillionTokens": 3
+                },
+                "gemini-3.8-flash": {
+                    "inputUsdPerMillionTokens": 0.75,
+                    "outputUsdPerMillionTokens": 3.75,
+                    "cachedInputUsdPerMillionTokens": 0.075,
+                    "cacheWriteUsdPerMillionTokens": 0.041667
+                },
+                "glm-5.3-flash": {
+                    "inputUsdPerMillionTokens": 0.15,
+                    "outputUsdPerMillionTokens": 0.5,
+                    "cachedInputUsdPerMillionTokens": 0.03,
+                    "cacheWriteUsdPerMillionTokens": 0.15
+                },
+                "qwen3.8-flash": {
+                    "inputUsdPerMillionTokens": 0.16,
+                    "outputUsdPerMillionTokens": 0.47,
+                    "cachedInputUsdPerMillionTokens": 0.016,
+                    "cacheWriteUsdPerMillionTokens": 0.16
+                },
+                "muse-spark-1.3-contributor": {
+                    "inputUsdPerMillionTokens": 0.1,
+                    "outputUsdPerMillionTokens": 0.2,
+                    "cachedInputUsdPerMillionTokens": 0.002,
+                    "cacheWriteUsdPerMillionTokens": 0.1
                 }
             }
         }
