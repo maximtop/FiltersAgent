@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { TraceEventType, type TraceEvent } from '../../src/types/trace';
-import { BEFORE_SLOT, FOOTER_GRAPHIC, SECTION_GAP, reviewWith } from './visual-review-stub';
+import { reviewWith } from './visual-review-stub';
+import { BEFORE_SLOT, FOOTER_GRAPHIC, SECTION_GAP } from './visual-review-fixtures';
 
 /**
  * Validation errors the final synthesis was sent back to repair.

@@ -19,6 +19,8 @@ import {
     CANDIDATE_VISUAL_SYMPTOM_VALUES,
     CandidateInstanceDisposition,
     CandidateVisualReviewModelOutputSchema,
+    MAX_OBSERVED_DAMAGE_ITEMS,
+    MAX_OBSERVED_DAMAGE_ITEM_CHARS,
     type CandidateVisualInventoryReconciliation,
     type CandidateVisualReviewModelOutput,
 } from '../types/candidate-visual-review';
@@ -84,21 +86,10 @@ const CandidateVisualAfterDispositionOutputSchema = v.object({
 });
 
 /**
- * Most damage entries a review keeps, flaws and missing content together; the persisted review
- * holds the same bound.
- */
-const MAX_FINAL_DAMAGE_ENTRIES = 20;
-
-/**
- * Longest damage entry a review keeps; the persisted review holds the same bound.
- */
-const MAX_FINAL_DAMAGE_ENTRY_CHARS = 1_000;
-
-/**
  * Longest missing-content entry: one kept damage entry once the prefix and its space are added.
  */
 const MAX_MISSING_CONTENT_ENTRY_CHARS =
-    MAX_FINAL_DAMAGE_ENTRY_CHARS - MISSING_CONTENT_PREFIX.length - 1;
+    MAX_OBSERVED_DAMAGE_ITEM_CHARS - MISSING_CONTENT_PREFIX.length - 1;
 
 /**
  * Semantic output used only by the final inventory-reconciliation vision call.
@@ -131,8 +122,10 @@ const CandidateVisualFinalModelOutputSchema = v.pipe(
         pageIntegrity: v.picklist(CANDIDATE_VISUAL_PAGE_INTEGRITY_VALUES),
         rationale: v.pipe(v.string(), v.minLength(1), v.maxLength(MAX_RATIONALE_CHARS)),
         observedDamage: v.pipe(
-            v.array(v.pipe(v.string(), v.minLength(1), v.maxLength(MAX_FINAL_DAMAGE_ENTRY_CHARS))),
-            v.maxLength(MAX_FINAL_DAMAGE_ENTRIES),
+            v.array(
+                v.pipe(v.string(), v.minLength(1), v.maxLength(MAX_OBSERVED_DAMAGE_ITEM_CHARS)),
+            ),
+            v.maxLength(MAX_OBSERVED_DAMAGE_ITEMS),
         ),
         // Optional so a reply that names nothing gone needs no key; the review keeps each entry in
         // observedDamage behind its prefix.
@@ -145,8 +138,8 @@ const CandidateVisualFinalModelOutputSchema = v.pipe(
     v.check(
         (output) =>
             output.observedDamage.length + (output.missingContent?.length ?? 0) <=
-            MAX_FINAL_DAMAGE_ENTRIES,
-        `observedDamage and missingContent together hold at most ${MAX_FINAL_DAMAGE_ENTRIES} ` +
+            MAX_OBSERVED_DAMAGE_ITEMS,
+        `observedDamage and missingContent together hold at most ${MAX_OBSERVED_DAMAGE_ITEMS} ` +
             'entries; merge entries about the same element.',
     ),
 );

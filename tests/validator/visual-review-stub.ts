@@ -6,18 +6,18 @@
 import { mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { vi } from 'vitest';
 import { TraceRecorder } from '../../src/tracer/trace-recorder';
 import { reviewCandidateVisually } from '../../src/validator/candidate-visual-verifier';
 import type { CandidateVisualReview } from '../../src/types/candidate-visual-review';
 import type { TraceEvent } from '../../src/types/trace';
+import type { CaptureState } from '../../src/types/validation';
 import type {
     CandidateVisualEvidenceImage,
     CandidateVisualVerifierOptions,
 } from '../../src/validator/candidate-visual-evidence';
 import { SingleShotResultKind, type SingleShotClient } from '../../src/pi/single-shot-types';
 import type { SingleShotMessage } from '../../src/pi/single-shot-input';
-import { DomCheckMeasurementStatus, type DomCheckRecord } from '../../src/types/dom-check';
+import type { DomCheckRecord } from '../../src/types/dom-check';
 import { encodePng } from '../pi/fixtures/png-image';
 import type { CandidateVisualInstanceFootprint } from '../../src/types/candidate-visual-instance';
 import type { DomCheckFinding } from '../../src/validator/candidate-visual-dom-adjudication';
@@ -84,7 +84,7 @@ export interface StubDamage {
 /**
  * What an attribution stub answers for one item, or nothing to leave it open.
  */
-export interface StubAttribution {
+interface StubAttribution {
     /**
      * BEFORE image the answer cites as showing the item unchanged.
      */
@@ -99,7 +99,7 @@ export interface StubAttribution {
 /**
  * What an adjudication stub answers for every observation it is asked about.
  */
-export interface StubAdjudication {
+interface StubAdjudication {
     /**
      * What the cited check says about the space.
      */
@@ -207,24 +207,9 @@ interface StubRequest {
 }
 
 /**
- * The stubbed client and the recorder of its calls.
- */
-export interface StubVision {
-    /**
-     * The client the review calls.
-     */
-    vision: SingleShotClient;
-
-    /**
-     * Every call the review made.
-     */
-    chat: ReturnType<typeof vi.fn>;
-}
-
-/**
  * A value for each page state.
  */
-export interface StatePair<T> {
+interface StatePair<T> {
     /**
      * The value for the page before the candidate.
      */
@@ -239,7 +224,7 @@ export interface StatePair<T> {
 /**
  * What one review left behind.
  */
-export interface ReviewOutcome {
+interface ReviewOutcome {
     /**
      * The persisted review.
      */
@@ -257,7 +242,7 @@ export interface ReviewOutcome {
  * @param messages - The request messages.
  * @returns Their text.
  */
-export function requestText(messages: SingleShotMessage[]): string {
+function requestText(messages: SingleShotMessage[]): string {
     return messages.map((message) => message.text).join('\n');
 }
 
@@ -277,10 +262,10 @@ function parsed(value: unknown): unknown {
  * every AFTER flaw it is shown regresses the page.
  *
  * @param script - What the stub reports and answers.
- * @returns The client and the recorder of its calls.
+ * @returns The client.
  */
-export function stubVision(script: StubScript): StubVision {
-    const chat = vi.fn(async (options: StubRequest) => {
+function stubVision(script: StubScript): SingleShotClient {
+    const structured = async (options: StubRequest): Promise<unknown> => {
         const text = requestText(options.messages);
         const hasImages = options.messages.some((message) => 'images' in message);
         if (text.includes('ITEM artifact=')) {
@@ -362,23 +347,20 @@ export function stubVision(script: StubScript): StubVision {
                 ? {}
                 : { missingContent: script.missingContent }),
         });
-    });
+    };
     return {
-        vision: {
-            modelId: 'vision-stub',
-            structured: chat as never,
-            text: async () => {
-                throw new Error('not used by this suite');
-            },
+        modelId: 'vision-stub',
+        structured: structured as never,
+        text: async () => {
+            throw new Error('not used by this suite');
         },
-        chat,
     };
 }
 
 /**
  * What one review's fixture carries beyond the default: two stacked tiles per state.
  */
-export interface ReviewFixture {
+interface ReviewFixture {
     /**
      * DOM checks the agent attached.
      */
@@ -426,7 +408,7 @@ function makeOptions(
         return { id, path };
     };
     const tiles = (
-        state: 'before' | 'after',
+        state: CaptureState,
     ): CandidateVisualVerifierOptions['evidence']['beforeTiles'] =>
         (fixture.tileTops?.[state] ?? [0, TILE_HEIGHT]).map((y, index) => ({
             ...image(`${state}-tile-${index + 1}`),
@@ -476,76 +458,11 @@ export async function reviewWith(
 ): Promise<ReviewOutcome> {
     const root = mkdtempSync(join(tmpdir(), 'candidate-visual-settlement-'));
     try {
-        const { vision } = stubVision(script);
+        const vision = stubVision(script);
         const options = makeOptions(root, vision, fixture);
         const { review } = await reviewCandidateVisually(options);
         return { review, events: options.recorder.toJSON().events };
     } finally {
         rmSync(root, { recursive: true, force: true });
     }
-}
-
-/**
- * The advertising slot the BEFORE page shows and the candidate removes.
- */
-export const BEFORE_SLOT: StubInstance = {
-    artifactId: 'before-tile-1',
-    landmark: 'Below the masthead',
-    description: 'An empty reserved advertising slot spanning the content width.',
-    footprint: 'blank_space',
-};
-
-/**
- * The site's own footer graphic, which the AFTER inventory reads as a broken image.
- */
-export const FOOTER_GRAPHIC: StubDamage = {
-    artifactId: 'after-tile-2',
-    description: 'Footer, right column: a black error graphic with a cartoon character.',
-};
-
-/**
- * An ordinary gap between two sections of the AFTER page.
- */
-export const SECTION_GAP: StubInstance = {
-    artifactId: 'after-tile-2',
-    landmark: 'Between the news grid and the video section',
-    description: 'A blank band between the two sections, consistent with a reserved ad slot.',
-    footprint: 'blank_space',
-};
-
-/**
- * Blank space at the removed slot's own place, below the masthead.
- */
-export const SLOT_GAP: StubInstance = {
-    artifactId: 'after-tile-1',
-    landmark: 'Below the masthead',
-    description: 'A blank band below the masthead where the advertising slot was.',
-    footprint: 'blank_space',
-};
-
-/**
- * A DOM check naming the grid that holds the space below the masthead.
- *
- * @param after - What the check returned on the candidate page.
- * @returns The check record.
- */
-export function gridCheck(
-    after: DomCheckRecord['after'] = {
-        status: DomCheckMeasurementStatus.Measured,
-        result: '{"gap":"40px","background":"rgba(0, 0, 0, 0)"}',
-        truncated: false,
-    },
-): DomCheckRecord {
-    return {
-        expression:
-            "(() => { const s = getComputedStyle(document.querySelector('.home-grid')); " +
-            'return { gap: s.rowGap, background: s.backgroundColor }; })()',
-        claim: 'The space below the masthead is the row gap of the transparent home grid.',
-        before: {
-            status: DomCheckMeasurementStatus.Measured,
-            result: '{"gap":"40px","background":"rgba(0, 0, 0, 0)"}',
-            truncated: false,
-        },
-        after,
-    };
 }

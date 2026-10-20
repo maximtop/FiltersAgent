@@ -19,7 +19,7 @@ import {
 /**
  * Maximum number of page-damage observations accepted from one visual review.
  */
-const MAX_OBSERVED_DAMAGE_ITEMS = 20;
+export const MAX_OBSERVED_DAMAGE_ITEMS = 20;
 
 /**
  * Maximum number of repeated symptom instances accepted from one visual review.
@@ -37,9 +37,18 @@ const MAX_INVENTORY_RECONCILIATIONS = 50;
 const RationaleSchema = v.pipe(v.string(), v.minLength(1), v.maxLength(4_000));
 
 /**
+ * Longest description of one visually observed non-target regression.
+ */
+export const MAX_OBSERVED_DAMAGE_ITEM_CHARS = 1_000;
+
+/**
  * Bounded description of one visually observed non-target regression.
  */
-const ObservedDamageItemSchema = v.pipe(v.string(), v.minLength(1), v.maxLength(1_000));
+const ObservedDamageItemSchema = v.pipe(
+    v.string(),
+    v.minLength(1),
+    v.maxLength(MAX_OBSERVED_DAMAGE_ITEM_CHARS),
+);
 
 /**
  * Bounded description of the complete reporter-defined symptom family inspected by vision.

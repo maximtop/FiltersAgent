@@ -1,12 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import {
-    BEFORE_SLOT,
-    FOOTER_GRAPHIC,
-    SECTION_GAP,
-    SLOT_GAP,
-    reviewWith,
-    type StubInstance,
-} from './visual-review-stub';
+import { TILE_HEIGHT, reviewWith, type StubInstance } from './visual-review-stub';
+import { BEFORE_SLOT, FOOTER_GRAPHIC, SECTION_GAP, SLOT_GAP } from './visual-review-fixtures';
+
+/**
+ * Distance between the tops of two overlapping tiles, as the capture lays them out.
+ */
+const OVERLAPPING_TILE_STEP = 920;
 
 describe('reviewCandidateVisually settles what the page showed without the candidate', () => {
     it('does not count a flaw the BEFORE tile shows unchanged as candidate damage', async () => {
@@ -67,6 +66,37 @@ describe('reviewCandidateVisually settles what the page showed without the candi
             damage: [],
             attribute: () => ({ comparisonArtifactId: 'before-tile-1' }),
         });
+
+        expect(review.verdict).toBe('rejected');
+        expect(review.settlement?.observations).toEqual([]);
+    });
+
+    it('asks no further BEFORE tile once a match lands on the blank-space symptom', async () => {
+        // The document lost two tiles' height, so the slot gap's window spans three BEFORE tiles in
+        // two requests. The first match lands on the tile where BEFORE recorded the empty slot;
+        // the second request offers a tile with nothing recorded on it, and asking again there
+        // would set the slot's own place aside.
+        const { review } = await reviewWith(
+            {
+                instances: [BEFORE_SLOT, SLOT_GAP],
+                damage: [],
+                attribute: (_item, request) => ({
+                    comparisonArtifactId: request.includes('COMPARISON artifact=before-tile-1;')
+                        ? 'before-tile-1'
+                        : 'before-tile-3',
+                }),
+            },
+            {
+                tileTops: {
+                    before: [0, OVERLAPPING_TILE_STEP, 2 * OVERLAPPING_TILE_STEP],
+                    after: [0],
+                },
+                documentHeights: {
+                    before: 2 * OVERLAPPING_TILE_STEP + TILE_HEIGHT,
+                    after: TILE_HEIGHT,
+                },
+            },
+        );
 
         expect(review.verdict).toBe('rejected');
         expect(review.settlement?.observations).toEqual([]);

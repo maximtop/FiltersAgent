@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { TraceEventType } from '../../src/types/trace';
-import { BEFORE_SLOT, FOOTER_GRAPHIC, TILE_HEIGHT, reviewWith } from './visual-review-stub';
+import { TILE_HEIGHT, reviewWith } from './visual-review-stub';
+import { BEFORE_SLOT, FOOTER_GRAPHIC } from './visual-review-fixtures';
 
 /**
  * Distance between the tops of two overlapping tiles, as the capture lays them out.

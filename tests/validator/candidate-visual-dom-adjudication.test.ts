@@ -1,17 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import { DomCheckMeasurementStatus, type DomCheckRecord } from '../../src/types/dom-check';
 import { TraceEventType, type TraceEvent } from '../../src/types/trace';
-import {
-    BEFORE_SLOT,
-    SLOT_GAP,
-    gridCheck,
-    reviewWith,
-    type StubScript,
-} from './visual-review-stub';
+import { reviewWith, type StubScript } from './visual-review-stub';
+import { BEFORE_SLOT, SLOT_GAP, gridCheck } from './visual-review-fixtures';
 
 /**
- * A review whose only open AFTER item is blank space at the removed slot's own place, so only a DOM
- * check can settle it.
+ * A review whose only open AFTER item is blank space at the removed slot's own place: attribution
+ * places it at the BEFORE symptom, so only a DOM check can settle it.
  *
  * @param holder - The holder the adjudication names in a layout finding.
  * @returns The stub script.
@@ -20,6 +15,7 @@ function slotGapScript(holder: string): StubScript {
     return {
         instances: [BEFORE_SLOT, SLOT_GAP],
         damage: [],
+        attribute: () => ({ comparisonArtifactId: 'before-tile-1', comparisonObservationIndex: 1 }),
         adjudicate: { finding: 'layout', domCheckIndex: 1, holder },
     };
 }
