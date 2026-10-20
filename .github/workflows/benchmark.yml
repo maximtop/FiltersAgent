@@ -23,7 +23,7 @@
 # retries on its own: every repeat is paid for.
 name: Benchmark series
 
-run-name: Benchmark ${{ inputs.model }} on ${{ inputs.ref }}
+run-name: Benchmark ${{ inputs.model }} on ${{ inputs.ref }}${{ inputs.single-shot-reasoning-effort != 'default' && format(' (single-shot {0})', inputs.single-shot-reasoning-effort) || '' }}
 
 on:
     workflow_dispatch:
@@ -61,6 +61,18 @@ on:
                 description: LLM_VISION_MAX_OUTPUT_TOKENS; required when the vision model differs
                 type: string
                 default: ''
+            # The vision and intake calls run at the agent's own default effort unless this names one;
+            # a higher effort can make a vision call outrun its ten-minute ceiling.
+            single-shot-reasoning-effort:
+                description: LLM_SINGLE_SHOT_REASONING_EFFORT; default keeps the agent's own
+                type: choice
+                options:
+                    - default
+                    - minimal
+                    - low
+                    - medium
+                    - high
+                default: default
             cases:
                 description: Case directory names separated by spaces, or all
                 type: string
@@ -377,6 +389,7 @@ jobs:
                   GATEWAY_KEY: ${{ secrets.BENCHMARK_GATEWAY_KEY }}
                   VISION_MODEL: ${{ inputs.vision-model }}
                   VISION_MAX_OUTPUT_TOKENS: ${{ inputs.vision-max-output-tokens }}
+                  SINGLE_SHOT_EFFORT: ${{ inputs.single-shot-reasoning-effort }}
                   LLM_MODEL: ${{ inputs.model }}
                   LLM_CONTEXT_WINDOW_TOKENS: ${{ inputs.context-window-tokens }}
                   LLM_MAX_OUTPUT_TOKENS: ${{ inputs.max-output-tokens }}
@@ -400,6 +413,9 @@ jobs:
                   fi
                   if [ -n "$VISION_MAX_OUTPUT_TOKENS" ]; then
                       export LLM_VISION_MAX_OUTPUT_TOKENS="$VISION_MAX_OUTPUT_TOKENS"
+                  fi
+                  if [ "$SINGLE_SHOT_EFFORT" != default ]; then
+                      export LLM_SINGLE_SHOT_REASONING_EFFORT="$SINGLE_SHOT_EFFORT"
                   fi
                   export LLM_PRICING_FILE="$RUNNER_TEMP/pricing.json"
                   printf '%s' "$BENCHMARK_PRICING" > "$LLM_PRICING_FILE"
