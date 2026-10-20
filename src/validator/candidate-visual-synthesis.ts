@@ -24,13 +24,15 @@ import {
     type CandidateVisualInventoryReconciliation,
     type CandidateVisualReviewModelOutput,
 } from '../types/candidate-visual-review';
-import { CandidateVisualInstanceSchema } from '../types/candidate-visual-instance';
+import {
+    CandidateVisualInstanceSchema,
+    MAX_RATIONALE_CHARS,
+} from '../types/candidate-visual-instance';
 import {
     assertAdditionalInstanceBindings,
     assertCompleteInventoryReconciliation,
     orderInventoryDispositions,
 } from './candidate-visual-reconciliation';
-import { MAX_RATIONALE_CHARS } from './candidate-visual-inventory';
 import {
     MAX_RECONCILED_INSTANCES,
     type CandidateVisualTileInventory,
@@ -399,7 +401,9 @@ export async function synthesizeFinalReview(
         // One schema-validation attempt per outer attempt: the loop owns bounded repair and the
         // dismissal audit, so the client must not burn its own repair budget here.
         if (result.kind === SingleShotResultKind.ProviderFailure) {
-            throw new Error(`Vision ${describeProviderFailure(result)}`);
+            throw new Error(
+                `Vision final synthesis attempt ${attempt} ${describeProviderFailure(result)}`,
+            );
         }
         if (result.kind === SingleShotResultKind.InvalidResult) {
             lastValidationError = result.detail;

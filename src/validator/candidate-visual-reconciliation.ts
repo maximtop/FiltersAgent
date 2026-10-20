@@ -1,7 +1,8 @@
 /**
  * The index checks of the final synthesis: every numbered observation of both states reconciled
- * exactly once, in runner order, and no instance the synthesis adds citing another state's image.
- * They read only indices and artifact IDs, never what an observation says.
+ * exactly once, in runner order, and no instance the synthesis adds citing another state's image;
+ * and the one rule both settlement requests apply to their numbered answers. They read only indices
+ * and artifact IDs, never what an observation says.
  */
 import type { CandidateVisualInstance } from '../types/candidate-visual-instance';
 import type { CaptureState } from '../types/validation';
@@ -88,4 +89,21 @@ export function assertAdditionalInstanceBindings(
             );
         }
     }
+}
+
+/**
+ * The indices a reply answered exactly once.
+ *
+ * A request that numbers what it asks about acts on an answer only when it is the one answer for
+ * that number: two answers for one item give it no single answer, and the item stays open.
+ *
+ * @param indices - The index of every answer, in reply order.
+ * @returns The indices that occur exactly once.
+ */
+export function answeredOnce(indices: readonly number[]): Set<number> {
+    const counts = new Map<number, number>();
+    for (const index of indices) {
+        counts.set(index, (counts.get(index) ?? 0) + 1);
+    }
+    return new Set([...counts].filter(([, count]) => count === 1).map(([index]) => index));
 }

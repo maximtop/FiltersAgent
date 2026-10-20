@@ -10,11 +10,11 @@ import {
     SYNTHESIS_CONTEXT_DECISION_PHASE,
 } from '../../src/validator/candidate-visual-verifier';
 import { MAX_TILE_INVENTORY_CONTEXT_CHARS } from '../../src/validator/candidate-visual-context';
+import { MAX_OBSERVED_DAMAGE_ENTRIES } from '../../src/validator/candidate-visual-inventory';
 import {
-    MAX_OBSERVED_DAMAGE_ENTRIES,
+    MAX_OBSERVED_DAMAGE_ENTRY_CHARS,
     MAX_RATIONALE_CHARS,
-} from '../../src/validator/candidate-visual-inventory';
-import { MAX_OBSERVED_DAMAGE_ENTRY_CHARS } from '../../src/types/candidate-visual-instance';
+} from '../../src/types/candidate-visual-instance';
 import { VISUAL_REVIEW_UNAVAILABLE_PREFIX } from '../../src/validator/candidate-visual-synthesis';
 import type { CandidateVisualVerifierOptions } from '../../src/validator/candidate-visual-evidence';
 import { composeReporterSymptomScope } from '../../src/validator/reporter-symptom-scope';

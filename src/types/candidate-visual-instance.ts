@@ -69,6 +69,12 @@ export type CandidateVisualInventoryInstance = v.InferOutput<
 >;
 
 /**
+ * Longest rationale any reply of the visual review may give, and the review persists: an
+ * explanation of a few paragraphs.
+ */
+export const MAX_RATIONALE_CHARS = 4_000;
+
+/**
  * Longest damage entry one inventory request may report: one flaw and its landmark in a few
  * sentences.
  */

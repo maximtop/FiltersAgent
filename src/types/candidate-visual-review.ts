@@ -8,7 +8,7 @@ import {
     ArtifactIdSchema,
     CandidateVisualFullPageOverviewEvidenceSchema,
 } from './full-page-overview-evidence';
-import { CandidateVisualInstanceSchema } from './candidate-visual-instance';
+import { CandidateVisualInstanceSchema, MAX_RATIONALE_CHARS } from './candidate-visual-instance';
 import { CandidateVisualSettlementSchema } from './candidate-visual-settlement';
 import {
     CandidateNetworkVerdict,
@@ -34,7 +34,7 @@ const MAX_INVENTORY_RECONCILIATIONS = 50;
 /**
  * Bounded natural-language explanation returned by the visual model.
  */
-const RationaleSchema = v.pipe(v.string(), v.minLength(1), v.maxLength(4_000));
+const RationaleSchema = v.pipe(v.string(), v.minLength(1), v.maxLength(MAX_RATIONALE_CHARS));
 
 /**
  * Longest description of one visually observed non-target regression.

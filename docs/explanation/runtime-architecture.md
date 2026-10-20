@@ -146,12 +146,15 @@ Blank space where BEFORE showed the symptom never leaves that way, since it
 is what the candidate had to clear: the request may place it at a BEFORE
 observation of the symptom, and the code itself refuses a match on a BEFORE
 image where the inventory recorded blank space as the symptom. Blank space
-left open goes to one narrow request with the agent's DOM checks, held to the
-same bar as the synthesis: the check must name the element that holds the
-space and show it is not kept for the ad. The runner acts on a layout answer
-only when the cited check measured both page loads and its expression queries
-the named element with a literal selector, ID or class name, through
-`querySelector`, `getElementById` or a similar call.
+left open goes to one narrow request with the agent's DOM checks: the check
+must name the element that holds the space and show it is not kept for the ad.
+The runner acts on a layout answer only when the cited check measured both
+page loads and its expression queries the named element with a literal
+selector, ID or class name, through `querySelector`, `getElementById` or a
+similar call. This request is the only place a check can prove layout: the
+synthesis sees the checks only as evidence of residue and never dismisses an
+observation on one, so a layout answer the code refused leaves the space
+counted.
 Visible advertising, labels and frames are never set aside. The review
 records everything it set aside, with its ground, under `settlement`. The
 trace counts the attribution answers the code refused by reason, and lists

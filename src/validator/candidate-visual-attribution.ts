@@ -163,7 +163,9 @@ async function attributeImage(
             }),
         );
         if (result.kind === SingleShotResultKind.ProviderFailure) {
-            throw new Error(`Vision ${describeProviderFailure(result)}`);
+            throw new Error(
+                `Vision attribution of ${item.image.id} ${describeProviderFailure(result)}`,
+            );
         }
         const requestMeta = {
             purpose: 'candidate_visual_attribution',

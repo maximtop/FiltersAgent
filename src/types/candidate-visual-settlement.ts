@@ -12,6 +12,7 @@ import * as v from 'valibot';
 import {
     CandidateVisualInstanceSchema,
     MAX_OBSERVED_DAMAGE_ENTRY_CHARS,
+    MAX_RATIONALE_CHARS,
 } from './candidate-visual-instance';
 import { ArtifactIdSchema } from './full-page-overview-evidence';
 
@@ -38,15 +39,10 @@ export const CandidateVisualSettlementGround = {
 export type CandidateVisualSettlementGround =
     (typeof CandidateVisualSettlementGround)[keyof typeof CandidateVisualSettlementGround];
 
-/**
- * Longest rationale one settlement records, matching the review's own rationale bound.
- */
-const MAX_SETTLEMENT_RATIONALE_CHARS = 4_000;
-
 const SettlementRationaleSchema = v.pipe(
     v.string(),
     v.minLength(1),
-    v.maxLength(MAX_SETTLEMENT_RATIONALE_CHARS),
+    v.maxLength(MAX_RATIONALE_CHARS),
 );
 
 export const CandidateVisualSettledObservationSchema = v.variant('ground', [

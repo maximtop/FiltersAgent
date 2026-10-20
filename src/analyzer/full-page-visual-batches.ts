@@ -382,7 +382,7 @@ export async function inspectInventoryBatch(
         ...(options.signal === undefined ? {} : { signal: options.signal }),
     });
     if (result.kind === SingleShotResultKind.ProviderFailure) {
-        throw new Error(`Vision ${describeProviderFailure(result)}`);
+        throw new Error(`Vision pre-candidate batch (${label}) ${describeProviderFailure(result)}`);
     }
     if (result.kind === SingleShotResultKind.InvalidResult) {
         throw new Error(`Vision model did not return schema-valid JSON: ${result.detail}`);
