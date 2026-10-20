@@ -19,6 +19,12 @@ const TILE_HEIGHT = 1_080;
 const CANDIDATE_RULE = 'example.org##.ad-slot';
 
 /**
+ * Size of an image that one request may carry, but never beside another of the same size: under the
+ * per-image cap, over half the bytes one request may carry.
+ */
+const LARGE_IMAGE_BYTES = 3_500_000;
+
+/**
  * One observation an inventory stub reports.
  */
 interface StubInstance {
@@ -34,6 +40,10 @@ interface StubInstance {
 interface StubDamage {
     artifactId: string;
     description: string;
+    /**
+     * Image whose request reports the flaw, when it is not the one the flaw cites.
+     */
+    reportedOn?: string;
 }
 
 /**
@@ -59,9 +69,11 @@ interface StubAdjudication {
 interface StubScript {
     instances: StubInstance[];
     damage: StubDamage[];
-    attribute?: (itemText: string) => StubAttribution | undefined;
+    attribute?: (itemText: string, requestText: string) => StubAttribution | undefined;
     adjudicate?: StubAdjudication;
     alwaysRegressed?: boolean;
+    alwaysResidue?: boolean;
+    missingContent?: string[];
 }
 
 /**
@@ -111,7 +123,7 @@ function stubVision(script: StubScript): {
             const items = [...text.matchAll(/^Item (\d+) \([a-z_]+\): (.*)$/gmu)];
             return parsed({
                 items: items.flatMap(([, index, itemText]) => {
-                    const answer = script.attribute?.(itemText ?? '');
+                    const answer = script.attribute?.(itemText ?? '', text);
                     return answer === undefined
                         ? []
                         : [
@@ -135,7 +147,9 @@ function stubVision(script: StubScript): {
                 coverageObserved: true,
                 symptomScope: 'Empty advertising slots between sections.',
                 instances: script.instances.filter((item) => labelled.has(item.artifactId)),
-                observedDamage: script.damage.filter((item) => labelled.has(item.artifactId)),
+                observedDamage: script.damage
+                    .filter((item) => labelled.has(item.reportedOn ?? item.artifactId))
+                    .map(({ artifactId, description }) => ({ artifactId, description })),
                 rationale: 'Every supplied image was inventoried.',
             });
         }
@@ -163,7 +177,7 @@ function stubVision(script: StubScript): {
         return parsed({
             symptom: after > 0 ? 'not_resolved' : 'resolved',
             symptomScope: 'Empty advertising slots between sections.',
-            adLayoutResidue: after > 0 ? 'present' : 'absent',
+            adLayoutResidue: script.alwaysResidue || after > 0 ? 'present' : 'absent',
             coverageComplete: true,
             beforeInventoryReconciliation: inventory.before.instances.map((_, index) => ({
                 observationIndex: index + 1,
@@ -180,6 +194,9 @@ function stubVision(script: StubScript): {
             pageIntegrity: script.alwaysRegressed || afterDamage > 0 ? 'regressed' : 'intact',
             rationale: 'Reconciled the supplied inventory.',
             observedDamage: afterDamage > 0 ? ['A flaw the AFTER inventory lists.'] : [],
+            ...(script.missingContent === undefined
+                ? {}
+                : { missingContent: script.missingContent }),
         });
     });
     return {
@@ -200,18 +217,23 @@ function stubVision(script: StubScript): {
  * @param root - Directory the fixture images are written to.
  * @param vision - The stubbed vision model.
  * @param domChecks - DOM checks the agent attached, if any.
+ * @param largeImages - Images written at {@link LARGE_IMAGE_BYTES}.
  * @returns The options.
  */
 function makeOptions(
     root: string,
     vision: SingleShotClient,
     domChecks?: DomCheckRecord[],
+    largeImages: readonly string[] = [],
 ): CandidateVisualVerifierOptions {
     const image = (id: string): { id: string; path: string } => {
         const path = join(root, `${id}.png`);
+        const png = encodePng(4, 4, () => [255, 255, 255]);
         writeFileSync(
             path,
-            encodePng(4, 4, () => [255, 255, 255]),
+            largeImages.includes(id)
+                ? Buffer.concat([png, Buffer.alloc(LARGE_IMAGE_BYTES - png.length)])
+                : png,
         );
         return { id, path };
     };
@@ -323,11 +345,29 @@ describe('reviewCandidateVisually settles what the page showed without the candi
      * @param domChecks - DOM checks the agent attached, if any.
      * @returns The review result and the stub's call recorder.
      */
-    async function review(script: StubScript, domChecks?: DomCheckRecord[]) {
+    async function review(
+        script: StubScript,
+        domChecks?: DomCheckRecord[],
+        largeImages: readonly string[] = [],
+    ) {
         root = mkdtempSync(join(tmpdir(), 'candidate-visual-settlement-'));
         const { vision, chat } = stubVision(script);
-        const result = await reviewCandidateVisually(makeOptions(root, vision, domChecks));
+        const result = await reviewCandidateVisually(
+            makeOptions(root, vision, domChecks, largeImages),
+        );
         return { ...result, chat };
+    }
+
+    /**
+     * Text of every request the review sent.
+     *
+     * @param chat - The stub's call recorder.
+     * @returns One joined text per request.
+     */
+    function sent(chat: ReturnType<typeof vi.fn>): string[] {
+        return chat.mock.calls.map(([options]) =>
+            requestText((options as { messages: SingleShotMessage[] }).messages),
+        );
     }
 
     it('does not count a flaw the BEFORE tile shows unchanged as candidate damage', async () => {
@@ -474,5 +514,111 @@ describe('reviewCandidateVisually settles what the page showed without the candi
             )
             .filter((text) => text.includes('pageIntegrity=regressed needs a flaw'));
         expect(repairs.length).toBeGreaterThan(0);
+    });
+    it('keeps blank space whose BEFORE match shows the blank-space symptom', async () => {
+        // The reported symptom is itself an empty slot, so the page's own gap and the slot look
+        // alike; the match cites the tile on which BEFORE recorded that slot.
+        const { review: result } = await review({
+            instances: [BEFORE_SLOT, SLOT_GAP],
+            damage: [],
+            attribute: () => ({ comparisonArtifactId: 'before-tile-1' }),
+        });
+
+        expect(result.verdict).toBe('rejected');
+        expect(result.settlement?.observations).toEqual([]);
+    });
+
+    it('keeps blank space at a symptom the BEFORE pass cited on the viewport', async () => {
+        const viewportSlot: StubInstance = {
+            artifactId: 'before-viewport',
+            landmark: 'Between the news grid and the video section',
+            description: 'A reserved advertising frame with its label.',
+            footprint: 'visible',
+        };
+        const { review: result } = await review({
+            instances: [BEFORE_SLOT, viewportSlot, SECTION_GAP],
+            damage: [],
+            attribute: (_item, request) => {
+                const listed = /^Observation (\d+): artifact=before-viewport;/mu.exec(request);
+                return {
+                    comparisonArtifactId: 'before-tile-2',
+                    ...(listed === null ? {} : { comparisonObservationIndex: Number(listed[1]) }),
+                };
+            },
+        });
+
+        expect(result.verdict).toBe('rejected');
+        expect(result.settlement?.observations).toEqual([]);
+    });
+
+    it('does not count a flaw the BEFORE viewport shows unchanged as candidate damage', async () => {
+        const { review: result } = await review({
+            instances: [BEFORE_SLOT],
+            damage: [{ ...FOOTER_GRAPHIC, artifactId: 'after-viewport' }],
+            attribute: () => ({ comparisonArtifactId: 'before-viewport' }),
+        });
+
+        expect(result.verdict).toBe('verified');
+        expect(result.settlement?.damage).toEqual([
+            expect.objectContaining({ beforeArtifactId: 'before-viewport' }),
+        ]);
+    });
+
+    it('keeps a regressed page when the synthesis names content the candidate removed', async () => {
+        const { review: result } = await review({
+            instances: [BEFORE_SLOT],
+            damage: [FOOTER_GRAPHIC],
+            attribute: () => ({ comparisonArtifactId: 'before-tile-2' }),
+            alwaysRegressed: true,
+            missingContent: ['The article list below the masthead is gone.'],
+        });
+
+        expect(result.verdict).toBe('rejected');
+        expect(result.pageIntegrity).toBe('regressed');
+        expect(result.observedDamage).toEqual([
+            expect.stringContaining('The article list below the masthead is gone.'),
+        ]);
+    });
+
+    it('refuses residue once every AFTER observation is set aside, and stays inconclusive', async () => {
+        const { review: result, chat } = await review({
+            instances: [BEFORE_SLOT, SECTION_GAP],
+            damage: [],
+            attribute: () => ({ comparisonArtifactId: 'before-tile-2' }),
+            alwaysResidue: true,
+        });
+
+        expect(result.verdict).toBe('inconclusive');
+        expect(sent(chat).some((text) => text.includes('adLayoutResidue=present needs'))).toBe(
+            true,
+        );
+    });
+
+    it('leaves a flaw to the synthesis when its tile and the BEFORE tile exceed one request', async () => {
+        const { review: result, chat } = await review(
+            {
+                instances: [BEFORE_SLOT],
+                damage: [FOOTER_GRAPHIC],
+                attribute: () => ({ comparisonArtifactId: 'before-tile-2' }),
+            },
+            undefined,
+            ['after-tile-2', 'before-tile-2'],
+        );
+
+        expect(result.verdict).toBe('rejected');
+        expect(sent(chat).some((text) => text.includes('ITEM artifact=after-tile-2'))).toBe(false);
+    });
+
+    it('keeps a flaw that cites an image outside its request for the synthesis', async () => {
+        const { review: result } = await review({
+            instances: [BEFORE_SLOT],
+            damage: [
+                { ...FOOTER_GRAPHIC, artifactId: 'after-viewport', reportedOn: 'after-tile-2' },
+            ],
+            attribute: () => ({ comparisonArtifactId: 'before-viewport' }),
+        });
+
+        expect(result.verdict).toBe('rejected');
+        expect(result.pageIntegrity).toBe('regressed');
     });
 });

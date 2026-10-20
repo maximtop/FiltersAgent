@@ -12,9 +12,9 @@ import {
 import { MAX_TILE_INVENTORY_CONTEXT_CHARS } from '../../src/validator/candidate-visual-context';
 import {
     MAX_OBSERVED_DAMAGE_ENTRIES,
-    MAX_OBSERVED_DAMAGE_ENTRY_CHARS,
     MAX_RATIONALE_CHARS,
 } from '../../src/validator/candidate-visual-inventory';
+import { MAX_OBSERVED_DAMAGE_ENTRY_CHARS } from '../../src/types/candidate-visual-instance';
 import { VISUAL_REVIEW_UNAVAILABLE_PREFIX } from '../../src/validator/candidate-visual-synthesis';
 import type { CandidateVisualVerifierOptions } from '../../src/validator/candidate-visual-evidence';
 import { composeReporterSymptomScope } from '../../src/validator/reporter-symptom-scope';
@@ -2043,6 +2043,8 @@ describe('reviewCandidateVisually', () => {
     });
 
     it('rejects a nebule-like candidate when vision reports residual ad layout', async () => {
+        // The residue-only shape a maintainer is handed: the synthesis keeps the empty wrapper as
+        // the observation residue rests on, and no remaining instance says the symptom is there.
         const root = mkdtempSync(join(tmpdir(), 'candidate-visual-review-ad-layout-residue-'));
         const recorder = new TraceRecorder({ runId: 'visual-review', issueNumber: 3, mode: 'fix' });
         const wrapper = {
@@ -2059,8 +2061,8 @@ describe('reviewCandidateVisually', () => {
                     afterInventoryReconciliation: [
                         {
                             observationIndex: 1,
-                            disposition: 'remaining',
-                            rationale: 'The empty labelled wrapper is residue of the ad.',
+                            disposition: 'not_same_symptom',
+                            rationale: 'The empty labelled wrapper is residue, not the ad itself.',
                         },
                     ],
                     rationale:
@@ -2075,6 +2077,7 @@ describe('reviewCandidateVisually', () => {
                 verdict: 'rejected',
                 symptom: 'resolved',
                 adLayoutResidue: 'present',
+                remainingInstances: [],
                 pageIntegrity: 'intact',
             });
         } finally {

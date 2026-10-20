@@ -9,7 +9,10 @@
  * maintainer reads why the synthesis never weighed it.
  */
 import * as v from 'valibot';
-import { CandidateVisualInstanceSchema } from './candidate-visual-instance';
+import {
+    CandidateVisualInstanceSchema,
+    MAX_OBSERVED_DAMAGE_ENTRY_CHARS,
+} from './candidate-visual-instance';
 import { ArtifactIdSchema } from './full-page-overview-evidence';
 
 /**
@@ -40,11 +43,6 @@ export type CandidateVisualSettlementGround =
  */
 const MAX_SETTLEMENT_RATIONALE_CHARS = 4_000;
 
-/**
- * Longest damage description a settlement keeps, matching one inventory damage entry.
- */
-const MAX_SETTLED_DAMAGE_DESCRIPTION_CHARS = 1_000;
-
 const SettlementRationaleSchema = v.pipe(
     v.string(),
     v.minLength(1),
@@ -69,11 +67,7 @@ export const CandidateVisualSettledObservationSchema = v.variant('ground', [
 
 export const CandidateVisualSettledDamageSchema = v.strictObject({
     artifactId: ArtifactIdSchema,
-    description: v.pipe(
-        v.string(),
-        v.minLength(1),
-        v.maxLength(MAX_SETTLED_DAMAGE_DESCRIPTION_CHARS),
-    ),
+    description: v.pipe(v.string(), v.minLength(1), v.maxLength(MAX_OBSERVED_DAMAGE_ENTRY_CHARS)),
     beforeArtifactId: ArtifactIdSchema,
     rationale: SettlementRationaleSchema,
 });

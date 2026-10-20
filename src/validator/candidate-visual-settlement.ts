@@ -3,7 +3,7 @@
  * candidate and blank space an agent DOM check proves is layout, so the synthesis never weighs
  * either against the candidate.
  *
- * Two grounds, in this order. An AFTER flaw or blank space a BEFORE tile shows unchanged is the
+ * Two grounds, in this order. An AFTER flaw or blank space a BEFORE image shows unchanged is the
  * page's own (`candidate-visual-attribution`); blank space where BEFORE showed the symptom never
  * takes that ground, since it is what the candidate had to clear. Blank space left open may still
  * be layout a DOM check proves (`candidate-visual-dom-adjudication`). Only blank space and flaws
@@ -14,20 +14,18 @@ import type { CallLimiter } from '../pi/call-limiter';
 import { TraceEventType } from '../types/trace';
 import {
     CandidateVisualSettlementGround,
+    type CandidateVisualSettledDamage,
     type CandidateVisualSettledObservation,
     type CandidateVisualSettlement,
 } from '../types/candidate-visual-settlement';
-import type { CandidateVisualVerifierOptions } from './candidate-visual-evidence';
 import {
     CandidateVisualInstanceFootprint,
     type CandidateVisualInventoryInstance,
-    type CandidateVisualTileInventory,
-} from './candidate-visual-context';
-import {
-    AttributionItemKind,
-    attributeAfterItems,
-    type AttributionItem,
-} from './candidate-visual-attribution';
+} from '../types/candidate-visual-instance';
+import type { CandidateVisualVerifierOptions } from './candidate-visual-evidence';
+import type { CandidateVisualTileInventory } from './candidate-visual-context';
+import { attributeAfterItems } from './candidate-visual-attribution';
+import { AttributionItemKind, type AttributionItem } from './candidate-visual-attribution-request';
 import { adjudicateDomChecks } from './candidate-visual-dom-adjudication';
 import { SymptomKind, isBreakageSymptom } from './symptom-rubric';
 
@@ -74,27 +72,27 @@ function damageKey(observationIndex: number, entryIndex: number): string {
  * so the counts are recomputed request by request.
  *
  * @param after - The complete AFTER inventory.
- * @param settledInstances - Keys of the settled instances.
- * @param settledDamage - Keys of the settled flaws.
+ * @param settled - Keys of the settled instances and flaws.
  * @returns The inventory the synthesis reconciles.
  */
 function withoutSettled(
     after: CandidateVisualTileInventory,
-    settledInstances: ReadonlySet<string>,
-    settledDamage: ReadonlySet<string>,
+    settled: ReadonlySet<string>,
 ): CandidateVisualTileInventory {
     const instances: CandidateVisualInventoryInstance[] = [];
     let cursor = 0;
     const observations = after.observations.map((observation, observationIndex) => {
-        const own = after.instances.slice(cursor, cursor + observation.instanceCount);
-        const kept = own.filter((_, offset) => !settledInstances.has(instanceKey(cursor + offset)));
+        const start = cursor;
+        const kept = after.instances
+            .slice(start, start + observation.instanceCount)
+            .filter((_, offset) => !settled.has(instanceKey(start + offset)));
         cursor += observation.instanceCount;
         instances.push(...kept);
         return {
             ...observation,
             instanceCount: kept.length,
             observedDamage: observation.observedDamage.filter(
-                (_, entryIndex) => !settledDamage.has(damageKey(observationIndex, entryIndex)),
+                (_, entryIndex) => !settled.has(damageKey(observationIndex, entryIndex)),
             ),
         };
     });
@@ -126,15 +124,26 @@ export async function settleAfterInventory(
                       instance.footprint === CandidateVisualInstanceFootprint.BlankSpace,
               )
         : [];
-    const items: AttributionItem[] = [
-        ...after.observations.flatMap((observation, observationIndex) =>
-            observation.observedDamage.map((entry, entryIndex) => ({
-                kind: AttributionItemKind.Flaw,
-                key: damageKey(observationIndex, entryIndex),
-                artifactId: entry.artifactId,
-                text: entry.description,
-            })),
+    const flaws = after.observations.flatMap((observation, observationIndex) =>
+        observation.observedDamage.flatMap((entry, entryIndex) =>
+            entry.artifactId === undefined
+                ? []
+                : [
+                      {
+                          entry,
+                          artifactId: entry.artifactId,
+                          key: damageKey(observationIndex, entryIndex),
+                      },
+                  ],
         ),
+    );
+    const items: AttributionItem[] = [
+        ...flaws.map(({ entry, artifactId, key }) => ({
+            kind: AttributionItemKind.Flaw,
+            key,
+            artifactId,
+            text: entry.description,
+        })),
         ...blankSpace.map(({ instance, key }) => ({
             kind: AttributionItemKind.BlankSpace,
             key,
@@ -142,22 +151,21 @@ export async function settleAfterInventory(
             text: `${instance.landmark} — ${instance.description}`,
         })),
     ];
-    const matches =
-        items.length === 0
-            ? new Map()
-            : await attributeAfterItems(options, items, before.instances, limiter);
+    const matches = await attributeAfterItems(options, items, before.instances, limiter);
     const proofs = await adjudicateDomChecks(
         options,
         blankSpace.filter(({ key }) => !matches.has(key)),
         before.instances,
     );
 
+    const settled = new Set<string>();
     const observations: CandidateVisualSettledObservation[] = [];
     for (const { instance, key } of blankSpace) {
         const { footprint: _footprint, ...persisted } = instance;
         const match = matches.get(key);
         const proof = proofs.get(key);
         if (match !== undefined) {
+            settled.add(key);
             observations.push({
                 ground: CandidateVisualSettlementGround.UnchangedBefore,
                 instance: persisted,
@@ -165,6 +173,7 @@ export async function settleAfterInventory(
                 rationale: match.rationale,
             });
         } else if (proof !== undefined) {
+            settled.add(key);
             observations.push({
                 ground: CandidateVisualSettlementGround.DomCheckLayout,
                 instance: persisted,
@@ -174,29 +183,19 @@ export async function settleAfterInventory(
             });
         }
     }
-    const damage = after.observations.flatMap((observation, observationIndex) =>
-        observation.observedDamage.flatMap((entry, entryIndex) => {
-            const match = matches.get(damageKey(observationIndex, entryIndex));
-            return match === undefined
-                ? []
-                : [
-                      {
-                          artifactId: entry.artifactId,
-                          description: entry.description,
-                          beforeArtifactId: match.beforeArtifactId,
-                          rationale: match.rationale,
-                      },
-                  ];
-        }),
-    );
-    const settledInstances = new Set(
-        blankSpace.filter(({ key }) => matches.has(key) || proofs.has(key)).map(({ key }) => key),
-    );
-    const settledDamage = new Set(
-        items
-            .filter((item) => item.kind === AttributionItemKind.Flaw && matches.has(item.key))
-            .map((item) => item.key),
-    );
+    const damage: CandidateVisualSettledDamage[] = [];
+    for (const { entry, artifactId, key } of flaws) {
+        const match = matches.get(key);
+        if (match !== undefined) {
+            settled.add(key);
+            damage.push({
+                artifactId,
+                description: entry.description,
+                beforeArtifactId: match.beforeArtifactId,
+                rationale: match.rationale,
+            });
+        }
+    }
     options.recorder.record(TraceEventType.Decision, {
         phase: 'candidate_visual_settlement',
         validationArtifactId: options.validationArtifactId,
@@ -208,8 +207,34 @@ export async function settleAfterInventory(
         ).length,
         settledDamage: damage.length,
     });
-    return {
-        after: withoutSettled(after, settledInstances, settledDamage),
-        settlement: { observations, damage },
-    };
+    return { after: withoutSettled(after, settled), settlement: { observations, damage } };
+}
+
+/**
+ * Present what the runner set aside from the AFTER inventory, or nothing when it set nothing aside.
+ *
+ * The batch rationales still describe what was set aside, so the synthesis is told those items are
+ * settled rather than left to rediscover them there.
+ *
+ * @param settlement - What the runner set aside.
+ * @returns Context lines for the final text-only request.
+ */
+export function settlementContext(settlement: CandidateVisualSettlement): string[] {
+    if (settlement.observations.length === 0 && settlement.damage.length === 0) {
+        return [];
+    }
+    return [
+        'Runner-settled AFTER items, taken out of the AFTER inventory before this synthesis ' +
+            'because a BEFORE image shows them unchanged or an agent DOM check proves the blank ' +
+            'space is page layout. They are settled: never count them as remaining, residue or ' +
+            'damage, whatever a batch rationale says about them.',
+        JSON.stringify({
+            observations: settlement.observations.map((item) => ({
+                ground: item.ground,
+                landmark: item.instance.landmark,
+                description: item.instance.description,
+            })),
+            damage: settlement.damage.map((item) => item.description),
+        }),
+    ];
 }

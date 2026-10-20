@@ -1,7 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
     CandidateVisualEvidenceSource,
-    CandidateVisualInstanceFootprint,
     MAX_SYMPTOM_SCOPE_CHARS,
     MAX_TILE_INVENTORY_CONTEXT_CHARS,
     SHORTENED_RATIONALE_CHARS,
@@ -12,9 +11,12 @@ import {
 } from '../../src/validator/candidate-visual-context';
 import {
     MAX_OBSERVED_DAMAGE_ENTRIES,
-    MAX_OBSERVED_DAMAGE_ENTRY_CHARS,
     MAX_RATIONALE_CHARS,
 } from '../../src/validator/candidate-visual-inventory';
+import {
+    CandidateVisualInstanceFootprint,
+    MAX_OBSERVED_DAMAGE_ENTRY_CHARS,
+} from '../../src/types/candidate-visual-instance';
 
 /**
  * Observations per state that, at the largest rationale and one damage entry short of the most a

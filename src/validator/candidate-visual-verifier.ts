@@ -47,8 +47,8 @@ import {
     type FittedTileInventoryContext,
 } from './candidate-visual-context';
 import { planFullPageOverview } from './candidate-visual-planning';
-import { settleAfterInventory } from './candidate-visual-settlement';
-import { synthesisConsistency } from './candidate-visual-consistency';
+import { settleAfterInventory, settlementContext } from './candidate-visual-settlement';
+import { MISSING_CONTENT_RUBRIC, synthesisConsistency } from './candidate-visual-consistency';
 import type { CandidateVisualSettlement } from '../types/candidate-visual-settlement';
 import { inconclusiveModelOutput, synthesizeFinalReview } from './candidate-visual-synthesis';
 import type { CandidateVisualVerifierOptions } from './candidate-visual-evidence';
@@ -130,35 +130,6 @@ function domCheckContext(options: CandidateVisualVerifierOptions): string[] {
 }
 
 /**
- * Present what the runner set aside from the AFTER inventory, or nothing when it set nothing aside.
- *
- * The batch rationales still describe what was set aside, so the synthesis is told those items are
- * settled rather than left to rediscover them there.
- *
- * @param settlement - What the runner set aside.
- * @returns Context lines for the final text-only request.
- */
-function settlementContext(settlement: CandidateVisualSettlement): string[] {
-    if (settlement.observations.length === 0 && settlement.damage.length === 0) {
-        return [];
-    }
-    return [
-        'Runner-settled AFTER items, taken out of the AFTER inventory before this synthesis ' +
-            'because a BEFORE tile shows them unchanged or an agent DOM check proves the blank ' +
-            'space is page layout. They are settled: never count them as remaining, residue or ' +
-            'damage, whatever a batch rationale says about them.',
-        JSON.stringify({
-            observations: settlement.observations.map((item) => ({
-                ground: item.ground,
-                landmark: item.instance.landmark,
-                description: item.instance.description,
-            })),
-            damage: settlement.damage.map((item) => item.description),
-        }),
-    ];
-}
-
-/**
  * Build the final text-only request after every evidence image was inspected in bounded calls.
  *
  * @param options - Trusted review options containing candidate and runner context.
@@ -187,6 +158,7 @@ function buildReviewMessages(
             "page's own and was there without the candidate: when the AFTER inventory reports the",
             'same flaw at the same landmark, never count it as candidate damage, never report',
             'pageIntegrity regressed because of it, and leave it out of observedDamage.',
+            ...MISSING_CONTENT_RUBRIC,
             'When browserFacts reports ruleKind "network", the candidate blocks a request',
             'rather than hiding an element, so it can break page function without leaving visible',
             'damage: a passing verdict then also requires that no first-party function the blocked',

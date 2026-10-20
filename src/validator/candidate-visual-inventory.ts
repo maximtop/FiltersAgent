@@ -25,7 +25,11 @@ import {
     isBreakageSymptom,
 } from './symptom-rubric';
 import { TraceEventType } from '../types/trace';
-import { CandidateVisualInstanceSchema } from '../types/candidate-visual-instance';
+import {
+    CandidateVisualDamageEntrySchema,
+    CandidateVisualInventoryInstanceSchema,
+    type CandidateVisualDamageEntry,
+} from '../types/candidate-visual-instance';
 import {
     ArtifactIdSchema,
     FullPageOverviewMode,
@@ -38,7 +42,6 @@ import type {
     CandidateVisualVerifierOptions,
 } from './candidate-visual-evidence';
 import {
-    CANDIDATE_VISUAL_INSTANCE_FOOTPRINT_VALUES,
     CandidateVisualEvidenceSource,
     MAX_SYMPTOM_SCOPE_CHARS,
     boundedModel,
@@ -72,12 +75,6 @@ const MAX_TILE_BATCH_INSTANCES = 20;
 export const MAX_OBSERVED_DAMAGE_ENTRIES = 20;
 
 /**
- * Longest damage entry one inventory request may report: one flaw and its landmark in a few
- * sentences.
- */
-export const MAX_OBSERVED_DAMAGE_ENTRY_CHARS = 1_000;
-
-/**
  * Output requested while the vision model inventories one bounded tile batch.
  *
  * Every field is required and checked; a key beside them is dropped rather than refused. A model
@@ -88,24 +85,12 @@ const CandidateVisualTileBatchOutputSchema = v.object({
     coverageObserved: v.boolean(),
     symptomScope: v.pipe(v.string(), v.minLength(1), v.maxLength(MAX_SYMPTOM_SCOPE_CHARS)),
     instances: v.pipe(
-        v.array(
-            v.object({
-                ...CandidateVisualInstanceSchema.entries,
-                footprint: v.picklist(CANDIDATE_VISUAL_INSTANCE_FOOTPRINT_VALUES),
-            }),
-        ),
+        v.array(CandidateVisualInventoryInstanceSchema),
         v.maxLength(MAX_TILE_BATCH_INSTANCES),
     ),
     observedDamage: v.pipe(
         v.array(
-            v.object({
-                artifactId: ArtifactIdSchema,
-                description: v.pipe(
-                    v.string(),
-                    v.minLength(1),
-                    v.maxLength(MAX_OBSERVED_DAMAGE_ENTRY_CHARS),
-                ),
-            }),
+            v.object({ ...CandidateVisualDamageEntrySchema.entries, artifactId: ArtifactIdSchema }),
         ),
         v.maxLength(MAX_OBSERVED_DAMAGE_ENTRIES),
     ),
@@ -201,23 +186,25 @@ async function inventoryImages(
         throw new Error(`Vision model did not return schema-valid JSON: ${result.detail}`);
     }
     const output = result.value;
-    const observedDamage =
-        request.state === CaptureState.Before
-            ? output.observedDamage.map((entry) => ({
-                  artifactId: entry.artifactId,
-                  description: `${PRE_EXISTING_DAMAGE_PREFIX} ${entry.description}`,
-              }))
-            : output.observedDamage;
     const model = boundedModel(options.vision.modelId);
     const artifactIds = request.images.map((image) => image.id);
     const allowedIds = new Set(artifactIds);
-    for (const cited of [...output.instances, ...output.observedDamage]) {
-        if (!allowedIds.has(cited.artifactId)) {
+    for (const instance of output.instances) {
+        if (!allowedIds.has(instance.artifactId)) {
             throw new Error(
-                `Vision cited a ${request.state} ${request.citationScope}: ${cited.artifactId}`,
+                `Vision cited a ${request.state} ${request.citationScope}: ${instance.artifactId}`,
             );
         }
     }
+    // A flaw's artifact only routes it to the BEFORE comparison, so a flaw citing an image this
+    // request never carried keeps its description for the synthesis and loses only the route.
+    const observedDamage: CandidateVisualDamageEntry[] = output.observedDamage.map((entry) => ({
+        ...(allowedIds.has(entry.artifactId) ? { artifactId: entry.artifactId } : {}),
+        description:
+            request.state === CaptureState.Before
+                ? `${PRE_EXISTING_DAMAGE_PREFIX} ${entry.description}`
+                : entry.description,
+    }));
     options.recorder.recordLlmTurn(
         {
             purpose: request.purpose,

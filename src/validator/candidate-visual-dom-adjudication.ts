@@ -5,28 +5,25 @@
  *
  * The final synthesis was shown the checks beside a long rubric and still kept ordinary gaps as ad
  * residue while a check named the grid track holding them. Here one narrow request answers, per
- * observation, which check proves it layout and which element holds the space, and the code acts on
- * that answer only after seeing that the check measured both page loads and really names that
- * element.
+ * observation, which check proves it layout and which selector of that check queries the element
+ * holding the space. The code acts on a layout answer only after seeing that the check measured
+ * both page loads and that its expression queries exactly that selector.
  */
 import * as v from 'valibot';
 import { describeProviderFailure } from '../pi/single-shot';
 import { SingleShotResultKind } from '../pi/single-shot-types';
 import { SingleShotMessageRole } from '../pi/single-shot-input';
 import { TraceEventType } from '../types/trace';
-import {
-    DomCheckMeasurementStatus,
-    type DomCheckMeasurement,
-    type DomCheckRecord,
-} from '../types/dom-check';
+import { DomCheckMeasurementStatus, type DomCheckRecord } from '../types/dom-check';
+import type { CandidateVisualInventoryInstance } from '../types/candidate-visual-instance';
 import type {
     CandidateVisualEvidenceTile,
     CandidateVisualVerifierOptions,
 } from './candidate-visual-evidence';
 import {
+    MAX_RECONCILED_INSTANCES,
     boundedModel,
     boundedSemanticContext,
-    type CandidateVisualInventoryInstance,
 } from './candidate-visual-context';
 import { MAX_RATIONALE_CHARS } from './candidate-visual-inventory';
 import { MAX_DOM_CHECK_FACTS_CHARS, renderDomChecksForReview } from './dom-check-context';
@@ -58,14 +55,65 @@ export const DomCheckFinding = {
 export type DomCheckFinding = (typeof DomCheckFinding)[keyof typeof DomCheckFinding];
 
 /**
- * Longest holder the request may quote: a selector or element description, never a page of text.
+ * Why the code did not act on an answer.
+ */
+const DomCheckRefusal = {
+    /**
+     * The answer numbered an observation the request never offered.
+     */
+    UnknownObservation: 'unknown_observation',
+
+    /**
+     * The same observation was answered more than once.
+     */
+    AnsweredTwice: 'answered_twice',
+
+    /**
+     * The layout answer cited no check, or one the agent never attached.
+     */
+    NoSuchCheck: 'no_such_check',
+
+    /**
+     * The cited check failed on the baseline or the candidate page load.
+     */
+    LoadNotMeasured: 'load_not_measured',
+
+    /**
+     * The layout answer named no holder, or one the check's expression never queries.
+     */
+    HolderNotQueried: 'holder_not_queried',
+} as const;
+
+/**
+ * DomCheckRefusal value.
+ */
+type DomCheckRefusal = (typeof DomCheckRefusal)[keyof typeof DomCheckRefusal];
+
+/**
+ * Longest holder the request may quote: a selector, never a page of text.
  */
 const MAX_HOLDER_CHARS = 300;
 
 /**
- * Most observations one request answers: every instance one AFTER inventory may hold.
+ * DOM calls whose first string argument selects an element, and what that argument is shorthand
+ * for: an ID or a class name stands for the selector a querySelector call would take.
  */
-const MAX_ADJUDICATED_OBSERVATIONS = 50;
+const SELECTOR_CALLS = {
+    querySelector: '',
+    querySelectorAll: '',
+    closest: '',
+    matches: '',
+    getElementById: '#',
+    getElementsByClassName: '.',
+} as const;
+
+/**
+ * A selector call with a literal first argument: the call name, the quote, the literal.
+ */
+const SELECTOR_CALL_PATTERN = new RegExp(
+    String.raw`\b(${Object.keys(SELECTOR_CALLS).join('|')})\s*\(\s*(['"\x60])((?:\\.|(?!\2).)*?)\2`,
+    'gu',
+);
 
 /**
  * Output requested from the adjudication request.
@@ -81,9 +129,14 @@ const AdjudicationOutputSchema = v.object({
                 rationale: v.pipe(v.string(), v.minLength(1), v.maxLength(MAX_RATIONALE_CHARS)),
             }),
         ),
-        v.maxLength(MAX_ADJUDICATED_OBSERVATIONS),
+        v.maxLength(MAX_RECONCILED_INSTANCES),
     ),
 });
+
+/**
+ * One answer of the adjudication request.
+ */
+type AdjudicationAnswer = v.InferOutput<typeof AdjudicationOutputSchema>['observations'][number];
 
 /**
  * One blank AFTER observation a DOM check proves is layout.
@@ -95,7 +148,7 @@ export interface DomCheckLayoutProof {
     domCheckIndex: number;
 
     /**
-     * The element holding the space, as the check spells it.
+     * The selector of the element holding the space, as the check's expression queries it.
      */
     holder: string;
 
@@ -121,34 +174,52 @@ export interface AdjudicationItem {
 }
 
 /**
- * The text of one measurement the holder may be quoted from.
+ * Every selector a check's expression queries through a DOM call with a literal argument.
  *
- * @param measurement - One phase's measurement.
- * @returns The recorded result, or nothing for a failed one.
+ * @param expression - The check's expression.
+ * @returns The selectors, IDs and class names written as the selector they stand for.
  */
-function measuredText(measurement: DomCheckMeasurement): string | undefined {
-    return measurement.status === DomCheckMeasurementStatus.Measured
-        ? measurement.result
-        : undefined;
+function queriedSelectors(expression: string): Set<string> {
+    const selectors = new Set<string>();
+    for (const [, call, , literal] of expression.matchAll(SELECTOR_CALL_PATTERN)) {
+        if (literal === undefined || literal.includes('${')) {
+            continue;
+        }
+        const shorthand = SELECTOR_CALLS[call as keyof typeof SELECTOR_CALLS];
+        selectors.add(`${shorthand}${literal.trim()}`);
+    }
+    return selectors;
 }
 
 /**
- * Whether a check can back a layout finding naming this holder.
+ * The layout proof one answer gives, or why the code cannot act on it.
  *
- * A check that failed in either page load measured one state only, and a holder the check never
- * spells is the model's own wording, not the element the check measured.
+ * A check that failed in either page load measured one state only, and a holder the check's
+ * expression never queries is the model's own wording, not the element the check measured.
  *
- * @param check - The cited check.
- * @param holder - The element the finding names.
- * @returns True when the check measured both loads and spells the holder.
+ * @param answer - A layout answer about an offered observation.
+ * @param checks - Every check the agent attached.
+ * @returns The proof, or the refusal reason.
  */
-function checkBacksHolder(check: DomCheckRecord, holder: string): boolean {
-    const before = measuredText(check.before);
-    const after = measuredText(check.after);
-    if (before === undefined || after === undefined) {
-        return false;
+function layoutProof(
+    answer: AdjudicationAnswer,
+    checks: readonly DomCheckRecord[],
+): DomCheckLayoutProof | DomCheckRefusal {
+    const check = answer.domCheckIndex === null ? undefined : checks[answer.domCheckIndex - 1];
+    if (answer.domCheckIndex === null || check === undefined) {
+        return DomCheckRefusal.NoSuchCheck;
     }
-    return [check.expression, before, after].some((text) => text.includes(holder));
+    if (
+        check.before.status !== DomCheckMeasurementStatus.Measured ||
+        check.after.status !== DomCheckMeasurementStatus.Measured
+    ) {
+        return DomCheckRefusal.LoadNotMeasured;
+    }
+    const holder = answer.holder?.trim() ?? '';
+    if (holder.length === 0 || !queriedSelectors(check.expression).has(holder)) {
+        return DomCheckRefusal.HolderNotQueried;
+    }
+    return { domCheckIndex: answer.domCheckIndex, holder, rationale: answer.rationale };
 }
 
 /**
@@ -174,6 +245,10 @@ function locate(
 /**
  * Ask which blank AFTER observations a DOM check proves are layout.
  *
+ * Every answer is recorded with the observation it is about, the finding, the cited check and
+ * holder, and the reason the code refused it, so a review that still rejects on residue tells why
+ * the agent's check did not settle the space.
+ *
  * @param options - Review options carrying the checks, evidence, model and trace.
  * @param items - Blank AFTER observations still open.
  * @param beforeInstances - Every BEFORE inventory instance, for where the symptom sat.
@@ -189,8 +264,12 @@ export async function adjudicateDomChecks(
     if (checks.length === 0 || items.length === 0) {
         return proofs;
     }
-    const offered = items.slice(0, MAX_ADJUDICATED_OBSERVATIONS);
     const model = boundedModel(options.vision.modelId);
+    const offered = items.map((item, index) => ({
+        observationIndex: index + 1,
+        afterArtifactId: item.instance.artifactId,
+        landmark: item.instance.landmark,
+    }));
     const result = await options.vision.structured({
         messages: [
             { role: SingleShotMessageRole.System, text: DOM_CHECK_ADJUDICATION_RUBRIC.join(' ') },
@@ -212,7 +291,7 @@ export async function adjudicateDomChecks(
                                   locate(instance, options.evidence.beforeTiles),
                           )),
                     'AFTER observations of blank space to decide:',
-                    ...offered.map(
+                    ...items.map(
                         (item, index) =>
                             `Observation ${index + 1}: ` +
                             locate(item.instance, options.evidence.afterTiles),
@@ -230,12 +309,18 @@ export async function adjudicateDomChecks(
         purpose: 'candidate_visual_dom_adjudication',
         model,
         validationArtifactId: options.validationArtifactId,
-        observationCount: offered.length,
+        observationCount: items.length,
         domCheckCount: checks.length,
     };
     if (result.kind === SingleShotResultKind.InvalidResult) {
         // Nothing is set aside on an answer the code cannot read.
         options.recorder.recordLlmTurn(requestMeta, { model, invalid: result.detail });
+        options.recorder.record(TraceEventType.Decision, {
+            phase: 'candidate_visual_dom_adjudication',
+            validationArtifactId: options.validationArtifactId,
+            offered,
+            invalid: result.detail,
+        });
         return proofs;
     }
     const answerCounts = new Map<number, number>();
@@ -245,45 +330,38 @@ export async function adjudicateDomChecks(
             (answerCounts.get(answer.observationIndex) ?? 0) + 1,
         );
     }
-    const refused: number[] = [];
-    for (const answer of result.value.observations) {
-        const item = offered[answer.observationIndex - 1];
-        if (
-            item === undefined ||
-            answerCounts.get(answer.observationIndex) !== 1 ||
-            answer.finding !== DomCheckFinding.Layout
-        ) {
-            continue;
+    const answers = result.value.observations.map((answer) => {
+        const item = items[answer.observationIndex - 1];
+        let refusal: DomCheckRefusal | undefined;
+        if (item === undefined) {
+            refusal = DomCheckRefusal.UnknownObservation;
+        } else if (answerCounts.get(answer.observationIndex) !== 1) {
+            refusal = DomCheckRefusal.AnsweredTwice;
+        } else if (answer.finding === DomCheckFinding.Layout) {
+            const proof = layoutProof(answer, checks);
+            if (typeof proof === 'string') {
+                refusal = proof;
+            } else {
+                proofs.set(item.key, proof);
+            }
         }
-        const { domCheckIndex } = answer;
-        const check = domCheckIndex === null ? undefined : checks[domCheckIndex - 1];
-        const holder = answer.holder?.trim() ?? '';
-        if (
-            domCheckIndex === null ||
-            check === undefined ||
-            holder.length === 0 ||
-            !checkBacksHolder(check, holder)
-        ) {
-            refused.push(answer.observationIndex);
-            continue;
-        }
-        proofs.set(item.key, {
-            domCheckIndex,
-            holder,
-            rationale: answer.rationale,
-        });
-    }
-    options.recorder.recordLlmTurn(requestMeta, {
-        model,
-        layoutCount: proofs.size,
-        refusedLayoutObservationIndices: refused,
+        return {
+            observationIndex: answer.observationIndex,
+            afterArtifactId: item?.instance.artifactId ?? null,
+            landmark: item?.instance.landmark ?? null,
+            finding: answer.finding,
+            domCheckIndex: answer.domCheckIndex,
+            holder: answer.holder,
+            refusal: refusal ?? null,
+        };
     });
+    options.recorder.recordLlmTurn(requestMeta, { model, layoutCount: proofs.size });
     options.recorder.record(TraceEventType.Decision, {
         phase: 'candidate_visual_dom_adjudication',
         validationArtifactId: options.validationArtifactId,
-        observationCount: offered.length,
+        offered,
+        answers,
         layoutCount: proofs.size,
-        refusedLayoutObservationIndices: refused,
     });
     return proofs;
 }

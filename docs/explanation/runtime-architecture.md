@@ -136,26 +136,35 @@ graphic, can come back from the AFTER pass as a broken image. Ordinary gaps
 between sections read as reserved ad space the same way. So before the
 synthesis the runner settles the AFTER inventory. Each AFTER flaw, and in an
 ads review each AFTER instance the inventory marked as only blank space, is
-shown beside the BEFORE tiles where its content can sit: from the same height
-down by the height the document lost, because a hiding candidate only
-collapses space. A request that finds it unchanged there and cites one of
-those BEFORE tiles takes it out of the AFTER inventory. Blank space that lies
-where a BEFORE observation of the symptom sat never leaves that way, since it
-is what the candidate had to clear. Blank space left open goes to one narrow
-request with the agent's DOM checks, held to the same bar as the synthesis:
-the check must name the element that holds the space and show it is not kept
-for the ad. The runner acts on a layout answer only when the cited check
-measured both page loads and spells the named element in its expression or
-results. Visible advertising, labels and frames are never set aside. The
-review records everything it set aside, with its ground, under `settlement`.
+shown beside the BEFORE images where its content can sit: for a tile, the
+BEFORE tiles from the one at the same height down by the height the document
+lost, since a hiding candidate only collapses space, or up by the height it
+gained; for the viewport, the BEFORE viewport. A request that finds it
+unchanged there and cites one of those BEFORE images takes it out of the
+AFTER inventory; a pair of images too large for one request is not compared.
+Blank space where BEFORE showed the symptom never leaves that way, since it
+is what the candidate had to clear: the request may place it at a BEFORE
+observation of the symptom, and the code itself refuses a match on a BEFORE
+image where the inventory recorded blank space as the symptom. Blank space
+left open goes to one narrow request with the agent's DOM checks, held to the
+same bar as the synthesis: the check must name the element that holds the
+space and show it is not kept for the ad. The runner acts on a layout answer
+only when the cited check measured both page loads and its expression queries
+the named selector, through `querySelector`, `closest` or a similar call.
+Visible advertising, labels and frames are never set aside. The review
+records everything it set aside, with its ground, under `settlement`, and the
+trace records every answer the code refused and why.
 
 The synthesis must back its summary with what it reconciled. In an ads review
-an unresolved symptom or present residue needs an AFTER observation it kept
-as remaining, except residue of a third-party host block, and for a cosmetic
-candidate a regressed page needs a flaw the AFTER inventory still lists. A
-reply that breaks this is repaired like any invalid reply, and the review
-stays inconclusive if repair fails; the code never rewrites a field toward a
-passing verdict.
+an unresolved symptom needs an AFTER observation it kept as remaining, and
+present residue needs an AFTER observation at all, which it may still
+reconcile as not the symptom: that is the residue-only shape the agent hands
+a maintainer. Residue of a third-party host block is exempt. In that review,
+for a cosmetic candidate, a regressed page needs a flaw the AFTER inventory
+still lists or non-target content the synthesis names as gone, such as an
+article block an over-broad rule hid. A reply that breaks this is repaired
+like any invalid reply, and the review stays inconclusive if repair fails;
+the code never rewrites a field toward a passing verdict.
 
 The final step of the review is a text-only synthesis: it never sees the
 screenshots, only what the inventory requests reported about them, and it must
