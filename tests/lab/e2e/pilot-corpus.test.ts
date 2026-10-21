@@ -16,59 +16,53 @@ const EXPECTED_PILOT_CASES = {
         filtersBaseSha: '203b5312920118056616596bc62a19318f57d6d3',
         humanFixCommit: 'ba2dd4007fe83ead961c22dda013c5442d7456c4',
     },
-    'autoblog-spidersweb-pl-235567': {
-        issueNumber: 235567,
-        extensionVersion: '5.4.3.95',
-        filtersBaseSha: '4e28093e719cbb2bab819b6d3a84c12f441343c6',
-        humanFixCommit: '7198627160ef46235fbf83a8e1c0f2658bc2dcd6',
-    },
-    'e-words-jp-235510': {
-        issueNumber: 235510,
-        extensionVersion: '5.4.3.84',
-        filtersBaseSha: 'cd93c10da43f3dd3197d854adbe1b8218fdf8353',
-        humanFixCommit: 'ec975aaaf2675e246a7e47553b28689e2e63582a',
-    },
     'jelonka-com-234966': {
         issueNumber: 234966,
         extensionVersion: '5.4.3.87',
         filtersBaseSha: 'a220c34e6e26ce6e473c0ba1e7a339023da4eab3',
         humanFixCommit: '506ed6894a2fe30c15bbb70e912968ac2e8536d3',
     },
-    'rmcbfmplay-com-234430': {
-        issueNumber: 234430,
-        extensionVersion: '5.4.3.79',
-        filtersBaseSha: 'd467c114b8d13eb8f0aa795755c5481677b85f83',
-        humanFixCommit: '189c379260bf80951560510ff1788320c5789621',
-    },
-    'sbt-com-br-233534': {
-        issueNumber: 233534,
-        extensionVersion: '5.4.3.55',
-        filtersBaseSha: 'e4efd17f3b92eb3d8ae8e1ec016dd99f03962dda',
-        humanFixCommit: '8b2e1e2bbde06d489dc6a7f9f0b3b547d64600a6',
-    },
-    'gsmarena-com-233493': {
-        issueNumber: 233493,
-        extensionVersion: '5.4.3.55',
-        filtersBaseSha: '2a5b9f8ab0437a720de962e20a4c9d38859bb420',
-        humanFixCommit: '47dadcd767561710b1b748f0f0ee840628454272',
-    },
-    'devsoftwr-com-234282': {
-        issueNumber: 234282,
-        extensionVersion: '5.4.3.77',
-        filtersBaseSha: 'd71b139a1c2079e169b69f2a715195c0a6c65a5d',
-        humanFixCommit: '41c2e95df705ac73bdd01d9b4423a6065490182e',
-    },
-    'yt1s-com-co-234396': {
-        issueNumber: 234396,
-        extensionVersion: '5.4.3.78',
-        filtersBaseSha: 'd632203acbed5c17ef6056ad26cb695d903ef5c7',
-        humanFixCommit: 'b6130b6813ca2bc3f2213f9623c397928849b805',
+    'investing-com-234128': {
+        issueNumber: 234128,
+        extensionVersion: '5.4.3.74',
+        filtersBaseSha: 'ed2c57c0611d4b8772dd5d83d6e238f7fbe42965',
+        humanFixCommit: '7566f8e7c58ead39e2f3b7eff8edae0a838358e1',
     },
     'ipaomtk-com-232888': {
         issueNumber: 232888,
         extensionVersion: '5.4.3.38',
         filtersBaseSha: '1cf1de199b1a46305062fcedf68f884d6c97eb3e',
         humanFixCommit: 'ef8a6632bbe3531bdc945ac044f082dbb3bd16c1',
+    },
+    'sabcsport-com-238702': {
+        issueNumber: 238702,
+        extensionVersion: '5.4.3.129',
+        filtersBaseSha: 'efdf26d4ba04968cadaf35585e153046ee5bfb46',
+        humanFixCommit: '31b801bc6aafbb6cfba732372b160d92325db5e6',
+    },
+    'finance-eastmoney-com-238450': {
+        issueNumber: 238450,
+        extensionVersion: '5.4.3.127',
+        filtersBaseSha: '76e9c07253f450e812152fc3b73722a73b0a6962',
+        humanFixCommit: '425045656d90c7c5d814a134c425f19c894ef6bf',
+    },
+    'okteve-com-234057': {
+        issueNumber: 234057,
+        extensionVersion: '5.4.3.70',
+        filtersBaseSha: '73bbc251183fc9f0ae3ebc47475664394567be60',
+        humanFixCommit: 'd14951567323fc457b9a83c6486af7affa976d4b',
+    },
+    'freewebnovel-com-237978': {
+        issueNumber: 237978,
+        extensionVersion: '5.4.3.121',
+        filtersBaseSha: '7a3d1cb705d44010224745eab87646c3da826652',
+        humanFixCommit: 'ec96d884457c9faabbca61e1a94c5b0cd3976eb3',
+    },
+    'trans-info-236843': {
+        issueNumber: 236843,
+        extensionVersion: '5.4.3.110',
+        filtersBaseSha: 'b8d03da22233fe11cd3437bf21232f6c4dddd2ef',
+        humanFixCommit: '414fd9e5f41253f9439338a1e5ed2107f9a67011',
     },
 } as const;
 
@@ -111,7 +105,7 @@ describe('pilot golden e2e cases', () => {
             }
             expect(readFileSync(run.runConfigPath, 'utf8')).not.toContain(oracle.humanFixCommit);
         }
-        // Ten sequential shallow fetches from the public AdguardFilters remote; anonymous GitHub
+        // Nine sequential shallow fetches from the public AdguardFilters remote; anonymous GitHub
         // fetch latency was observed at 18–27 s each (2026-09-08), so the network-only budget
         // needs that headroom — 120 s previously timed the whole suite red under a slow network
         // even though every assertion was passing.

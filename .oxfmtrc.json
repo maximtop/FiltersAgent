@@ -11,6 +11,7 @@
     "ignorePatterns": [
         "/adguard-cli/",
         "dist/",
+        "lab/benchmark/e2e/cases/",
         "node_modules/",
         "src/**/fixtures/",
         "src/prompts/documents/",
