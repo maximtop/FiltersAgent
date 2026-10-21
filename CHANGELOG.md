@@ -81,6 +81,12 @@ The format is based on [Keep a Changelog], and this project adheres to
 
 ### Fixed
 
+- Fixed raw JavaScript candidates (`#%#` without `//scriptlet`) never running
+  in the AdGuard MV3 extension: every Chromium launch of a build with the
+  `userScripts` permission now turns on Chrome's "Allow User Scripts", which
+  Chrome ships off. A launch fails, naming the cause, when the extension's
+  service worker does not start or three attempts of up to 10 seconds each
+  leave the extension unable to call `chrome.userScripts`.
 - Fixed a run crashing when its browser closed while the network guard was
   still checking a request: the process died on an unhandled `route.abort`
   rejection.
@@ -94,6 +100,15 @@ The format is based on [Keep a Changelog], and this project adheres to
 - Fixed visual reviews ending without a verdict when the vision model added
   a key of its own, such as `coverageObserved_note`, to a reply or to an
   object inside it; such a key is now ignored.
+- Fixed visual reviews rejecting correct candidates for things the page shows
+  without them: a flaw or a gap that the baseline capture shows unchanged no
+  longer counts as damage or ad residue, and blank space where the ad was
+  stops counting as residue once a DOM check names the element that holds it
+  as page layout. Each such item is recorded in the review's `settlement`.
+  In an ads review, a `not_resolved` answer with no remaining observation,
+  residue with no AFTER observation, or, for a cosmetic rule, `regressed`
+  with no listed flaw or named missing content now ends the review
+  inconclusive after repair instead of rejecting the candidate.
 - Fixed two benchmark cases started at once on a fresh `--output-root`
   failing with `EEXIST` while creating the shared output directory.
 - Fixed `###id` element-hiding rules being validated against the selector
@@ -189,6 +204,10 @@ The format is based on [Keep a Changelog], and this project adheres to
 - Fixed the outcome line of a run the filter policy decided reading
   "Analysis-only findings, no verified change": it now names the policy
   verdict.
+- Fixed the report's "Place in the list" quoting the neighbouring rule whole,
+  which for a shared rule is a wall of domains with the selector at the end:
+  it now links the file, and the line the rule goes before or extends, at the
+  commit the run analyzed.
 - Fixed runs ending as rejected after the `defaults_plus_required`
   comparison closed an unfinished reporter-profile session: `finish_fix` now
   asks to relaunch that profile instead of capturing in the closed session.

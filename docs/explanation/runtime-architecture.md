@@ -77,7 +77,8 @@ or whose slot was already empty, leaves exactly that, so where the baseline
 showed the symptom such a check weighs nothing. An emptied container that still
 paints a background or keeps a reserved height counts as residue; no check
 outweighs visible advertising.
-Code never reads what a check means. New checks make a new experiment of the
+Code never interprets a check itself; how it acts on a check's answer is
+described below with the settlement of the AFTER inventory. New checks make a new experiment of the
 same candidate, which spends no candidate attempt but counts toward the three
 runs one candidate gets in all, shared with retries after an inconclusive
 review and with new reveal steps. Each check gets a few seconds on the page;
@@ -128,6 +129,47 @@ the candidate's selector matched nothing. Both states also list every visible
 rendering flaw with its landmark, and the code marks each BEFORE flaw
 `PRE-EXISTING:`, so the synthesis can still tell the page's own flaws from
 damage the candidate causes.
+
+That mark only helps when both passes call the same thing a flaw, and an
+ordinary element nobody calls broken in BEFORE, such as the site's own footer
+graphic, can come back from the AFTER pass as a broken image. Ordinary gaps
+between sections read as reserved ad space the same way. So before the
+synthesis the runner settles the AFTER inventory. Each AFTER flaw, and in an
+ads review each AFTER instance the inventory marked as only blank space, is
+shown beside the BEFORE images where its content can sit: for a tile, the
+BEFORE tiles from the one at the same height down by the height the document
+lost, since a hiding candidate only collapses space, or up by the height it
+gained; for the viewport, the BEFORE viewport. A request that finds it
+unchanged there and cites one of those BEFORE images takes it out of the
+AFTER inventory; a pair of images too large for one request is not compared.
+Blank space where BEFORE showed the symptom never leaves that way, since it
+is what the candidate had to clear: the request may place it at a BEFORE
+observation of the symptom, and the code itself refuses a match on a BEFORE
+image where the inventory recorded blank space as the symptom. Blank space
+left open goes to one narrow request with the agent's DOM checks: the check
+must name the element that holds the space and show it is not kept for the ad.
+The runner acts on a layout answer only when the cited check measured both
+page loads and its expression queries the named element with a literal
+selector, ID or class name, through `querySelector`, `getElementById` or a
+similar call. This request is the only place a check can prove layout: the
+synthesis sees the checks only as evidence of residue and never dismisses an
+observation on one, so a layout answer the code refused leaves the space
+counted.
+Visible advertising, labels and frames are never set aside. The review
+records everything it set aside, with its ground, under `settlement`. The
+trace counts the attribution answers the code refused by reason, and lists
+each answer of the DOM-check request with the reason it was refused.
+
+The synthesis must back its summary with what it reconciled. In an ads review
+an unresolved symptom needs an AFTER observation it kept as remaining, and
+present residue needs an AFTER observation at all, which it may still
+reconcile as not the symptom: that is the residue-only shape the agent hands
+a maintainer. Residue of a third-party host block is exempt. In that review,
+for a cosmetic candidate, a regressed page needs a flaw the AFTER inventory
+still lists or non-target content the synthesis names as gone, such as an
+article block an over-broad rule hid. A reply that breaks this is repaired
+like any invalid reply, and the review stays inconclusive if repair fails;
+the code never rewrites a field toward a passing verdict.
 
 The final step of the review is a text-only synthesis: it never sees the
 screenshots, only what the inventory requests reported about them, and it must
@@ -341,14 +383,22 @@ mismatched ownership, manifest, or visibility state. There is no cleanup CLI.
   session launches and keeps it for the session — before the Baseline application, because the
   build keeps Chrome's declarative-match log only when that page is open while its engine is
   configured.
+- "Allow User Scripts": `src/browser/chrome-user-scripts-toggle.ts` turns on Chromium's
+  per-extension toggle on `chrome://extensions` at every Chromium launch of an MV3 build that
+  requires the `userScripts` permission (`src/browser/launch-wiring.ts`), before the session page
+  opens. Chromium 138+ exposes `chrome.userScripts` only behind it, and the pinned MV3 build runs
+  raw JavaScript user rules and custom filters only through that API; built-in lists do not take
+  that path. Chrome ships the toggle off, so a raw JavaScript rule can work here and not for a
+  reporter. The toggle is a click in the browser's own WebUI, not a profile setting: a launch makes
+  three bounded attempts on fresh pages, counts one only when the extension's service worker can
+  call `chrome.userScripts` the way the build checks it, and fails when none does. Whether the manifest requires `userScripts` is
+  read once, when the build is prepared, and reaches the launch with the session configuration.
 - List slices (`settings.slice` of `launch_browser`): `src/browser/extension-list-text.ts` reads a
   list's text from the build's own declarative ruleset (`metadata.filterContent` in 5.5 or
   `metadata.rawFilterList` in 5.4, byte-identical to the published list) and cuts a line range from
   it, checksum lines dropped;
   `src/local/loopback-text-server.ts` serves the slice on `127.0.0.1`;
-  `src/browser/chrome-user-scripts-toggle.ts` flips Chromium's per-extension "Allow User Scripts"
-  (Chromium 138+ exposes `chrome.userScripts` only behind it, and the pinned MV3 build runs no
-  custom filter without that API); `src/orchestrator/list-slice-baseline.ts` runs the slice
+  `src/orchestrator/list-slice-baseline.ts` runs the slice
   session's Baseline and `src/orchestrator/list-slice-launch.ts` refuses a bad slice before any
   launch. A slice session refuses `apply_rule`.
 - `src/browser/page-state-probe.ts`, `src/browser/page-state-budget.ts` — the bounded
