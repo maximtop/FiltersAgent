@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "rawIssue": {
+    "number": 238398,
+    "reporterAuthor": "adguard-bot",
+    "url": "https://github.com/AdguardTeam/AdguardFilters/issues/238398",
+    "title": "www.xxlgamer.com",
+    "body": "### Issue URL (Annoyance)\n[https://www.xxlgamer.com/](https://adguardteam.github.io/AnonymousRedirect/redirect.html?url=https%3A%2F%2Fwww.xxlgamer.com%2F)\n\n### Comment\n> https://www.xxlgamer.com/\n> https://www.xxlgamer.cz/\n> https://www.xxlgamer.de/\n> https://www.xxlgamer.es/\n> https://www.xxlgamer.fr/\n> https://www.xxlgamer.it/\n> https://www.xxlgamer.hu/\n> https://www.xxlgamer.nl/\n> https://www.xxlgamer.pl/\n> https://www.xxlgamer.sk/\n\n\n\n### Screenshots\n<details>\n  <summary>Screenshot 1</summary>\n\n  ![Screenshot 1](https://cdn.adguardcdn.com/sitereports/j0va9pmrknc4c8w40s4s80oww80080s7upqvtywqr8.png?nc=1)\n</details>\n\n\n### System configuration\n\n| Information | Value |\n|-------------|-------|\nAdGuard product: | AdGuard Browser Extension v5.4.3.127 MV3\nBrowser: | Chrome\nFilters: | **Ad Blocking:**<br>AdGuard Base filter<br><br>**Privacy:**<br>AdGuard Tracking Protection filter, <br>AdGuard URL Tracking filter<br><br>**Social Widgets:**<br>AdGuard Social Media filter<br><br>**Annoyances:**<br>AdGuard Cookie Notices filter, <br>AdGuard Popups filter, <br>AdGuard Mobile App Banners filter, <br>AdGuard Other Annoyances filter, <br>AdGuard Widgets filter<br><br>**Security:**<br>Online Malicious URL Blocklist, <br>Phishing URL Blocklist, <br>Scam Blocklist by DurableNapkin, <br>uBlock Origin – Badware risks, <br>Dandelion Sprout's Anti-Malware List\nFilters last update: | 2026-08-15T08:00:55Z\n\n\n\n### Issue configuration\n[Import](https://reports.adguard.com/settings/import.html?scheme_version=4&amp;product_type=ext&amp;product_version=5.4.3.127&amp;system_version=&amp;ext.manifest_version=3&amp;browser=chrome&amp;regular_filters=2%2C3%2C4%2C17%2C18%2C19%2C20%2C21%2C22%2C208%2C255%2C256%2C257%2C259&amp;filters_last_update=2026-08-15T08%3A00%3A55Z&amp;stealth.enabled=0)\n",
+    "state": "closed",
+    "labels": [
+      "A: Resolved",
+      "T: Annoyance",
+      "P4: Low",
+      "N: AdGuard Browser Extension"
+    ],
+    "assignee": "piquark6046",
+    "comments": []
+  },
+  "reporterComments": [],
+  "attachments": [
+    {
+      "kind": "issue_screenshot",
+      "sourceUrl": "https://cdn.adguardcdn.com/sitereports/j0va9pmrknc4c8w40s4s80oww80080s7upqvtywqr8.png?nc=1",
+      "localPath": "attachments/01-b14ddf17edc36187.png",
+      "sha256": "b14ddf17edc361875959e0f22d679c632410fc8463010011c6194c97c6a2cfaa",
+      "promptVisible": true,
+      "source": "body"
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "rawIssue": {
+    "number": 237811,
+    "reporterAuthor": "adguard-bot",
+    "url": "https://github.com/AdguardTeam/AdguardFilters/issues/237811",
+    "title": "u.co.uk",
+    "body": "### Issue URL (Anti Adblock Script)\n[https://u.co.uk/shows/classic-eastenders/series-27/episode-192/6401781725112?autoplaying=true](https://adguardteam.github.io/AnonymousRedirect/redirect.html?url=https%3A%2F%2Fu.co.uk%2Fshows%2Fclassic-eastenders%2Fseries-27%2Fepisode-192%2F6401781725112%3Fautoplaying%3Dtrue)\n\n\n\n\n### Screenshots\n<details>\n  <summary>Screenshot 1</summary>\n\n  ![Screenshot 1](https://cdn.adguardcdn.com/sitereports/kyk75fp7tw084gcc08cow8g4o4owkw0fv1fzeyjsv4.png?nc=1)\n</details>\n\n\n### System configuration\n\n| Information | Value |\n|-------------|-------|\nAdGuard product: | AdGuard Browser Extension v5.4.3.93 MV3\nSystem version: | `Windows 10`\nBrowser: | Chrome\nFilters: | **Ad Blocking:**<br>AdGuard Base filter<br><br>**Privacy:**<br>AdGuard Tracking Protection filter\nFilters last update: | 2026-07-10T09:01:06Z\n\n\n\n### Issue configuration\n[Import](https://reports.adguard.com/settings/import.html?scheme_version=4&amp;product_type=ext&amp;product_version=5.4.3.93&amp;system_version=Windows+10&amp;ext.manifest_version=3&amp;browser=chrome&amp;regular_filters=2%2C3&amp;filters_last_update=2026-07-10T09%3A01%3A06Z&amp;stealth.enabled=0)\n",
+    "state": "closed",
+    "labels": [
+      "T: Anti Adblock Script",
+      "A: Resolved",
+      "P4: Low",
+      "N: AdGuard Browser Extension"
+    ],
+    "assignee": "AdamWr",
+    "comments": []
+  },
+  "reporterComments": [],
+  "attachments": [
+    {
+      "kind": "issue_screenshot",
+      "sourceUrl": "https://cdn.adguardcdn.com/sitereports/kyk75fp7tw084gcc08cow8g4o4owkw0fv1fzeyjsv4.png?nc=1",
+      "localPath": "attachments/01-64bced28513a8286.png",
+      "sha256": "64bced28513a8286d293f777d0e709340acc336323316bc55233d2a7cae9db15",
+      "promptVisible": true,
+      "source": "body"
+    }
+  ]
+}

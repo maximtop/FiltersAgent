@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "rawIssue": {
+    "number": 238719,
+    "reporterAuthor": "adguard-bot",
+    "url": "https://github.com/AdguardTeam/AdguardFilters/issues/238719",
+    "title": "www.mzyy94.com",
+    "body": "### Issue URL (Annoyance)\n[https://www.mzyy94.com/blog/2026/08/19/local-llm-dual-gpu-oculink/](https://adguardteam.github.io/AnonymousRedirect/redirect.html?url=https%3A%2F%2Fwww.mzyy94.com%2Fblog%2F2026%2F08%2F19%2Flocal-llm-dual-gpu-oculink%2F)\n\n\n\n\n### Screenshots\n<details>\n  <summary>Screenshot 1</summary>\n\n  ![Screenshot 1](https://cdn.adguardcdn.com/sitereports/laxs8ycxkcgwsg408s4og4cc88wss8cgl0xuig4b8g.png?nc=1)\n</details>\n\n\n### System configuration\n\n| Information | Value |\n|-------------|-------|\nAdGuard product: | AdGuard Browser Extension v5.4.3.129 MV3\nSystem version: | `Windows 11`\nBrowser: | Chrome\nFilters: | **Ad Blocking:**<br>AdGuard Base filter, <br>AdGuard Mobile Ads filter<br><br>**Privacy:**<br>AdGuard Tracking Protection filter, <br>AdGuard URL Tracking filter<br><br>**Social Widgets:**<br>AdGuard Social Media filter<br><br>**Annoyances:**<br>AdGuard Cookie Notices filter, <br>AdGuard Popups filter, <br>AdGuard Mobile App Banners filter, <br>AdGuard Other Annoyances filter, <br>AdGuard Widgets filter<br><br>**Security:**<br>Online Malicious URL Blocklist, <br>uBlock Origin – Badware risks<br><br>**Language-specific:**<br>AdGuard Japanese filter\nFilters last update: | 2026-08-17T09:01:01Z\n\n\n\n### Issue configuration\n[Import](https://reports.adguard.com/settings/import.html?scheme_version=4&amp;product_type=ext&amp;product_version=5.4.3.129&amp;system_version=Windows+11&amp;ext.manifest_version=3&amp;browser=chrome&amp;regular_filters=2%2C3%2C4%2C7%2C11%2C17%2C18%2C19%2C20%2C21%2C22%2C208%2C257&amp;filters_last_update=2026-08-17T09%3A01%3A01Z&amp;stealth.enabled=1&amp;stealth.block_trackers=1&amp;stealth.strip_url=1)\n",
+    "state": "closed",
+    "labels": [
+      "T: Annoyance",
+      "P4: Low",
+      "A: In progress",
+      "N: AdGuard Browser Extension"
+    ],
+    "assignee": "Alex-302",
+    "comments": []
+  },
+  "reporterComments": [],
+  "attachments": [
+    {
+      "kind": "issue_screenshot",
+      "sourceUrl": "https://cdn.adguardcdn.com/sitereports/laxs8ycxkcgwsg408s4og4cc88wss8cgl0xuig4b8g.png?nc=1",
+      "localPath": "attachments/01-62604180688afa6a.png",
+      "sha256": "62604180688afa6a08abed06132741a85c48524668cb7ad46c57dbab07c7b871",
+      "promptVisible": true,
+      "source": "body"
+    }
+  ]
+}

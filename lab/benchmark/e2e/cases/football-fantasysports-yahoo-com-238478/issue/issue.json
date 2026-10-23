@@ -1,0 +1,155 @@
+{
+  "schemaVersion": 1,
+  "rawIssue": {
+    "number": 238478,
+    "reporterAuthor": "adguard-bot",
+    "url": "https://github.com/AdguardTeam/AdguardFilters/issues/238478",
+    "title": "football.fantasysports.yahoo.com",
+    "body": "### Issue URL (Incorrect Blocking)\n[https://football.fantasysports.yahoo.com/f1/715126](https://adguardteam.github.io/AnonymousRedirect/redirect.html?url=https%3A%2F%2Ffootball.fantasysports.yahoo.com%2Ff1%2F715126)\n\n### Comment\n> yahoo fantasy football page, sometimes doesn&#039;t load, just a white page.  sometimes loads but the mouse cursor where it needs to become hand so I can click to go to another page doesn&#039;t work.  just an arrow cursor only. never becomes a hand.  sometimes, everything works but then when I switch tabs and come back to the yahoo tab, it&#039;s just a blank page.\n\n```\nUsername: @jedikoosh\n```\n\n\n### Screenshots\n<details>\n  <summary>Screenshot 1</summary>\n\n  ![Screenshot 1](https://cdn.adguardcdn.com/sitereports/deabk1gjltwg0swgsggkwg4k4gck8o0f9u3rywb0cg.png?nc=1)\n</details>\n<details>\n  <summary>Screenshot 2</summary>\n\n  ![Screenshot 2](https://cdn.adguardcdn.com/sitereports/g8u7wipdnzco80c8kwos4co0gs8gkwc6cxo41w0bxs.png?nc=1)\n</details>\n\n<details>\n  <summary>Screenshot 1 with AdGuard disabled</summary>\n\n  ![Screenshot 1](https://cdn.adguardcdn.com/sitereports/rgnf29qpqyow4o480kokcs4s008o8gkr14k5l5p2mo.png?nc=1)\n</details>\n\n### System configuration\n\n| Information | Value |\n|-------------|-------|\nAdGuard product: | AdGuard Mini for Mac v2.3.0.1091\nSystem version: | `MacOS 26.6.1 (Build 25G76)`\nBrowser: | Safari\nLicense type: | free\nAdvanced rules: | enabled\nFilters: | **Ad Blocking:**<br>AdGuard Base filter<br><br>**Privacy:**<br>AdGuard Tracking Protection filter, <br>AdGuard Mail Tracking Protection filter<br><br>**Social Widgets:**<br>AdGuard Social Media filter<br><br>**Annoyances:**<br>AdGuard Cookie Notices filter, <br>AdGuard Popups filter, <br>AdGuard Mobile App Banners filter\nFilters last update: | 2026-08-16T17:18:05\nUserscripts: | disabled\nUserstyles: | disabled\nOther extensions used: | `none`\n\n\n",
+    "state": "closed",
+    "labels": [
+      "T: Incorrect Blocking",
+      "P1: Critical",
+      "A: In progress",
+      "N: AdGuard Browser Extension",
+      "A: Waiting for data",
+      "N: AdGuard Mini for Mac"
+    ],
+    "assignee": "BlazDT",
+    "comments": [
+      {
+        "author": "adguard-bot",
+        "body": "### Issue URL (Incorrect Blocking)\n[https://football.fantasysports.yahoo.com/league/lims_football/2026](https://adguardteam.github.io/AnonymousRedirect/redirect.html?url=https%3A%2F%2Ffootball.fantasysports.yahoo.com%2Fleague%2Flims_football%2F2026)\n\n### Comment\n> Site will not load with Adguard enabled, gives Page Unresponsive error. Page is fully responsive when filtering is disabled for the website\n\n\n\n### Screenshots\n<details>\n  <summary>Screenshot 1</summary>\n\n  ![Screenshot 1](https://cdn.adguardcdn.com/sitereports/nv06haeyzgg0k8w4kko8cwwoks0080omxjli99r76s.jpg?nc=1)\n</details>\n\n<details>\n  <summary>Screenshot 1 with AdGuard disabled</summary>\n\n  ![Screenshot 1](https://cdn.adguardcdn.com/sitereports/tiux700a0i88ckcosc4w8s4osc808o4f0r7n0jlu1k.jpg?nc=1)\n</details>\n\n### System configuration\n\n| Information | Value |\n|-------------|-------|\nAdGuard product: | AdGuard Browser Extension v5.4.3.129 MV3\nSystem version: | `Mac OS 26.6.2`\nBrowser: | Chrome\nFilters: | **Ad Blocking:**<br>AdGuard Base filter, <br>AdGuard Mobile Ads filter<br><br>**Other:**<br>Filter unblocking search ads and self-promotion\nFilters last update: | 2026-08-17T09:01:01Z\nOther extensions used: | `Issue happens when Adguard is only extension enabled.`\n\n\n\n### Issue configuration\n[Import](https://reports.adguard.com/settings/import.html?scheme_version=4&amp;product_type=ext&amp;product_version=5.4.3.129&amp;system_version=Mac+OS+26.6.2&amp;ext.manifest_version=3&amp;browser=chrome&amp;regular_filters=2%2C11%2C10&amp;filters_last_update=2026-08-17T09%3A01%3A01Z&amp;stealth.enabled=0)\n",
+        "createdAt": "2026-08-19T15:27:00Z"
+      },
+      {
+        "author": "github-actions[bot]",
+        "body": "This issue has been automatically marked as stale because it has been open for 3 days with no activity.\nUnfortunately, our resources are limited and we can not always take the time to respond to requests about websites that are not popular enough. The issue will be closed if no further activity occurs.\nPlease note, that AdGuard Filters is an open-source project that is used by different content blockers and we welcome contributions. If you have some technical knowledge about how websites work, you are welcome to create a pull request following [these instructions](https://github.com/AdguardTeam/AdguardFilters/blob/master/CONTRIBUTING.md).",
+        "createdAt": "2026-08-22T16:03:02Z"
+      },
+      {
+        "author": "BlazDT",
+        "body": "Requires Yahoo login and account requires phone number.\nPlease take a look @AdguardTeam/filters-maintainers ",
+        "createdAt": "2026-08-25T14:58:51Z"
+      },
+      {
+        "author": "livejamie",
+        "body": "Can confirm, think it's also related to #226904\n\n<img width=\"2120\" height=\"1185\" alt=\"Image\" src=\"https://github.com/user-attachments/assets/ed2c9ed4-b636-4f1a-922b-0300c0d829e9\" />",
+        "createdAt": "2026-09-02T08:35:38Z"
+      },
+      {
+        "author": "ntnguyen1234",
+        "body": "@livejamie Hi, can you test if these rules help on Adguard?\n\n```adblock\nsports.yahoo.com,fantasysports.yahoo.com#%#//scriptlet('json-prune', 'autoRecovery')\nsports.yahoo.com,fantasysports.yahoo.com#%#//scriptlet('prevent-innerHTML', 'script', 'loadRecoveryScripts')\n```",
+        "createdAt": "2026-09-03T02:23:28Z"
+      },
+      {
+        "author": "piquark6046",
+        "body": "@ntnguyen1234  please refer https://github.com/FilteringDev/tinyShield/issues/96",
+        "createdAt": "2026-09-03T02:48:20Z"
+      },
+      {
+        "author": "ntnguyen1234",
+        "body": "I can reproduce on `sports.yahoo.com` with US IP (`fantasysports.yahoo.com` requires account so I can't check). Although I can't reproduce the detection/breakages, but the AS script is in `https://s.yimg.com/du/site/deuduugekctjprmq.js` and the AS domains are `athwartwhoafat.com`.",
+        "createdAt": "2026-09-03T03:26:09Z"
+      },
+      {
+        "author": "piquark6046",
+        "body": "> I can reproduce on sports.yahoo.com with US IP\n\nI could not actually (on Chromium MV3 because the reporter said that the issue exists on Firefox and Chromium).\n\n<details><summary>Screenshot</summary>\n<p>\n\n<img width=\"1906\" height=\"1072\" alt=\"Image\" src=\"https://github.com/user-attachments/assets/2bd57347-9733-4f0c-8089-bb7c7f50d599\" />\n\n</p>\n</details> ",
+        "createdAt": "2026-09-03T03:29:09Z"
+      },
+      {
+        "author": "ntnguyen1234",
+        "body": "Yeah, I mean I can't reproduce that detection screen, but I can see the AS connections (at least on home page)\n\n<details>\n\n<img width=\"3700\" height=\"1838\" alt=\"Image\" src=\"https://github.com/user-attachments/assets/5c513c8c-2b27-4e50-a6e9-95c656d7abf8\" />\n\n</details>",
+        "createdAt": "2026-09-03T03:42:56Z"
+      },
+      {
+        "author": "piquark6046",
+        "body": "> Yeah, I mean I can't reproduce that detection screen, \n\nAh. Okay.\n",
+        "createdAt": "2026-09-03T03:47:12Z"
+      },
+      {
+        "author": "Alex-302",
+        "body": "any news?)",
+        "createdAt": "2026-09-08T14:49:57Z"
+      },
+      {
+        "author": "ntnguyen1234",
+        "body": "I think it should be fine. I'll add the rules.",
+        "createdAt": "2026-09-09T01:24:43Z"
+      }
+    ]
+  },
+  "reporterComments": [
+    {
+      "author": "adguard-bot",
+      "body": "### Issue URL (Incorrect Blocking)\n[https://football.fantasysports.yahoo.com/league/lims_football/2026](https://adguardteam.github.io/AnonymousRedirect/redirect.html?url=https%3A%2F%2Ffootball.fantasysports.yahoo.com%2Fleague%2Flims_football%2F2026)\n\n### Comment\n> Site will not load with Adguard enabled, gives Page Unresponsive error. Page is fully responsive when filtering is disabled for the website\n\n\n\n### Screenshots\n<details>\n  <summary>Screenshot 1</summary>\n\n  ![Screenshot 1](https://cdn.adguardcdn.com/sitereports/nv06haeyzgg0k8w4kko8cwwoks0080omxjli99r76s.jpg?nc=1)\n</details>\n\n<details>\n  <summary>Screenshot 1 with AdGuard disabled</summary>\n\n  ![Screenshot 1](https://cdn.adguardcdn.com/sitereports/tiux700a0i88ckcosc4w8s4osc808o4f0r7n0jlu1k.jpg?nc=1)\n</details>\n\n### System configuration\n\n| Information | Value |\n|-------------|-------|\nAdGuard product: | AdGuard Browser Extension v5.4.3.129 MV3\nSystem version: | `Mac OS 26.6.2`\nBrowser: | Chrome\nFilters: | **Ad Blocking:**<br>AdGuard Base filter, <br>AdGuard Mobile Ads filter<br><br>**Other:**<br>Filter unblocking search ads and self-promotion\nFilters last update: | 2026-08-17T09:01:01Z\nOther extensions used: | `Issue happens when Adguard is only extension enabled.`\n\n\n\n### Issue configuration\n[Import](https://reports.adguard.com/settings/import.html?scheme_version=4&amp;product_type=ext&amp;product_version=5.4.3.129&amp;system_version=Mac+OS+26.6.2&amp;ext.manifest_version=3&amp;browser=chrome&amp;regular_filters=2%2C11%2C10&amp;filters_last_update=2026-08-17T09%3A01%3A01Z&amp;stealth.enabled=0)\n",
+      "createdAt": "2026-08-19T15:27:00Z"
+    }
+  ],
+  "attachments": [
+    {
+      "kind": "issue_screenshot",
+      "sourceUrl": "https://cdn.adguardcdn.com/sitereports/deabk1gjltwg0swgsggkwg4k4gck8o0f9u3rywb0cg.png?nc=1",
+      "localPath": "attachments/01-67a98724f38dd364.png",
+      "sha256": "67a98724f38dd3640cb0947e0d018264233b0c71feb75802986793ad52316b36",
+      "promptVisible": true,
+      "source": "body"
+    },
+    {
+      "kind": "issue_screenshot",
+      "sourceUrl": "https://cdn.adguardcdn.com/sitereports/g8u7wipdnzco80c8kwos4co0gs8gkwc6cxo41w0bxs.png?nc=1",
+      "localPath": "attachments/02-0de28d25f69e517a.png",
+      "sha256": "0de28d25f69e517abb3b970c74e1eb56bdc9c147d0aaac09e89d5c9e028cf3ca",
+      "promptVisible": true,
+      "source": "body"
+    },
+    {
+      "kind": "issue_screenshot",
+      "sourceUrl": "https://cdn.adguardcdn.com/sitereports/rgnf29qpqyow4o480kokcs4s008o8gkr14k5l5p2mo.png?nc=1",
+      "localPath": "attachments/03-cc045a0cdecbdb80.png",
+      "sha256": "cc045a0cdecbdb8071cb9c4b7fa15525e1dc193fcdf1a48113481b123537ae23",
+      "promptVisible": true,
+      "source": "body"
+    },
+    {
+      "kind": "issue_screenshot",
+      "sourceUrl": "https://cdn.adguardcdn.com/sitereports/nv06haeyzgg0k8w4kko8cwwoks0080omxjli99r76s.jpg?nc=1",
+      "localPath": "attachments/04-578e518f1aa3db66.jpg",
+      "sha256": "578e518f1aa3db668cd3379a7d90ba58e7953b59e27ae98b12c2bce69afffe86",
+      "promptVisible": true,
+      "source": "reporter_comment"
+    },
+    {
+      "kind": "issue_screenshot",
+      "sourceUrl": "https://cdn.adguardcdn.com/sitereports/tiux700a0i88ckcosc4w8s4osc808o4f0r7n0jlu1k.jpg?nc=1",
+      "localPath": "attachments/05-c272ec5ec4739977.jpg",
+      "sha256": "c272ec5ec473997774518ba8db6ce240e5f618a4f8c20d9911399039f0db836d",
+      "promptVisible": true,
+      "source": "reporter_comment"
+    },
+    {
+      "kind": "issue_screenshot",
+      "sourceUrl": "https://github.com/user-attachments/assets/ed2c9ed4-b636-4f1a-922b-0300c0d829e9",
+      "localPath": "attachments/06-7375357f658125bd.png",
+      "sha256": "7375357f658125bdcd3025ccfd815224f6a4e1a991d7f53f863476f4a353c7e1",
+      "promptVisible": false,
+      "source": "raw_comment"
+    },
+    {
+      "kind": "issue_screenshot",
+      "sourceUrl": "https://github.com/user-attachments/assets/2bd57347-9733-4f0c-8089-bb7c7f50d599",
+      "localPath": "attachments/07-13b4d285a2a568ac.png",
+      "sha256": "13b4d285a2a568ace53741d82698fb5c66aebe7c1fa89297b1699ec0ca516924",
+      "promptVisible": false,
+      "source": "raw_comment"
+    },
+    {
+      "kind": "issue_screenshot",
+      "sourceUrl": "https://github.com/user-attachments/assets/5c513c8c-2b27-4e50-a6e9-95c656d7abf8",
+      "localPath": "attachments/08-6a94a0e22917e046.png",
+      "sha256": "6a94a0e22917e04633e79e3abed3a07f28d36d07d0b0ed09858bbf3cd35604f8",
+      "promptVisible": false,
+      "source": "raw_comment"
+    }
+  ]
+}

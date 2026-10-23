@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "rawIssue": {
+    "number": 238449,
+    "reporterAuthor": "adguard-bot",
+    "url": "https://github.com/AdguardTeam/AdguardFilters/issues/238449",
+    "title": "www.flyert.com.cn",
+    "body": "### Issue URL (Ads)\n[https://www.flyert.com.cn/forum.php?mod=forumdisplay&amp;fid=63](https://adguardteam.github.io/AnonymousRedirect/redirect.html?url=https%3A%2F%2Fwww.flyert.com.cn%2Fforum.php%3Fmod%3Dforumdisplay%26fid%3D63)\n\n\n\n\n### Screenshots\n<details>\n  <summary>Screenshot 1</summary>\n\n  ![Screenshot 1](https://cdn.adguardcdn.com/sitereports/hyfjl0k30mosck0o84g84kkckc8owgcf63e0w55640.png?nc=1)\n</details>\n\n\n### System configuration\n\n| Information | Value |\n|-------------|-------|\nAdGuard product: | AdGuard Browser Extension v5.4.3.127 MV3\nSystem version: | `Mac OS 27.0.0`\nBrowser: | Chrome\nFilters: | **Ad Blocking:**<br>AdGuard Base filter<br><br>**Social Widgets:**<br>AdGuard Social Media filter<br><br>**Annoyances:**<br>AdGuard Cookie Notices filter, <br>AdGuard Popups filter, <br>AdGuard Mobile App Banners filter, <br>AdGuard Other Annoyances filter, <br>AdGuard Widgets filter<br><br>**Language-specific:**<br>AdGuard Japanese filter, <br>AdGuard Chinese filter\nCustom filters: | `CJX's Annoyance List (url: https://raw.githubusercontent.com/cjx82630/cjxlist/master/cjx-annoyance.txt)`\nFilters last update: | 2026-08-15T08:00:55Z\n\n\n\n### Issue configuration\n[Import](https://reports.adguard.com/settings/import.html?scheme_version=4&amp;product_type=ext&amp;product_version=5.4.3.127&amp;system_version=Mac+OS+27.0.0&amp;ext.manifest_version=3&amp;browser=chrome&amp;regular_filters=2%2C4%2C7%2C18%2C19%2C20%2C21%2C22%2C224&amp;custom_filters=CJX%27s+Annoyance+List+%28url%3A+https%3A%2F%2Fraw.githubusercontent.com%2Fcjx82630%2Fcjxlist%2Fmaster%2Fcjx-annoyance.txt%29&amp;filters_last_update=2026-08-15T08%3A00%3A55Z&amp;stealth.enabled=0)\n",
+    "state": "closed",
+    "labels": [
+      "T: Ads",
+      "P1: Critical",
+      "A: In progress",
+      "N: AdGuard Browser Extension",
+      "Stale"
+    ],
+    "assignee": "Alex-302",
+    "comments": [
+      {
+        "author": "github-actions[bot]",
+        "body": "This issue has been automatically marked as stale because it has been open for 3 days with no activity.\nUnfortunately, our resources are limited and we can not always take the time to respond to requests about websites that are not popular enough. The issue will be closed if no further activity occurs.\nPlease note, that AdGuard Filters is an open-source project that is used by different content blockers and we welcome contributions. If you have some technical knowledge about how websites work, you are welcome to create a pull request following [these instructions](https://github.com/AdguardTeam/AdguardFilters/blob/master/CONTRIBUTING.md).",
+        "createdAt": "2026-08-19T10:06:43Z"
+      }
+    ]
+  },
+  "reporterComments": [],
+  "attachments": [
+    {
+      "kind": "issue_screenshot",
+      "sourceUrl": "https://cdn.adguardcdn.com/sitereports/hyfjl0k30mosck0o84g84kkckc8owgcf63e0w55640.png?nc=1",
+      "localPath": "attachments/01-d0c71f39952dd254.png",
+      "sha256": "d0c71f39952dd2543463e55a999b268539248e019ed110de6152a87d00140a9f",
+      "promptVisible": true,
+      "source": "body"
+    }
+  ]
+}

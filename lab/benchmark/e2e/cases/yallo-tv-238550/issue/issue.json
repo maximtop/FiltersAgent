@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "rawIssue": {
+    "number": 238550,
+    "reporterAuthor": "adguard-bot",
+    "url": "https://github.com/AdguardTeam/AdguardFilters/issues/238550",
+    "title": "yallo.tv",
+    "body": "### Issue URL (Anti Adblock Script)\n[https://yallo.tv/](https://adguardteam.github.io/AnonymousRedirect/redirect.html?url=https%3A%2F%2Fyallo.tv%2F)\n\n### Comment\n> Ihr Ad on blocker geht nicht auf yallo TV \n\n\n\n### Screenshots\n<details>\n  <summary>Screenshot 1</summary>\n\n  ![Screenshot 1](https://cdn.adguardcdn.com/sitereports/suzzl2bnc2swc408kgo0w0scskkkssiszf24fd2k8w.jpg?nc=1)\n</details>\n\n\n### System configuration\n\n| Information | Value |\n|-------------|-------|\nAdGuard product: | AdGuard Browser Extension v5.4.3.129 MV3\nSystem version: | `Windows 11`\nBrowser: | Chrome\nFilters: | **Ad Blocking:**<br>AdGuard Base filter<br><br>**Other:**<br>Filter unblocking search ads and self-promotion<br><br>**Language-specific:**<br>AdGuard German filter\nFilters last update: | 2026-08-17T09:01:01Z\n\n\n\n### Issue configuration\n[Import](https://reports.adguard.com/settings/import.html?scheme_version=4&amp;product_type=ext&amp;product_version=5.4.3.129&amp;system_version=Windows+11&amp;ext.manifest_version=3&amp;browser=chrome&amp;regular_filters=2%2C6%2C10&amp;filters_last_update=2026-08-17T09%3A01%3A01Z&amp;stealth.enabled=0)\n",
+    "state": "closed",
+    "labels": [
+      "T: Anti Adblock Script",
+      "P3: Medium",
+      "A: In progress",
+      "N: AdGuard Browser Extension"
+    ],
+    "assignee": "AdamWr",
+    "comments": []
+  },
+  "reporterComments": [],
+  "attachments": [
+    {
+      "kind": "issue_screenshot",
+      "sourceUrl": "https://cdn.adguardcdn.com/sitereports/suzzl2bnc2swc408kgo0w0scskkkssiszf24fd2k8w.jpg?nc=1",
+      "localPath": "attachments/01-e388888d14777170.jpg",
+      "sha256": "e388888d147771705636627ebc7e942058a2bd4ade1cacfcdeab3fa16fd1bb5a",
+      "promptVisible": true,
+      "source": "body"
+    }
+  ]
+}

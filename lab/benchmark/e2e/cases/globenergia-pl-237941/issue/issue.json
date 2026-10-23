@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "rawIssue": {
+    "number": 237941,
+    "reporterAuthor": "adguard-bot",
+    "url": "https://github.com/AdguardTeam/AdguardFilters/issues/237941",
+    "title": "globenergia.pl",
+    "body": "### Issue URL (Ads)\n[https://globenergia.pl/](https://adguardteam.github.io/AnonymousRedirect/redirect.html?url=https%3A%2F%2Fglobenergia.pl%2F)\n\n\n\n\n### Screenshots\n<details>\n  <summary>Screenshot 1</summary>\n\n  ![Screenshot 1](https://cdn.adguardcdn.com/sitereports/l9yyxanm45c0ckwwkcw0wo48ccw00cohu9lmtuia8o.png?nc=1)\n</details>\n<details>\n  <summary>Screenshot 2</summary>\n\n  ![Screenshot 2](https://cdn.adguardcdn.com/sitereports/ety7znrzi7coc44oso8gko0ko4kksks1jmy5epgb30.png?nc=1)\n</details>\n<details>\n  <summary>Screenshot 3</summary>\n\n  ![Screenshot 3](https://cdn.adguardcdn.com/sitereports/1s18cyrag200gcs88oow48o44gook043x2m616ok4s.png?nc=1)\n</details>\n<details>\n  <summary>Screenshot 4</summary>\n\n  ![Screenshot 4](https://cdn.adguardcdn.com/sitereports/t2y6vzi299ck4w48g08ggggwwcws8008mnpuwhy7os.png?nc=1)\n</details>\n\n\n### System configuration\n\n| Information | Value |\n|-------------|-------|\nAdGuard product: | AdGuard Browser Extension v5.4.3.121 MV3\nBrowser: | Chrome\nFilters: | **Ad Blocking:**<br>AdGuard Base filter<br><br>**Privacy:**<br>AdGuard Tracking Protection filter, <br>AdGuard URL Tracking filter<br><br>**Social Widgets:**<br>AdGuard Social Media filter<br><br>**Annoyances:**<br>AdGuard Cookie Notices filter, <br>AdGuard Popups filter, <br>AdGuard Mobile App Banners filter, <br>AdGuard Other Annoyances filter, <br>AdGuard Widgets filter<br><br>**Security:**<br>Online Malicious URL Blocklist, <br>Phishing URL Blocklist, <br>Scam Blocklist by DurableNapkin, <br>uBlock Origin – Badware risks, <br>Dandelion Sprout's Anti-Malware List<br><br>**Language-specific:**<br>Official Polish filters for AdBlock, uBlock Origin & AdGuard, <br>Polish GDPR-Cookies Filters, <br>Polish Anti Adblock Filters\nFilters last update: | 2026-08-09T09:00:47Z\n\n\n\n### Issue configuration\n[Import](https://reports.adguard.com/settings/import.html?scheme_version=4&amp;product_type=ext&amp;product_version=5.4.3.121&amp;system_version=&amp;ext.manifest_version=3&amp;browser=chrome&amp;regular_filters=2%2C3%2C4%2C17%2C18%2C19%2C20%2C21%2C22%2C208%2C216%2C217%2C238%2C255%2C256%2C257%2C259&amp;filters_last_update=2026-08-09T09%3A00%3A47Z&amp;stealth.enabled=0)\n",
+    "state": "closed",
+    "labels": [
+      "T: Ads",
+      "P3: Medium",
+      "A: In progress",
+      "N: AdGuard Browser Extension"
+    ],
+    "assignee": "Sergey-Lyapin",
+    "comments": [
+      {
+        "author": "adguard-bot",
+        "body": "### Issue URL (Ads)\n[https://globenergia.pl/koniec-ekstremalnie-taniej-fotowoltaiki-z-chin-najwieksi-producenci-mowia-dosc/](https://adguardteam.github.io/AnonymousRedirect/redirect.html?url=https%3A%2F%2Fglobenergia.pl%2Fkoniec-ekstremalnie-taniej-fotowoltaiki-z-chin-najwieksi-producenci-mowia-dosc%2F)\n\n\n\n\n### Screenshots\n<details>\n  <summary>Screenshot 1</summary>\n\n  ![Screenshot 1](https://cdn.adguardcdn.com/sitereports/tg0qphj6lasockkcggkw44kkggs04koljizdgs275s.png?nc=1)\n</details>\n<details>\n  <summary>Screenshot 2</summary>\n\n  ![Screenshot 2](https://cdn.adguardcdn.com/sitereports/50ev7qld9yckggc0ok48088wgossgwk6egld6nbyi0.png?nc=1)\n</details>\n\n\n### System configuration\n\n| Information | Value |\n|-------------|-------|\nAdGuard product: | AdGuard Browser Extension v5.4.3.121 MV3\nBrowser: | Chrome\nFilters: | **Ad Blocking:**<br>AdGuard Base filter<br><br>**Privacy:**<br>AdGuard Tracking Protection filter, <br>AdGuard URL Tracking filter<br><br>**Social Widgets:**<br>AdGuard Social Media filter<br><br>**Annoyances:**<br>AdGuard Cookie Notices filter, <br>AdGuard Popups filter, <br>AdGuard Mobile App Banners filter, <br>AdGuard Other Annoyances filter, <br>AdGuard Widgets filter<br><br>**Security:**<br>Online Malicious URL Blocklist, <br>Phishing URL Blocklist, <br>Scam Blocklist by DurableNapkin, <br>uBlock Origin – Badware risks, <br>Dandelion Sprout's Anti-Malware List<br><br>**Language-specific:**<br>Official Polish filters for AdBlock, uBlock Origin & AdGuard, <br>Polish GDPR-Cookies Filters, <br>Polish Anti Adblock Filters\nFilters last update: | 2026-08-09T09:00:47Z\n\n\n\n### Issue configuration\n[Import](https://reports.adguard.com/settings/import.html?scheme_version=4&amp;product_type=ext&amp;product_version=5.4.3.121&amp;system_version=&amp;ext.manifest_version=3&amp;browser=chrome&amp;regular_filters=2%2C3%2C4%2C17%2C18%2C19%2C20%2C21%2C22%2C208%2C216%2C217%2C238%2C255%2C256%2C257%2C259&amp;filters_last_update=2026-08-09T09%3A00%3A47Z&amp;stealth.enabled=0)\n",
+        "createdAt": "2026-08-10T09:09:56Z"
+      }
+    ]
+  },
+  "reporterComments": [
+    {
+      "author": "adguard-bot",
+      "body": "### Issue URL (Ads)\n[https://globenergia.pl/koniec-ekstremalnie-taniej-fotowoltaiki-z-chin-najwieksi-producenci-mowia-dosc/](https://adguardteam.github.io/AnonymousRedirect/redirect.html?url=https%3A%2F%2Fglobenergia.pl%2Fkoniec-ekstremalnie-taniej-fotowoltaiki-z-chin-najwieksi-producenci-mowia-dosc%2F)\n\n\n\n\n### Screenshots\n<details>\n  <summary>Screenshot 1</summary>\n\n  ![Screenshot 1](https://cdn.adguardcdn.com/sitereports/tg0qphj6lasockkcggkw44kkggs04koljizdgs275s.png?nc=1)\n</details>\n<details>\n  <summary>Screenshot 2</summary>\n\n  ![Screenshot 2](https://cdn.adguardcdn.com/sitereports/50ev7qld9yckggc0ok48088wgossgwk6egld6nbyi0.png?nc=1)\n</details>\n\n\n### System configuration\n\n| Information | Value |\n|-------------|-------|\nAdGuard product: | AdGuard Browser Extension v5.4.3.121 MV3\nBrowser: | Chrome\nFilters: | **Ad Blocking:**<br>AdGuard Base filter<br><br>**Privacy:**<br>AdGuard Tracking Protection filter, <br>AdGuard URL Tracking filter<br><br>**Social Widgets:**<br>AdGuard Social Media filter<br><br>**Annoyances:**<br>AdGuard Cookie Notices filter, <br>AdGuard Popups filter, <br>AdGuard Mobile App Banners filter, <br>AdGuard Other Annoyances filter, <br>AdGuard Widgets filter<br><br>**Security:**<br>Online Malicious URL Blocklist, <br>Phishing URL Blocklist, <br>Scam Blocklist by DurableNapkin, <br>uBlock Origin – Badware risks, <br>Dandelion Sprout's Anti-Malware List<br><br>**Language-specific:**<br>Official Polish filters for AdBlock, uBlock Origin & AdGuard, <br>Polish GDPR-Cookies Filters, <br>Polish Anti Adblock Filters\nFilters last update: | 2026-08-09T09:00:47Z\n\n\n\n### Issue configuration\n[Import](https://reports.adguard.com/settings/import.html?scheme_version=4&amp;product_type=ext&amp;product_version=5.4.3.121&amp;system_version=&amp;ext.manifest_version=3&amp;browser=chrome&amp;regular_filters=2%2C3%2C4%2C17%2C18%2C19%2C20%2C21%2C22%2C208%2C216%2C217%2C238%2C255%2C256%2C257%2C259&amp;filters_last_update=2026-08-09T09%3A00%3A47Z&amp;stealth.enabled=0)\n",
+      "createdAt": "2026-08-10T09:09:56Z"
+    }
+  ],
+  "attachments": [
+    {
+      "kind": "issue_screenshot",
+      "sourceUrl": "https://cdn.adguardcdn.com/sitereports/l9yyxanm45c0ckwwkcw0wo48ccw00cohu9lmtuia8o.png?nc=1",
+      "localPath": "attachments/01-669d52d96a92f9e4.png",
+      "sha256": "669d52d96a92f9e4d360ed9836d6f5f7e073044772fd736bf424831d3c82a354",
+      "promptVisible": true,
+      "source": "body"
+    },
+    {
+      "kind": "issue_screenshot",
+      "sourceUrl": "https://cdn.adguardcdn.com/sitereports/ety7znrzi7coc44oso8gko0ko4kksks1jmy5epgb30.png?nc=1",
+      "localPath": "attachments/02-4887389a2bad7c67.png",
+      "sha256": "4887389a2bad7c671c4a08c64abbcd5fe6a658dc512498ce3b17b1fde69d8028",
+      "promptVisible": true,
+      "source": "body"
+    },
+    {
+      "kind": "issue_screenshot",
+      "sourceUrl": "https://cdn.adguardcdn.com/sitereports/1s18cyrag200gcs88oow48o44gook043x2m616ok4s.png?nc=1",
+      "localPath": "attachments/03-f830215ae8fd3f76.png",
+      "sha256": "f830215ae8fd3f76d65be4ab23cb9962f3f203295d71cd670e773a5cb20fa475",
+      "promptVisible": true,
+      "source": "body"
+    },
+    {
+      "kind": "issue_screenshot",
+      "sourceUrl": "https://cdn.adguardcdn.com/sitereports/t2y6vzi299ck4w48g08ggggwwcws8008mnpuwhy7os.png?nc=1",
+      "localPath": "attachments/04-01836b8f16a84af6.png",
+      "sha256": "01836b8f16a84af618f40d36ecbb4c871e206a7d491f938b95b1ad2c6c29ce7a",
+      "promptVisible": true,
+      "source": "body"
+    },
+    {
+      "kind": "issue_screenshot",
+      "sourceUrl": "https://cdn.adguardcdn.com/sitereports/tg0qphj6lasockkcggkw44kkggs04koljizdgs275s.png?nc=1",
+      "localPath": "attachments/05-f76aa53032789d4a.png",
+      "sha256": "f76aa53032789d4ace396fe063c89321b92ef2c82bb8b2a5ae3156007fbb9d27",
+      "promptVisible": true,
+      "source": "reporter_comment"
+    },
+    {
+      "kind": "issue_screenshot",
+      "sourceUrl": "https://cdn.adguardcdn.com/sitereports/50ev7qld9yckggc0ok48088wgossgwk6egld6nbyi0.png?nc=1",
+      "localPath": "attachments/06-01be4311055fbcd6.png",
+      "sha256": "01be4311055fbcd64ef2c449eb19084c0ad8ba4f086b2df66098a393153733b3",
+      "promptVisible": true,
+      "source": "reporter_comment"
+    }
+  ]
+}

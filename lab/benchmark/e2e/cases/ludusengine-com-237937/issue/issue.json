@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "rawIssue": {
+    "number": 237937,
+    "reporterAuthor": "adguard-bot",
+    "url": "https://github.com/AdguardTeam/AdguardFilters/issues/237937",
+    "title": "ludusengine.com",
+    "body": "### Issue URL (Annoyance)\n[https://ludusengine.com/](https://adguardteam.github.io/AnonymousRedirect/redirect.html?url=https%3A%2F%2Fludusengine.com%2F)\n\n\n\n\n### Screenshots\n<details>\n  <summary>Screenshot 1</summary>\n\n  ![Screenshot 1](https://cdn.adguardcdn.com/sitereports/4qf31a5525q8o8ockcgss4ogw8wcoco3e5ic9fz4l8.png?nc=1)\n</details>\n\n\n### System configuration\n\n| Information | Value |\n|-------------|-------|\nAdGuard product: | AdGuard Browser Extension v5.4.3.121 MV3\nBrowser: | Chrome\nFilters: | **Ad Blocking:**<br>AdGuard Base filter<br><br>**Privacy:**<br>AdGuard Tracking Protection filter, <br>AdGuard URL Tracking filter<br><br>**Social Widgets:**<br>AdGuard Social Media filter<br><br>**Annoyances:**<br>AdGuard Cookie Notices filter, <br>AdGuard Popups filter, <br>AdGuard Mobile App Banners filter, <br>AdGuard Other Annoyances filter, <br>AdGuard Widgets filter<br><br>**Security:**<br>Online Malicious URL Blocklist, <br>Phishing URL Blocklist, <br>Scam Blocklist by DurableNapkin, <br>uBlock Origin – Badware risks, <br>Dandelion Sprout's Anti-Malware List\nFilters last update: | 2026-08-09T09:00:47Z\n\n\n\n### Issue configuration\n[Import](https://reports.adguard.com/settings/import.html?scheme_version=4&amp;product_type=ext&amp;product_version=5.4.3.121&amp;system_version=&amp;ext.manifest_version=3&amp;browser=chrome&amp;regular_filters=2%2C3%2C4%2C17%2C18%2C19%2C20%2C21%2C22%2C208%2C255%2C256%2C257%2C259&amp;filters_last_update=2026-08-09T09%3A00%3A47Z&amp;stealth.enabled=0)\n",
+    "state": "closed",
+    "labels": [
+      "T: Annoyance",
+      "P4: Low",
+      "A: In progress",
+      "N: AdGuard Browser Extension"
+    ],
+    "assignee": "zloyden",
+    "comments": []
+  },
+  "reporterComments": [],
+  "attachments": [
+    {
+      "kind": "issue_screenshot",
+      "sourceUrl": "https://cdn.adguardcdn.com/sitereports/4qf31a5525q8o8ockcgss4ogw8wcoco3e5ic9fz4l8.png?nc=1",
+      "localPath": "attachments/01-f9901a77dc77df18.png",
+      "sha256": "f9901a77dc77df18c4b6699f61a375e95aaea549c6e6124753b608a3fd6aec46",
+      "promptVisible": true,
+      "source": "body"
+    }
+  ]
+}

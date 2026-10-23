@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "rawIssue": {
+    "number": 238764,
+    "reporterAuthor": "adguard-bot",
+    "url": "https://github.com/AdguardTeam/AdguardFilters/issues/238764",
+    "title": "www.sporcle.com",
+    "body": "### Issue URL (Incorrect Blocking)\n[https://www.sporcle.com/](https://adguardteam.github.io/AnonymousRedirect/redirect.html?url=https%3A%2F%2Fwww.sporcle.com%2F)\n\n### Comment\n> Sommige advertenties komen door, zoals op screenshot te zien. Tevens wordt deze website extreem langzaam, en verbruikt deze ineens enorm veel ram. De laptop begint ook hard te koelen middels ventilatoren op maximale stand. Bij andere websites heb ik hier geen last van. \n\n\n\n### Screenshots\n<details>\n  <summary>Screenshot 1</summary>\n\n  ![Screenshot 1](https://cdn.adguardcdn.com/sitereports/185udyen5sqo4kk0kk00gg4c0sog8gsfng4vrzu01w.jpg?nc=1)\n</details>\n\n<details>\n  <summary>Screenshot 1 with AdGuard disabled</summary>\n\n  ![Screenshot 1](https://cdn.adguardcdn.com/sitereports/6sg5u6n9rdgcwcsowgk0ocoggwc840w7bonne5z5qk.jpg?nc=1)\n</details>\n\n### System configuration\n\n| Information | Value |\n|-------------|-------|\nAdGuard product: | AdGuard Browser Extension v5.4.3.129 MV3\nSystem version: | `Windows 11`\nBrowser: | Chrome\nFilters: | **Ad Blocking:**<br>AdGuard Base filter<br><br>**Other:**<br>Filter unblocking search ads and self-promotion<br><br>**Language-specific:**<br>AdGuard Dutch filter\nFilters last update: | 2026-08-17T09:01:01Z\nOther extensions used: | `Poper Blocker`\n\n\n\n### Issue configuration\n[Import](https://reports.adguard.com/settings/import.html?scheme_version=4&amp;product_type=ext&amp;product_version=5.4.3.129&amp;system_version=Windows+11&amp;ext.manifest_version=3&amp;browser=chrome&amp;regular_filters=2%2C8%2C10&amp;filters_last_update=2026-08-17T09%3A01%3A01Z&amp;stealth.enabled=0)\n",
+    "state": "closed",
+    "labels": [
+      "T: Incorrect Blocking",
+      "A: Cannot reproduce",
+      "P1: Critical",
+      "A: In progress",
+      "N: AdGuard Browser Extension"
+    ],
+    "assignee": "zloyden",
+    "comments": []
+  },
+  "reporterComments": [],
+  "attachments": [
+    {
+      "kind": "issue_screenshot",
+      "sourceUrl": "https://cdn.adguardcdn.com/sitereports/185udyen5sqo4kk0kk00gg4c0sog8gsfng4vrzu01w.jpg?nc=1",
+      "localPath": "attachments/01-ecb2e2f189fad7c3.jpg",
+      "sha256": "ecb2e2f189fad7c399dfec696cf98d02585611c2d9178e6097d3033928dd2c6b",
+      "promptVisible": true,
+      "source": "body"
+    },
+    {
+      "kind": "issue_screenshot",
+      "sourceUrl": "https://cdn.adguardcdn.com/sitereports/6sg5u6n9rdgcwcsowgk0ocoggwc840w7bonne5z5qk.jpg?nc=1",
+      "localPath": "attachments/02-ecb2e2f189fad7c3.jpg",
+      "sha256": "ecb2e2f189fad7c399dfec696cf98d02585611c2d9178e6097d3033928dd2c6b",
+      "promptVisible": true,
+      "source": "body"
+    }
+  ]
+}

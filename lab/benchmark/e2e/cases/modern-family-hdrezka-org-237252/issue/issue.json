@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "rawIssue": {
+    "number": 237252,
+    "reporterAuthor": "adguard-bot",
+    "url": "https://github.com/AdguardTeam/AdguardFilters/issues/237252",
+    "title": "modern-family-hdrezka.org",
+    "body": "### Issue URL (Ads)\n[https://modern-family-hdrezka.org/56-dublyazh/10-season/7-episode](https://adguardteam.github.io/AnonymousRedirect/redirect.html?url=https%3A%2F%2Fmodern-family-hdrezka.org%2F56-dublyazh%2F10-season%2F7-episode)\n\n### Comment\n> саму рекламу не видно, но она играет и ее нельзя отключить. она играет прямо поверх плеера с сериалом. ручная блокировка не помогает\n\n\n\n### Screenshots\n<details>\n  <summary>Screenshot 1</summary>\n\n  ![Screenshot 1](https://cdn.adguardcdn.com/sitereports/d44zt52jew8owcwc8o8owwso8ww0gkw2kmp90mqyk6.png?nc=1)\n</details>\n\n\n### System configuration\n\n| Information | Value |\n|-------------|-------|\nAdGuard product: | AdGuard Browser Extension v5.4.3.115 MV3\nSystem version: | `Windows 10`\nBrowser: | Chrome\nFilters: | **Ad Blocking:**<br>AdGuard Base filter<br><br>**Other:**<br>Filter unblocking search ads and self-promotion<br><br>**Language-specific:**<br>AdGuard Russian filter\nFilters last update: | 2026-08-01T08:00:43Z\n\n\n\n### Issue configuration\n[Import](https://reports.adguard.com/settings/import.html?scheme_version=4&amp;product_type=ext&amp;product_version=5.4.3.115&amp;system_version=Windows+10&amp;ext.manifest_version=3&amp;browser=chrome&amp;regular_filters=1%2C2%2C10&amp;filters_last_update=2026-08-01T08%3A00%3A43Z&amp;stealth.enabled=0)\n",
+    "state": "closed",
+    "labels": [
+      "T: Ads",
+      "A: Cannot reproduce",
+      "P1: Critical",
+      "A: In progress",
+      "N: AdGuard Browser Extension",
+      "Stale"
+    ],
+    "assignee": "Alex-302",
+    "comments": [
+      {
+        "author": "github-actions[bot]",
+        "body": "This issue has been automatically marked as stale because it has been open for 3 days with no activity.\nUnfortunately, our resources are limited and we can not always take the time to respond to requests about websites that are not popular enough. The issue will be closed if no further activity occurs.\nPlease note, that AdGuard Filters is an open-source project that is used by different content blockers and we welcome contributions. If you have some technical knowledge about how websites work, you are welcome to create a pull request following [these instructions](https://github.com/AdguardTeam/AdguardFilters/blob/master/CONTRIBUTING.md).",
+        "createdAt": "2026-08-05T05:01:48Z"
+      }
+    ]
+  },
+  "reporterComments": [],
+  "attachments": [
+    {
+      "kind": "issue_screenshot",
+      "sourceUrl": "https://cdn.adguardcdn.com/sitereports/d44zt52jew8owcwc8o8owwso8ww0gkw2kmp90mqyk6.png?nc=1",
+      "localPath": "attachments/01-1aa3bd7216c86983.png",
+      "sha256": "1aa3bd7216c86983b445b7540de6c4229f87cfc9cf6666173b4a8662d6041bbe",
+      "promptVisible": true,
+      "source": "body"
+    }
+  ]
+}

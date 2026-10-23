@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "rawIssue": {
+    "number": 238258,
+    "reporterAuthor": "adguard-bot",
+    "url": "https://github.com/AdguardTeam/AdguardFilters/issues/238258",
+    "title": "www.rtally.link",
+    "body": "### Issue URL (Annoyance)\n[https://www.rtally.link/post/14722002-67bf-4e47-a281-df23e4dfdaf7](https://adguardteam.github.io/AnonymousRedirect/redirect.html?url=https%3A%2F%2Fwww.rtally.link%2Fpost%2F14722002-67bf-4e47-a281-df23e4dfdaf7)\n\n\n\n\n### Screenshots\n<details>\n  <summary>Screenshot 1</summary>\n\n  ![Screenshot 1](https://cdn.adguardcdn.com/sitereports/qw4x37ne9og0wkk0o8k4w0w04sgc0cc39tp8xajiw0.png?nc=1)\n</details>\n\n\n### System configuration\n\n| Information | Value |\n|-------------|-------|\nAdGuard product: | AdGuard Browser Extension v5.4.3.125 MV3\nSystem version: | `Windows 11`\nBrowser: | Chrome\nFilters: | **Ad Blocking:**<br>AdGuard Base filter, <br>AdGuard Mobile Ads filter<br><br>**Privacy:**<br>AdGuard Tracking Protection filter, <br>AdGuard URL Tracking filter<br><br>**Social Widgets:**<br>AdGuard Social Media filter<br><br>**Annoyances:**<br>AdGuard Cookie Notices filter, <br>AdGuard Popups filter, <br>AdGuard Mobile App Banners filter, <br>AdGuard Other Annoyances filter, <br>AdGuard Widgets filter<br><br>**Security:**<br>Phishing URL Blocklist<br><br>**Other:**<br>AdGuard Experimental filter\nCustom filters: | `AdGuard DNS filter (url: https://adguardteam.github.io/AdGuardSDNSFilter/Filters/filter.txt)`, <br>`uBlock filters (url: https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/filters.txt)`\nFilters last update: | 2026-08-13T08:01:27Z\n\n\n\n### Issue configuration\n[Import](https://reports.adguard.com/settings/import.html?scheme_version=4&amp;product_type=ext&amp;product_version=5.4.3.125&amp;system_version=Windows+11&amp;ext.manifest_version=3&amp;browser=chrome&amp;regular_filters=2%2C3%2C4%2C5%2C11%2C17%2C18%2C19%2C20%2C21%2C22%2C255&amp;custom_filters=AdGuard+DNS+filter+%28url%3A+https%3A%2F%2Fadguardteam.github.io%2FAdGuardSDNSFilter%2FFilters%2Ffilter.txt%29%2CuBlock+filters+%28url%3A+https%3A%2F%2Fraw.githubusercontent.com%2FuBlockOrigin%2FuAssets%2Fmaster%2Ffilters%2Ffilters.txt%29&amp;filters_last_update=2026-08-13T08%3A01%3A27Z&amp;stealth.enabled=1&amp;stealth.block_trackers=1&amp;stealth.x_client=1&amp;stealth.referrer=&amp;stealth.strip_url=1&amp;stealth.hide_search_queries=1&amp;stealth.send_dnt=1)\n",
+    "state": "closed",
+    "labels": [
+      "T: Annoyance",
+      "P2: High",
+      "A: In progress",
+      "N: AdGuard Browser Extension"
+    ],
+    "assignee": "ntnguyen1234",
+    "comments": []
+  },
+  "reporterComments": [],
+  "attachments": [
+    {
+      "kind": "issue_screenshot",
+      "sourceUrl": "https://cdn.adguardcdn.com/sitereports/qw4x37ne9og0wkk0o8k4w0w04sgc0cc39tp8xajiw0.png?nc=1",
+      "localPath": "attachments/01-228ee76bbdd69592.png",
+      "sha256": "228ee76bbdd69592c1a55b2c48337aa0d0cf1de952c61d289fc16e54337a4008",
+      "promptVisible": true,
+      "source": "body"
+    }
+  ]
+}

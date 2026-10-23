@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "rawIssue": {
+    "number": 238002,
+    "reporterAuthor": "adguard-bot",
+    "url": "https://github.com/AdguardTeam/AdguardFilters/issues/238002",
+    "title": "www.math-aids.com",
+    "body": "### Issue URL (Anti Adblock Script)\n[https://www.math-aids.com/](https://adguardteam.github.io/AnonymousRedirect/redirect.html?url=https%3A%2F%2Fwww.math-aids.com%2F)\n\n### Comment\n> When I visit https://www.math-aids.com/ and try to generate a worksheet, it pops up asking me to turn off my adblocker. This happens even when I disable the extension.\n\n\n\n### Screenshots\n<details>\n  <summary>Screenshot 1</summary>\n\n  ![Screenshot 1](https://cdn.adguardcdn.com/sitereports/djnolnrnbnwosw488w8c8goog804c0wcakuh4hhzvk.png?nc=1)\n</details>\n\n\n### System configuration\n\n| Information | Value |\n|-------------|-------|\nAdGuard product: | AdGuard Browser Extension v5.4.3.122 MV3\nSystem version: | `Windows 10`\nBrowser: | Chrome\nFilters: | **Ad Blocking:**<br>AdGuard Base filter<br><br>**Other:**<br>Filter unblocking search ads and self-promotion\nFilters last update: | 2026-08-10T09:00:59Z\nOther extensions used: | `avast`\n\n\n\n### Issue configuration\n[Import](https://reports.adguard.com/settings/import.html?scheme_version=4&amp;product_type=ext&amp;product_version=5.4.3.122&amp;system_version=Windows+10&amp;ext.manifest_version=3&amp;browser=chrome&amp;regular_filters=2%2C10&amp;filters_last_update=2026-08-10T09%3A00%3A59Z&amp;stealth.enabled=0)\n",
+    "state": "closed",
+    "labels": [
+      "T: Anti Adblock Script",
+      "P3: Medium",
+      "A: In progress",
+      "N: AdGuard Browser Extension"
+    ],
+    "assignee": "ntnguyen1234",
+    "comments": []
+  },
+  "reporterComments": [],
+  "attachments": [
+    {
+      "kind": "issue_screenshot",
+      "sourceUrl": "https://cdn.adguardcdn.com/sitereports/djnolnrnbnwosw488w8c8goog804c0wcakuh4hhzvk.png?nc=1",
+      "localPath": "attachments/01-b2d3db23578d513f.png",
+      "sha256": "b2d3db23578d513ffd0bf38caa9ba4a437dd7821c43e84e6f25a95202c1dffb9",
+      "promptVisible": true,
+      "source": "body"
+    }
+  ]
+}

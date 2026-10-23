@@ -1,0 +1,11 @@
+{
+    "schemaVersion": 3,
+    "issueNumber": 238625,
+    "issueFile": "issue/issue.json",
+    "filtersBaseSha": "cdf97b9a7c05acc9a8a76782fc246d824c83c656",
+    "extensionBuild": {
+        "version": "5.4.3.129",
+        "releaseTag": "v5.4.3.1",
+        "autobuildCommit": "88cf93ad5189cb170db865868ce5821f2ff5b714"
+    }
+}

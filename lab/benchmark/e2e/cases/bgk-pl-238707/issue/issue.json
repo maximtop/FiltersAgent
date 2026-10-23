@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "rawIssue": {
+    "number": 238707,
+    "reporterAuthor": "adguard-bot",
+    "url": "https://github.com/AdguardTeam/AdguardFilters/issues/238707",
+    "title": "www.bgk.pl",
+    "body": "### Issue URL (Incorrect Blocking)\n[https://www.bgk.pl/bip/zamowienia-publiczne-37/](https://adguardteam.github.io/AnonymousRedirect/redirect.html?url=https%3A%2F%2Fwww.bgk.pl%2Fbip%2Fzamowienia-publiczne-37%2F)\n\n### Comment\n> Can&#039;t access to page without accepting cookie baner. Cookie baner didn&#039;t show up when Adblock is active.\n\n```\nUsername: @gontii\n```\n\n\n### Screenshots\n<details>\n  <summary>Screenshot 1</summary>\n\n  ![Screenshot 1](https://cdn.adguardcdn.com/sitereports/izahqltkwz4s400sg8cgckg4skcsok8f59ng8h59jw.png?nc=1)\n</details>\n\n<details>\n  <summary>Screenshot 1 with AdGuard disabled</summary>\n\n  ![Screenshot 1](https://cdn.adguardcdn.com/sitereports/b5mk43dpcpkckkgcc4o0gkgw0w8gg4kng1gchnh09c.png?nc=1)\n</details>\n\n### System configuration\n\n| Information | Value |\n|-------------|-------|\nAdGuard product: | AdGuard Browser Extension v5.4.3.129 MV3\nSystem version: | `Windows 11`\nBrowser: | Chrome\nFilters: | **Ad Blocking:**<br>AdGuard Base filter<br><br>**Social Widgets:**<br>AdGuard Social Media filter<br><br>**Annoyances:**<br>AdGuard Cookie Notices filter, <br>AdGuard Popups filter, <br>AdGuard Mobile App Banners filter, <br>AdGuard Other Annoyances filter, <br>AdGuard Widgets filter<br><br>**Security:**<br>Online Malicious URL Blocklist<br><br>**Language-specific:**<br>Official Polish filters for AdBlock, uBlock Origin & AdGuard, <br>Polish Anti Adblock Filters\nFilters last update: | 2026-08-17T09:01:01Z\nOther extensions used: | `NewsFeedEradicator, LeechBlock NG`\n\n\n\n### Issue configuration\n[Import](https://reports.adguard.com/settings/import.html?scheme_version=4&amp;product_type=ext&amp;product_version=5.4.3.129&amp;system_version=Windows+11&amp;ext.manifest_version=3&amp;browser=chrome&amp;regular_filters=2%2C4%2C18%2C19%2C20%2C21%2C22%2C208%2C216%2C238&amp;filters_last_update=2026-08-17T09%3A01%3A01Z&amp;stealth.enabled=0)\n",
+    "state": "closed",
+    "labels": [
+      "T: Incorrect Blocking",
+      "P3: Medium",
+      "A: In progress",
+      "N: AdGuard Browser Extension"
+    ],
+    "assignee": "Alex-302",
+    "comments": []
+  },
+  "reporterComments": [],
+  "attachments": [
+    {
+      "kind": "issue_screenshot",
+      "sourceUrl": "https://cdn.adguardcdn.com/sitereports/izahqltkwz4s400sg8cgckg4skcsok8f59ng8h59jw.png?nc=1",
+      "localPath": "attachments/01-842959853bdca38a.png",
+      "sha256": "842959853bdca38a9996cbb67f1b1b2434a7eaf0708c8fd3a18a69018c73602c",
+      "promptVisible": true,
+      "source": "body"
+    },
+    {
+      "kind": "issue_screenshot",
+      "sourceUrl": "https://cdn.adguardcdn.com/sitereports/b5mk43dpcpkckkgcc4o0gkgw0w8gg4kng1gchnh09c.png?nc=1",
+      "localPath": "attachments/02-842959853bdca38a.png",
+      "sha256": "842959853bdca38a9996cbb67f1b1b2434a7eaf0708c8fd3a18a69018c73602c",
+      "promptVisible": true,
+      "source": "body"
+    }
+  ]
+}

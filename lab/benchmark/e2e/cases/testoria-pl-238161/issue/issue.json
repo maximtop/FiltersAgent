@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "rawIssue": {
+    "number": 238161,
+    "reporterAuthor": "adguard-bot",
+    "url": "https://github.com/AdguardTeam/AdguardFilters/issues/238161",
+    "title": "testoria.pl",
+    "body": "### Issue URL (Incorrect Blocking)\n[https://testoria.pl/](https://adguardteam.github.io/AnonymousRedirect/redirect.html?url=https%3A%2F%2Ftestoria.pl%2F)\n\n\n\n\n### Screenshots\n<details>\n  <summary>Screenshot 1</summary>\n\n  ![Screenshot 1](https://cdn.adguardcdn.com/sitereports/9l3cckjqqk8wgosgsgkwo40k8kg0g8ciwbmtugwim0.png?nc=1)\n</details>\n\n<details>\n  <summary>Screenshot 1 with AdGuard disabled</summary>\n\n  ![Screenshot 1](https://cdn.adguardcdn.com/sitereports/81qafzana800wsgc4k8soko4g0gogo0ll4kmhg60c0.png?nc=1)\n</details>\n\n### System configuration\n\n| Information | Value |\n|-------------|-------|\nAdGuard product: | AdGuard Browser Extension v5.4.3.123 MV3\nBrowser: | Chrome\nFilters: | **Ad Blocking:**<br>AdGuard Base filter<br><br>**Privacy:**<br>AdGuard Tracking Protection filter, <br>AdGuard URL Tracking filter<br><br>**Social Widgets:**<br>AdGuard Social Media filter<br><br>**Annoyances:**<br>AdGuard Cookie Notices filter, <br>AdGuard Popups filter, <br>AdGuard Mobile App Banners filter, <br>AdGuard Other Annoyances filter, <br>AdGuard Widgets filter<br><br>**Security:**<br>Online Malicious URL Blocklist, <br>Phishing URL Blocklist, <br>Scam Blocklist by DurableNapkin, <br>uBlock Origin – Badware risks, <br>Dandelion Sprout's Anti-Malware List<br><br>**Language-specific:**<br>Official Polish filters for AdBlock, uBlock Origin & AdGuard, <br>Polish GDPR-Cookies Filters, <br>Polish Anti Adblock Filters\nFilters last update: | 2026-08-11T09:00:55Z\n\n\n\n### Issue configuration\n[Import](https://reports.adguard.com/settings/import.html?scheme_version=4&amp;product_type=ext&amp;product_version=5.4.3.123&amp;system_version=&amp;ext.manifest_version=3&amp;browser=chrome&amp;regular_filters=2%2C3%2C4%2C17%2C18%2C19%2C20%2C21%2C22%2C208%2C216%2C217%2C238%2C255%2C256%2C257%2C259&amp;filters_last_update=2026-08-11T09%3A00%3A55Z&amp;stealth.enabled=0)\n",
+    "state": "closed",
+    "labels": [
+      "T: Incorrect Blocking",
+      "A: Resolved",
+      "P4: Low",
+      "N: AdGuard Browser Extension"
+    ],
+    "assignee": "AdamWr",
+    "comments": []
+  },
+  "reporterComments": [],
+  "attachments": [
+    {
+      "kind": "issue_screenshot",
+      "sourceUrl": "https://cdn.adguardcdn.com/sitereports/9l3cckjqqk8wgosgsgkwo40k8kg0g8ciwbmtugwim0.png?nc=1",
+      "localPath": "attachments/01-da4500344aead2ce.png",
+      "sha256": "da4500344aead2ce55464e01b3db4cab94799300b0a19ee62240c79c6a929295",
+      "promptVisible": true,
+      "source": "body"
+    },
+    {
+      "kind": "issue_screenshot",
+      "sourceUrl": "https://cdn.adguardcdn.com/sitereports/81qafzana800wsgc4k8soko4g0gogo0ll4kmhg60c0.png?nc=1",
+      "localPath": "attachments/02-4f5b4ab4a487547c.png",
+      "sha256": "4f5b4ab4a487547cfeecc02e5076e73ed21ecdc6b9b79c70c54f01854b4c8a40",
+      "promptVisible": true,
+      "source": "body"
+    }
+  ]
+}

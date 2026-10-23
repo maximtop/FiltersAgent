@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "rawIssue": {
+    "number": 238157,
+    "reporterAuthor": "adguard-bot",
+    "url": "https://github.com/AdguardTeam/AdguardFilters/issues/238157",
+    "title": "www.skyscanner.ch",
+    "body": "### Issue URL (Annoyance)\n[https://www.skyscanner.ch/transport/flights/waw/mnl/261106/261112/?adultsv2=1&amp;cabinclass=economy&amp;childrenv2=&amp;ref=home&amp;rtn=1&amp;preferdirects=false&amp;outboundaltsenabled=false&amp;inboundaltsenabled=false&amp;sortby=cheapest&amp;currency=PLN&amp;locale=pl-PL&amp;userSessionDataId=41acac71-b400-4fdb-9527-f9b9ea843800&amp;session_handoff=eyJhbGciOiJFUzI1NiIsImtpZCI6InNlc3Npb24tc2VydmljZS1oYW5kb2ZmLWtleS0yMDI2LTA1IiwidHlwIjoiSldUIn0.eyJodHRwczovL3NreXNjYW5uZXIubmV0L3Nlc3Npb25faWQiOiIwMTlmZWZiMi0zZWVhLTgwMDItOWIzNy05NzBlNmNkOWRiMTIiLCJleHAiOjE3ODY0MzQzMDR9.8AMDrK3PQ-QlpJlgVYDejlXEFe0vQ9AKag_cbXedxRajPrvwaxD4iMM8z4VZ0r9cNjP_uCn3dGBxSr-WHzAUGg&amp;associateid=AFF_TRA_19354_00001&amp;campaign_id=2856138&amp;adid=1027991&amp;click_timestamp=1786521490595&amp;irmweb=&amp;afsrc=1#/results](https://adguardteam.github.io/AnonymousRedirect/redirect.html?url=https%3A%2F%2Fwww.skyscanner.ch%2Ftransport%2Fflights%2Fwaw%2Fmnl%2F261106%2F261112%2F%3Fadultsv2%3D1%26cabinclass%3Deconomy%26childrenv2%3D%26ref%3Dhome%26rtn%3D1%26preferdirects%3Dfalse%26outboundaltsenabled%3Dfalse%26inboundaltsenabled%3Dfalse%26sortby%3Dcheapest%26currency%3DPLN%26locale%3Dpl-PL%26userSessionDataId%3D41acac71-b400-4fdb-9527-f9b9ea843800%26session_handoff%3DeyJhbGciOiJFUzI1NiIsImtpZCI6InNlc3Npb24tc2VydmljZS1oYW5kb2ZmLWtleS0yMDI2LTA1IiwidHlwIjoiSldUIn0.eyJodHRwczovL3NreXNjYW5uZXIubmV0L3Nlc3Npb25faWQiOiIwMTlmZWZiMi0zZWVhLTgwMDItOWIzNy05NzBlNmNkOWRiMTIiLCJleHAiOjE3ODY0MzQzMDR9.8AMDrK3PQ-QlpJlgVYDejlXEFe0vQ9AKag_cbXedxRajPrvwaxD4iMM8z4VZ0r9cNjP_uCn3dGBxSr-WHzAUGg%26associateid%3DAFF_TRA_19354_00001%26campaign_id%3D2856138%26adid%3D1027991%26click_timestamp%3D1786521490595%26irmweb%3D%26afsrc%3D1%23%2Fresults)\n\n\n\n\n### Screenshots\n<details>\n  <summary>Screenshot 1</summary>\n\n  ![Screenshot 1](https://cdn.adguardcdn.com/sitereports/krk7nt5zfaooo0w4g04ccc0cgookw8k23dnd7znht8.png?nc=1)\n</details>\n\n\n### System configuration\n\n| Information | Value |\n|-------------|-------|\nAdGuard product: | AdGuard Browser Extension v5.4.3.123 MV3\nBrowser: | Chrome\nFilters: | **Ad Blocking:**<br>AdGuard Base filter<br><br>**Privacy:**<br>AdGuard Tracking Protection filter, <br>AdGuard URL Tracking filter<br><br>**Social Widgets:**<br>AdGuard Social Media filter<br><br>**Annoyances:**<br>AdGuard Cookie Notices filter, <br>AdGuard Popups filter, <br>AdGuard Mobile App Banners filter, <br>AdGuard Other Annoyances filter, <br>AdGuard Widgets filter<br><br>**Security:**<br>Online Malicious URL Blocklist, <br>Phishing URL Blocklist, <br>Scam Blocklist by DurableNapkin, <br>uBlock Origin – Badware risks, <br>Dandelion Sprout's Anti-Malware List<br><br>**Language-specific:**<br>Official Polish filters for AdBlock, uBlock Origin & AdGuard, <br>Polish GDPR-Cookies Filters, <br>Polish Anti Adblock Filters\nFilters last update: | 2026-08-11T09:00:55Z\n\n\n\n### Issue configuration\n[Import](https://reports.adguard.com/settings/import.html?scheme_version=4&amp;product_type=ext&amp;product_version=5.4.3.123&amp;system_version=&amp;ext.manifest_version=3&amp;browser=chrome&amp;regular_filters=2%2C3%2C4%2C17%2C18%2C19%2C20%2C21%2C22%2C208%2C216%2C217%2C238%2C255%2C256%2C257%2C259&amp;filters_last_update=2026-08-11T09%3A00%3A55Z&amp;stealth.enabled=0)\n",
+    "state": "closed",
+    "labels": [
+      "T: Annoyance",
+      "P3: Medium",
+      "A: In progress",
+      "N: AdGuard Browser Extension"
+    ],
+    "assignee": "zloyden",
+    "comments": []
+  },
+  "reporterComments": [],
+  "attachments": [
+    {
+      "kind": "issue_screenshot",
+      "sourceUrl": "https://cdn.adguardcdn.com/sitereports/krk7nt5zfaooo0w4g04ccc0cgookw8k23dnd7znht8.png?nc=1",
+      "localPath": "attachments/01-49d609e433f294f8.png",
+      "sha256": "49d609e433f294f8f1ada2ff9c28b2e14dec8914ffe46f5561dbeba36ebc632d",
+      "promptVisible": true,
+      "source": "body"
+    }
+  ]
+}

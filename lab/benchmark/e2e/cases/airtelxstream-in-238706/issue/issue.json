@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "rawIssue": {
+    "number": 238706,
+    "reporterAuthor": "adguard-bot",
+    "url": "https://github.com/AdguardTeam/AdguardFilters/issues/238706",
+    "title": "www.airtelxstream.in",
+    "body": "### Issue URL (Incorrect Blocking)\n[https://www.airtelxstream.in/videos/day-5-1st-test-19-aug-2026/SONYLIV_VOD_LIVE_SPORT_1090539706](https://adguardteam.github.io/AnonymousRedirect/redirect.html?url=https%3A%2F%2Fwww.airtelxstream.in%2Fvideos%2Fday-5-1st-test-19-aug-2026%2FSONYLIV_VOD_LIVE_SPORT_1090539706)\n\n### Comment\n> When Adguard enabled, live content is not playing at all.\n> Ads are indeed blocked but screen turns black.\n> other content is playing without ads but is not visible as the screen is turned black.\n> \n> With Adguard disabled, everything works normal.\n\n\n\n### Screenshots\n<details>\n  <summary>Screenshot 1</summary>\n\n  ![Screenshot 1](https://cdn.adguardcdn.com/sitereports/2eip79rk4p340s0gwsk0wk08w4w4cgsc3mnzoeipr4.png?nc=1)\n</details>\n\n<details>\n  <summary>Screenshot 1 with AdGuard disabled</summary>\n\n  ![Screenshot 1](https://cdn.adguardcdn.com/sitereports/h18a7xzxsm8gs84kcg40s0c0og840o8tjfywdypam8.png?nc=1)\n</details>\n\n### System configuration\n\n| Information | Value |\n|-------------|-------|\nAdGuard product: | AdGuard Browser Extension v5.4.3.129 MV3\nSystem version: | `Windows 11`\nBrowser: | Chrome\nFilters: | **Ad Blocking:**<br>AdGuard Base filter<br><br>**Privacy:**<br>AdGuard Tracking Protection filter<br><br>**Social Widgets:**<br>AdGuard Social Media filter\nFilters last update: | 2026-08-17T09:01:01Z\nOther extensions used: | `adgaurd and adgaurd extra`\n\n\n\n### Issue configuration\n[Import](https://reports.adguard.com/settings/import.html?scheme_version=4&amp;product_type=ext&amp;product_version=5.4.3.129&amp;system_version=Windows+11&amp;ext.manifest_version=3&amp;browser=chrome&amp;regular_filters=2%2C3%2C4&amp;filters_last_update=2026-08-17T09%3A01%3A01Z&amp;stealth.enabled=0)\n",
+    "state": "closed",
+    "labels": [
+      "T: Incorrect Blocking",
+      "A: Resolved",
+      "P2: High",
+      "N: AdGuard Browser Extension"
+    ],
+    "assignee": "Alex-302",
+    "comments": [
+      {
+        "author": "Alex-302",
+        "body": "Can't check. \n@ghajini Please assist.",
+        "createdAt": "2026-08-19T09:10:25Z"
+      },
+      {
+        "author": "ghajini",
+        "body": "this should work\n\n```adb\n@@||imasdk.googleapis.com/js/sdkloader/ima3_dai.js$script,domain=airtelxstream.in\n```",
+        "createdAt": "2026-08-19T11:13:36Z"
+      }
+    ]
+  },
+  "reporterComments": [],
+  "attachments": [
+    {
+      "kind": "issue_screenshot",
+      "sourceUrl": "https://cdn.adguardcdn.com/sitereports/2eip79rk4p340s0gwsk0wk08w4w4cgsc3mnzoeipr4.png?nc=1",
+      "localPath": "attachments/01-a4a52b4d6ee30e46.png",
+      "sha256": "a4a52b4d6ee30e46a5468f6e77175c02149db12c1a608023d6897e7bef848957",
+      "promptVisible": true,
+      "source": "body"
+    },
+    {
+      "kind": "issue_screenshot",
+      "sourceUrl": "https://cdn.adguardcdn.com/sitereports/h18a7xzxsm8gs84kcg40s0c0og840o8tjfywdypam8.png?nc=1",
+      "localPath": "attachments/02-370654b54c1b0d59.png",
+      "sha256": "370654b54c1b0d59577d6c8f258563f7161c0cce59584a0ebc85e975cb4758ad",
+      "promptVisible": true,
+      "source": "body"
+    }
+  ]
+}

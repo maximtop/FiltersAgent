@@ -1,0 +1,178 @@
+{
+  "schemaVersion": 1,
+  "rawIssue": {
+    "number": 237440,
+    "reporterAuthor": "adguard-bot",
+    "url": "https://github.com/AdguardTeam/AdguardFilters/issues/237440",
+    "title": "kick.com",
+    "body": "### Issue URL (Ads)\n[https://kick.com/inkmate385](https://adguardteam.github.io/AnonymousRedirect/redirect.html?url=https%3A%2F%2Fkick.com%2Finkmate385)\n\n\n\n\n### Screenshots\n<details>\n  <summary>Screenshot 1</summary>\n\n  ![Screenshot 1](https://cdn.adguardcdn.com/sitereports/2j9gpixtk1yc4cskc8cs0sog8kokoo0tcymfukh574.png?nc=1)\n</details>\n\n\n### System configuration\n\n| Information | Value |\n|-------------|-------|\nAdGuard product: | AdGuard Mini for Mac v2.2.1.1053\nSystem version: | `MacOS 26.5.2 (Выпуск 25F84)`\nBrowser: | Safari\nLicense type: | free\nAdvanced rules: | enabled\nFilters: | **Ad Blocking:**<br>AdGuard Base filter, <br>EasyList<br><br>**Privacy:**<br>AdGuard Tracking Protection filter, <br>EasyPrivacy, <br>Peter Lowe's Blocklist<br><br>**Annoyances:**<br>AdGuard Cookie Notices filter, <br>Adblock Warning Removal List<br><br>**Language-specific:**<br>AdGuard Russian filter, <br>AdGuard German filter, <br>AdGuard French filter, <br>AdGuard Ukrainian filter\nFilters last update: | 2026-08-03T16:50:29\nUserscripts: | disabled\nUserstyles: | disabled\n\n\n",
+    "state": "closed",
+    "labels": [
+      "T: Ads",
+      "N: AdGuard for Windows",
+      "P1: Critical",
+      "A: In progress",
+      "N: AdGuard Browser Extension",
+      "N: AdGuard Mini for Mac"
+    ],
+    "assignee": "Alex-302",
+    "comments": [
+      {
+        "author": "adguard-bot",
+        "body": "### Issue URL (Ads)\n[https://kick.com/hazretiyasuo](https://adguardteam.github.io/AnonymousRedirect/redirect.html?url=https%3A%2F%2Fkick.com%2Fhazretiyasuo)\n\n\n\n\n### Screenshots\n<details>\n  <summary>Screenshot 1</summary>\n\n  ![Screenshot 1](https://cdn.adguardcdn.com/sitereports/tboctbuwcdcgcs44g4o404s8s4scsw8h78asvbkfjc.png?nc=1)\n</details>\n\n\n### System configuration\n\n| Information | Value |\n|-------------|-------|\nAdGuard product: | AdGuard Browser Extension v5.4.3.116 MV3\nSystem version: | `Windows 11`\nBrowser: | Chrome\nFilters: | **Ad Blocking:**<br>AdGuard Base filter<br><br>**Other:**<br>Filter unblocking search ads and self-promotion<br><br>**Language-specific:**<br>AdGuard Turkish filter\nFilters last update: | 2026-08-04T09:00:47Z\nOther extensions used: | `shazam, youtube disklike`\n\n\n\n### Issue configuration\n[Import](https://reports.adguard.com/settings/import.html?scheme_version=4&amp;product_type=ext&amp;product_version=5.4.3.116&amp;system_version=Windows+11&amp;ext.manifest_version=3&amp;browser=chrome&amp;regular_filters=2%2C10%2C13&amp;filters_last_update=2026-08-04T09%3A00%3A47Z&amp;stealth.enabled=0)\n",
+        "createdAt": "2026-08-04T20:13:20Z"
+      },
+      {
+        "author": "adguard-bot",
+        "body": "### Issue URL (Incorrect Blocking)\n[https://kick.com/odisnos](https://adguardteam.github.io/AnonymousRedirect/redirect.html?url=https%3A%2F%2Fkick.com%2Fodisnos)\n\n### Comment\n> Reklam engelleyici kick platformunun reklamlarını engellemiyor\n\n\n\n### Screenshots\n<details>\n  <summary>Screenshot 1</summary>\n\n  ![Screenshot 1](https://cdn.adguardcdn.com/sitereports/jbyq6on9g2888g4sws84kksc4skow0gtf2dp9k6q40.png?nc=1)\n</details>\n\n<details>\n  <summary>Screenshot 1 with AdGuard disabled</summary>\n\n  ![Screenshot 1](https://cdn.adguardcdn.com/sitereports/nrdzci71pyook0c4www0csg4kwgw0coexvlel6n8gg.png?nc=1)\n</details>\n\n### System configuration\n\n| Information | Value |\n|-------------|-------|\nAdGuard product: | AdGuard Browser Extension v5.4.3.117 MV3\nSystem version: | `Windows 11`\nBrowser: | Chrome\nFilters: | **Ad Blocking:**<br>AdGuard Base filter<br><br>**Other:**<br>Filter unblocking search ads and self-promotion<br><br>**Language-specific:**<br>AdGuard Turkish filter\nFilters last update: | 2026-08-05T09:00:54Z\n\n\n\n### Issue configuration\n[Import](https://reports.adguard.com/settings/import.html?scheme_version=4&amp;product_type=ext&amp;product_version=5.4.3.117&amp;system_version=Windows+11&amp;ext.manifest_version=3&amp;browser=chrome&amp;regular_filters=2%2C10%2C13&amp;filters_last_update=2026-08-05T09%3A00%3A54Z&amp;stealth.enabled=0)\n",
+        "createdAt": "2026-08-05T20:18:52Z"
+      },
+      {
+        "author": "adguard-bot",
+        "body": "### Issue URL (Ads)\n[https://kick.com/rraenee/videos/019fc34f-9728-77c5-a87b-e4ca0092b172](https://adguardteam.github.io/AnonymousRedirect/redirect.html?url=https%3A%2F%2Fkick.com%2Frraenee%2Fvideos%2F019fc34f-9728-77c5-a87b-e4ca0092b172)\n\n\n\n\n### Screenshots\n<details>\n  <summary>Screenshot 1</summary>\n\n  ![Screenshot 1](https://cdn.adguardcdn.com/sitereports/efq1bqm3aqog000ocsw0sgowc44oscwjfnjjbvjk80.png?nc=1)\n</details>\n\n\n### System configuration\n\n| Information | Value |\n|-------------|-------|\nAdGuard product: | AdGuard Browser Extension v5.4.3.117 MV3\nSystem version: | `Windows 10`\nBrowser: | Chrome\nFilters: | **Ad Blocking:**<br>AdGuard Base filter<br><br>**Other:**<br>Filter unblocking search ads and self-promotion<br><br>**Language-specific:**<br>AdGuard Turkish filter\nFilters last update: | 2026-08-05T09:00:54Z\n\n\n\n### Issue configuration\n[Import](https://reports.adguard.com/settings/import.html?scheme_version=4&amp;product_type=ext&amp;product_version=5.4.3.117&amp;system_version=Windows+10&amp;ext.manifest_version=3&amp;browser=chrome&amp;regular_filters=2%2C10%2C13&amp;filters_last_update=2026-08-05T09%3A00%3A54Z&amp;stealth.enabled=0)\n",
+        "createdAt": "2026-08-06T10:55:14Z"
+      },
+      {
+        "author": "adguard-bot",
+        "body": "### Issue URL (Ads)\n[https://kick.com/](https://adguardteam.github.io/AnonymousRedirect/redirect.html?url=https%3A%2F%2Fkick.com%2F)\n\n\n\n\n### Screenshots\n<details>\n  <summary>Screenshot 1</summary>\n\n  ![Screenshot 1](https://cdn.adguardcdn.com/sitereports/a8wx69xcixsks4k84cksgowcws8gkcbcmyvyk83qos.jpg?nc=1)\n</details>\n\n\n### System configuration\n\n| Information | Value |\n|-------------|-------|\nAdGuard product: | AdGuard Browser Extension v5.4.3.118 MV3\nSystem version: | `Windows 11`\nBrowser: | Chrome\nFilters: | **Ad Blocking:**<br>AdGuard Base filter<br><br>**Security:**<br>Online Malicious URL Blocklist, <br>Phishing URL Blocklist, <br>Scam Blocklist by DurableNapkin, <br>uBlock Origin – Badware risks, <br>Dandelion Sprout's Anti-Malware List<br><br>**Language-specific:**<br>AdGuard Turkish filter\nFilters last update: | 2026-08-06T09:00:50Z\n\n\n\n### Issue configuration\n[Import](https://reports.adguard.com/settings/import.html?scheme_version=4&amp;product_type=ext&amp;product_version=5.4.3.118&amp;system_version=Windows+11&amp;ext.manifest_version=3&amp;browser=chrome&amp;regular_filters=2%2C13%2C208%2C255%2C256%2C257%2C259&amp;filters_last_update=2026-08-06T09%3A00%3A50Z&amp;stealth.enabled=0)\n",
+        "createdAt": "2026-08-06T17:42:14Z"
+      },
+      {
+        "author": "adguard-bot",
+        "body": "### Issue URL (Incorrect Blocking)\n[https://kick.com/cyberrulztv/videos/019fdd1b-1740-7399-b48e-92fcb4a00529](https://adguardteam.github.io/AnonymousRedirect/redirect.html?url=https%3A%2F%2Fkick.com%2Fcyberrulztv%2Fvideos%2F019fdd1b-1740-7399-b48e-92fcb4a00529)\n\n\n\n\n### Screenshots\n<details>\n  <summary>Screenshot 1</summary>\n\n  ![Screenshot 1](https://cdn.adguardcdn.com/sitereports/fhmf3x9xx6o0c4sso8c8c8wo4ooo4ggebi955tvdxk.png?nc=1)\n</details>\n\n<details>\n  <summary>Screenshot 1 with AdGuard disabled</summary>\n\n  ![Screenshot 1](https://cdn.adguardcdn.com/sitereports/4r4t8cwkgpa808w08cg8wgsw8owokwgi0qoen3zfz4.png?nc=1)\n</details>\n\n### System configuration\n\n| Information | Value |\n|-------------|-------|\nAdGuard product: | AdGuard Browser Extension v5.4.3.119 MV3\nSystem version: | `Windows 10`\nBrowser: | Chrome\nFilters: | **Ad Blocking:**<br>AdGuard Base filter<br><br>**Other:**<br>Filter unblocking search ads and self-promotion<br><br>**Language-specific:**<br>AdGuard Turkish filter\nFilters last update: | 2026-08-07T09:00:50Z\n\n\n\n### Issue configuration\n[Import](https://reports.adguard.com/settings/import.html?scheme_version=4&amp;product_type=ext&amp;product_version=5.4.3.119&amp;system_version=Windows+10&amp;ext.manifest_version=3&amp;browser=chrome&amp;regular_filters=2%2C10%2C13&amp;filters_last_update=2026-08-07T09%3A00%3A50Z&amp;stealth.enabled=0)\n",
+        "createdAt": "2026-08-07T22:49:36Z"
+      },
+      {
+        "author": "github-actions[bot]",
+        "body": "This issue has been automatically marked as stale because it has been open for 3 days with no activity.\nUnfortunately, our resources are limited and we can not always take the time to respond to requests about websites that are not popular enough. The issue will be closed if no further activity occurs.\nPlease note, that AdGuard Filters is an open-source project that is used by different content blockers and we welcome contributions. If you have some technical knowledge about how websites work, you are welcome to create a pull request following [these instructions](https://github.com/AdguardTeam/AdguardFilters/blob/master/CONTRIBUTING.md).",
+        "createdAt": "2026-08-11T04:28:43Z"
+      },
+      {
+        "author": "BlazDT",
+        "body": "Please provide more instructions.\nIs the video ad only happening on live-channels? After which watching time.",
+        "createdAt": "2026-08-11T17:53:17Z"
+      },
+      {
+        "author": "adguard-bot",
+        "body": "### Issue URL (Ads)\n[https://kick.com/trainwreckstv/videos/019fee94-c4f8-7fb7-b4d7-7e3df42b3923](https://adguardteam.github.io/AnonymousRedirect/redirect.html?url=https%3A%2F%2Fkick.com%2Ftrainwreckstv%2Fvideos%2F019fee94-c4f8-7fb7-b4d7-7e3df42b3923)\n\n\n\n\n### Screenshots\n<details>\n  <summary>Screenshot 1</summary>\n\n  ![Screenshot 1](https://cdn.adguardcdn.com/sitereports/7ujv58665ns4ck08k8wogsccg8gggs02upxjwu0boq.jpg?nc=1)\n</details>\n\n\n### System configuration\n\n| Information | Value |\n|-------------|-------|\nAdGuard product: | AdGuard for Windows v7.22.9 (5282)\nSystem version: | `Microsoft Windows NT 10.0.19045.0`\nBrowser: | Firefox\nLicense type: | paid\nAdGuard driver: | WFP\nFilters: | **Ad Blocking:**<br>AdGuard Base filter, <br>AdGuard Mobile Ads filter<br><br>**Privacy:**<br>AdGuard Tracking Protection filter, <br>AdGuard URL Tracking filter, <br>Legitimate URL Shortener<br><br>**Social Widgets:**<br>AdGuard Social Media filter<br><br>**Annoyances:**<br>AdGuard Cookie Notices filter, <br>AdGuard Popups filter, <br>AdGuard Mobile App Banners filter, <br>AdGuard Widgets filter, <br>Adblock Warning Removal List<br><br>**Security:**<br>Online Malicious URL Blocklist, <br>Phishing URL Blocklist<br><br>**Other:**<br>AdGuard Experimental filter<br><br>**Language-specific:**<br>AdGuard Russian filter, <br>AdGuard German filter, <br>AdGuard French filter, <br>ROList, <br>ROLIST2, <br>road-block light, <br>Frellwit's Swedish Filter, <br>Dandelion Sprout's Nordic Filters\nCustom filters: | `User rules (url: none)`, <br>`I don't care about cookies (url: https://www.i-dont-care-about-cookies.eu/abp/)`, <br>`Web Annoyances Ultralist (url: https://raw.githubusercontent.com/yourduskquibbles/webannoyances/master/ultralist.txt)`, <br>`NoCoin Filter List (url: https://raw.githubusercontent.com/hoshsadiq/adblock-nocoin-list/master/nocoin.txt)`\nTracking protection: | **General**:<br>Block trackers, <br>Strip URLs from tracking parameters, <br>Hide your search queries, <br>Send Do-Not-Track header<br><br>**Tracking Methods**:<br>Self-destructing third-party cookies (180h)<br><br>**Browser API**:<br>Block WebRTC, <br>Block Push API, <br>Block Location API<br><br>**Windows Tracking**:<br>Disable Windows Telemetry, <br>Turn off Advertising ID, <br>Disable Windows Defender automatic samples submission, <br>Disable WAP Push Message Routing Service, <br>Disable Windows Recall<br><br>**Miscellaneous**:<br>Remove X-Client-Data header from HTTP requests, <br>Protect against DPI\nDNS filtering: | server: `tls://dns.adguard-dns.com`<br>filters: `AdGuard DNS Filter`, `User rules (url: none)`\nBrowsing Security: | enabled\nBrowsing Security statistics: | enabled\nUserscripts: | `[VOT] - Voice Over Translation (url: https://raw.githubusercontent.com/ilyhalight/voice-over-translation/master/dist/vot.user.js)`<br>`AdGuard Assistant (url: https://userscripts.adtidy.org/release/assistant/4.3/assistant.user.js)`<br>`AdGuard Extra (url: https://userscripts.adtidy.org/release/adguard-extra/1.0/adguard-extra.user.js)`<br>`AdGuard Popup Blocker (url: https://userscripts.adtidy.org/release/popup-blocker/2.5/popupblocker.user.js)`<br>`Web of Trust (url: https://userscripts.adtidy.org/release/adguard-wot/1.0/wot.user.js)`\nUserstyles: | disabled\n\n\n\n### Issue configuration\n[Import](https://reports.adguard.com/settings/import.html?product_type=win&amp;product_version=7.22.9+%285282%29&amp;system_version=Microsoft+Windows+NT+10.0.19045.0&amp;browser=firefox&amp;filters=1.2.3.4.5.6.11.16.17.18.19.20.22.114.207.208.234.236.243.249.251.255&amp;custom_filters=User%2520rules%2520%28url%253A%2520none%29%252CI%2520don%27t%2520care%2520about%2520cookies%2520%28url%253A%2520https%253A%252F%252Fwww.i-dont-care-about-cookies.eu%252Fabp%252F%29%252CWeb%2520Annoyances%2520Ultralist%2520%28url%253A%2520https%253A%252F%252Fraw.githubusercontent.com%252Fyourduskquibbles%252Fwebannoyances%252Fmaster%252Fultralist.txt%29%252CNoCoin%2520Filter%2520List%2520%28url%253A%2520https%253A%252F%252Fraw.githubusercontent.com%252Fhoshsadiq%252Fadblock-nocoin-list%252Fmaster%252Fnocoin.txt%29&amp;dns.servers=tls%3A%2F%2Fdns.adguard-dns.com&amp;userscripts=%255BVOT%255D%2520-%2520Voice%2520Over%2520Translation%2520%28url%253A%2520https%253A%252F%252Fraw.githubusercontent.com%252Filyhalight%252Fvoice-over-translation%252Fmaster%252Fdist%252Fvot.user.js%29%252C%250AAdGuard%2520Assistant%2520%28url%253A%2520https%253A%252F%252Fuserscripts.adtidy.org%252Frelease%252Fassistant%252F4.3%252Fassistant.user.js%29%252C%250AAdGuard%2520Extra%2520%28url%253A%2520https%253A%252F%252Fuserscripts.adtidy.org%252Frelease%252Fadguard-extra%252F1.0%252Fadguard-extra.user.js%29%252C%250AAdGuard%2520Popup%2520Blocker%2520%28url%253A%2520https%253A%252F%252Fuserscripts.adtidy.org%252Frelease%252Fpopup-blocker%252F2.5%252Fpopupblocker.user.js%29%252C%250AWeb%2520of%2520Trust%2520%28url%253A%2520https%253A%252F%252Fuserscripts.adtidy.org%252Frelease%252Fadguard-wot%252F1.0%252Fwot.user.js%29&amp;dns.filters=AdGuard%2520DNS%2520Filter%252C%250AUser%2520rules%2520%28url%253A%2520none%29&amp;dns.filters_enabled=true&amp;dns.enabled=true&amp;browsing_security.enabled=true&amp;browsing_security.statistics_enabled=true&amp;stealth.enabled=true&amp;stealth.webrtc=true&amp;stealth.push=true&amp;stealth.location=true&amp;stealth.flash=false&amp;stealth.java=false&amp;stealth.strip_url=true&amp;stealth.hide_search_queries=true&amp;stealth.DNT=true&amp;stealth.x_client=true&amp;stealth.dpi=true&amp;stealth.third_party_cookies=180&amp;stealth.disable_third_party_cache=false&amp;stealth.block_third_party_auth=false&amp;stealth.block_trackers=true&amp;stealth.disable_wap_push_message_routing_service=true&amp;stealth.disable_windows_defender=true&amp;stealth.disable_windows_telemetry=true&amp;stealth.turn_off_advertising_id=true&amp;win.wfp=true&amp;license_type=paid&amp;scheme_version=2&amp;adblocking.enabled=true&amp;dns.timeout=0&amp;dns.fallback_mode=System&amp;stealth.disable_windows_recall=true)\n",
+        "createdAt": "2026-08-11T18:45:49Z"
+      },
+      {
+        "author": "Alex-302",
+        "body": "@BlazDT Did you try US VPN?",
+        "createdAt": "2026-08-14T09:08:28Z"
+      },
+      {
+        "author": "BlazDT",
+        "body": "YES",
+        "createdAt": "2026-08-15T02:59:18Z"
+      }
+    ]
+  },
+  "reporterComments": [
+    {
+      "author": "adguard-bot",
+      "body": "### Issue URL (Ads)\n[https://kick.com/hazretiyasuo](https://adguardteam.github.io/AnonymousRedirect/redirect.html?url=https%3A%2F%2Fkick.com%2Fhazretiyasuo)\n\n\n\n\n### Screenshots\n<details>\n  <summary>Screenshot 1</summary>\n\n  ![Screenshot 1](https://cdn.adguardcdn.com/sitereports/tboctbuwcdcgcs44g4o404s8s4scsw8h78asvbkfjc.png?nc=1)\n</details>\n\n\n### System configuration\n\n| Information | Value |\n|-------------|-------|\nAdGuard product: | AdGuard Browser Extension v5.4.3.116 MV3\nSystem version: | `Windows 11`\nBrowser: | Chrome\nFilters: | **Ad Blocking:**<br>AdGuard Base filter<br><br>**Other:**<br>Filter unblocking search ads and self-promotion<br><br>**Language-specific:**<br>AdGuard Turkish filter\nFilters last update: | 2026-08-04T09:00:47Z\nOther extensions used: | `shazam, youtube disklike`\n\n\n\n### Issue configuration\n[Import](https://reports.adguard.com/settings/import.html?scheme_version=4&amp;product_type=ext&amp;product_version=5.4.3.116&amp;system_version=Windows+11&amp;ext.manifest_version=3&amp;browser=chrome&amp;regular_filters=2%2C10%2C13&amp;filters_last_update=2026-08-04T09%3A00%3A47Z&amp;stealth.enabled=0)\n",
+      "createdAt": "2026-08-04T20:13:20Z"
+    },
+    {
+      "author": "adguard-bot",
+      "body": "### Issue URL (Incorrect Blocking)\n[https://kick.com/odisnos](https://adguardteam.github.io/AnonymousRedirect/redirect.html?url=https%3A%2F%2Fkick.com%2Fodisnos)\n\n### Comment\n> Reklam engelleyici kick platformunun reklamlarını engellemiyor\n\n\n\n### Screenshots\n<details>\n  <summary>Screenshot 1</summary>\n\n  ![Screenshot 1](https://cdn.adguardcdn.com/sitereports/jbyq6on9g2888g4sws84kksc4skow0gtf2dp9k6q40.png?nc=1)\n</details>\n\n<details>\n  <summary>Screenshot 1 with AdGuard disabled</summary>\n\n  ![Screenshot 1](https://cdn.adguardcdn.com/sitereports/nrdzci71pyook0c4www0csg4kwgw0coexvlel6n8gg.png?nc=1)\n</details>\n\n### System configuration\n\n| Information | Value |\n|-------------|-------|\nAdGuard product: | AdGuard Browser Extension v5.4.3.117 MV3\nSystem version: | `Windows 11`\nBrowser: | Chrome\nFilters: | **Ad Blocking:**<br>AdGuard Base filter<br><br>**Other:**<br>Filter unblocking search ads and self-promotion<br><br>**Language-specific:**<br>AdGuard Turkish filter\nFilters last update: | 2026-08-05T09:00:54Z\n\n\n\n### Issue configuration\n[Import](https://reports.adguard.com/settings/import.html?scheme_version=4&amp;product_type=ext&amp;product_version=5.4.3.117&amp;system_version=Windows+11&amp;ext.manifest_version=3&amp;browser=chrome&amp;regular_filters=2%2C10%2C13&amp;filters_last_update=2026-08-05T09%3A00%3A54Z&amp;stealth.enabled=0)\n",
+      "createdAt": "2026-08-05T20:18:52Z"
+    },
+    {
+      "author": "adguard-bot",
+      "body": "### Issue URL (Ads)\n[https://kick.com/rraenee/videos/019fc34f-9728-77c5-a87b-e4ca0092b172](https://adguardteam.github.io/AnonymousRedirect/redirect.html?url=https%3A%2F%2Fkick.com%2Frraenee%2Fvideos%2F019fc34f-9728-77c5-a87b-e4ca0092b172)\n\n\n\n\n### Screenshots\n<details>\n  <summary>Screenshot 1</summary>\n\n  ![Screenshot 1](https://cdn.adguardcdn.com/sitereports/efq1bqm3aqog000ocsw0sgowc44oscwjfnjjbvjk80.png?nc=1)\n</details>\n\n\n### System configuration\n\n| Information | Value |\n|-------------|-------|\nAdGuard product: | AdGuard Browser Extension v5.4.3.117 MV3\nSystem version: | `Windows 10`\nBrowser: | Chrome\nFilters: | **Ad Blocking:**<br>AdGuard Base filter<br><br>**Other:**<br>Filter unblocking search ads and self-promotion<br><br>**Language-specific:**<br>AdGuard Turkish filter\nFilters last update: | 2026-08-05T09:00:54Z\n\n\n\n### Issue configuration\n[Import](https://reports.adguard.com/settings/import.html?scheme_version=4&amp;product_type=ext&amp;product_version=5.4.3.117&amp;system_version=Windows+10&amp;ext.manifest_version=3&amp;browser=chrome&amp;regular_filters=2%2C10%2C13&amp;filters_last_update=2026-08-05T09%3A00%3A54Z&amp;stealth.enabled=0)\n",
+      "createdAt": "2026-08-06T10:55:14Z"
+    },
+    {
+      "author": "adguard-bot",
+      "body": "### Issue URL (Ads)\n[https://kick.com/](https://adguardteam.github.io/AnonymousRedirect/redirect.html?url=https%3A%2F%2Fkick.com%2F)\n\n\n\n\n### Screenshots\n<details>\n  <summary>Screenshot 1</summary>\n\n  ![Screenshot 1](https://cdn.adguardcdn.com/sitereports/a8wx69xcixsks4k84cksgowcws8gkcbcmyvyk83qos.jpg?nc=1)\n</details>\n\n\n### System configuration\n\n| Information | Value |\n|-------------|-------|\nAdGuard product: | AdGuard Browser Extension v5.4.3.118 MV3\nSystem version: | `Windows 11`\nBrowser: | Chrome\nFilters: | **Ad Blocking:**<br>AdGuard Base filter<br><br>**Security:**<br>Online Malicious URL Blocklist, <br>Phishing URL Blocklist, <br>Scam Blocklist by DurableNapkin, <br>uBlock Origin – Badware risks, <br>Dandelion Sprout's Anti-Malware List<br><br>**Language-specific:**<br>AdGuard Turkish filter\nFilters last update: | 2026-08-06T09:00:50Z\n\n\n\n### Issue configuration\n[Import](https://reports.adguard.com/settings/import.html?scheme_version=4&amp;product_type=ext&amp;product_version=5.4.3.118&amp;system_version=Windows+11&amp;ext.manifest_version=3&amp;browser=chrome&amp;regular_filters=2%2C13%2C208%2C255%2C256%2C257%2C259&amp;filters_last_update=2026-08-06T09%3A00%3A50Z&amp;stealth.enabled=0)\n",
+      "createdAt": "2026-08-06T17:42:14Z"
+    },
+    {
+      "author": "adguard-bot",
+      "body": "### Issue URL (Incorrect Blocking)\n[https://kick.com/cyberrulztv/videos/019fdd1b-1740-7399-b48e-92fcb4a00529](https://adguardteam.github.io/AnonymousRedirect/redirect.html?url=https%3A%2F%2Fkick.com%2Fcyberrulztv%2Fvideos%2F019fdd1b-1740-7399-b48e-92fcb4a00529)\n\n\n\n\n### Screenshots\n<details>\n  <summary>Screenshot 1</summary>\n\n  ![Screenshot 1](https://cdn.adguardcdn.com/sitereports/fhmf3x9xx6o0c4sso8c8c8wo4ooo4ggebi955tvdxk.png?nc=1)\n</details>\n\n<details>\n  <summary>Screenshot 1 with AdGuard disabled</summary>\n\n  ![Screenshot 1](https://cdn.adguardcdn.com/sitereports/4r4t8cwkgpa808w08cg8wgsw8owokwgi0qoen3zfz4.png?nc=1)\n</details>\n\n### System configuration\n\n| Information | Value |\n|-------------|-------|\nAdGuard product: | AdGuard Browser Extension v5.4.3.119 MV3\nSystem version: | `Windows 10`\nBrowser: | Chrome\nFilters: | **Ad Blocking:**<br>AdGuard Base filter<br><br>**Other:**<br>Filter unblocking search ads and self-promotion<br><br>**Language-specific:**<br>AdGuard Turkish filter\nFilters last update: | 2026-08-07T09:00:50Z\n\n\n\n### Issue configuration\n[Import](https://reports.adguard.com/settings/import.html?scheme_version=4&amp;product_type=ext&amp;product_version=5.4.3.119&amp;system_version=Windows+10&amp;ext.manifest_version=3&amp;browser=chrome&amp;regular_filters=2%2C10%2C13&amp;filters_last_update=2026-08-07T09%3A00%3A50Z&amp;stealth.enabled=0)\n",
+      "createdAt": "2026-08-07T22:49:36Z"
+    },
+    {
+      "author": "adguard-bot",
+      "body": "### Issue URL (Ads)\n[https://kick.com/trainwreckstv/videos/019fee94-c4f8-7fb7-b4d7-7e3df42b3923](https://adguardteam.github.io/AnonymousRedirect/redirect.html?url=https%3A%2F%2Fkick.com%2Ftrainwreckstv%2Fvideos%2F019fee94-c4f8-7fb7-b4d7-7e3df42b3923)\n\n\n\n\n### Screenshots\n<details>\n  <summary>Screenshot 1</summary>\n\n  ![Screenshot 1](https://cdn.adguardcdn.com/sitereports/7ujv58665ns4ck08k8wogsccg8gggs02upxjwu0boq.jpg?nc=1)\n</details>\n\n\n### System configuration\n\n| Information | Value |\n|-------------|-------|\nAdGuard product: | AdGuard for Windows v7.22.9 (5282)\nSystem version: | `Microsoft Windows NT 10.0.19045.0`\nBrowser: | Firefox\nLicense type: | paid\nAdGuard driver: | WFP\nFilters: | **Ad Blocking:**<br>AdGuard Base filter, <br>AdGuard Mobile Ads filter<br><br>**Privacy:**<br>AdGuard Tracking Protection filter, <br>AdGuard URL Tracking filter, <br>Legitimate URL Shortener<br><br>**Social Widgets:**<br>AdGuard Social Media filter<br><br>**Annoyances:**<br>AdGuard Cookie Notices filter, <br>AdGuard Popups filter, <br>AdGuard Mobile App Banners filter, <br>AdGuard Widgets filter, <br>Adblock Warning Removal List<br><br>**Security:**<br>Online Malicious URL Blocklist, <br>Phishing URL Blocklist<br><br>**Other:**<br>AdGuard Experimental filter<br><br>**Language-specific:**<br>AdGuard Russian filter, <br>AdGuard German filter, <br>AdGuard French filter, <br>ROList, <br>ROLIST2, <br>road-block light, <br>Frellwit's Swedish Filter, <br>Dandelion Sprout's Nordic Filters\nCustom filters: | `User rules (url: none)`, <br>`I don't care about cookies (url: https://www.i-dont-care-about-cookies.eu/abp/)`, <br>`Web Annoyances Ultralist (url: https://raw.githubusercontent.com/yourduskquibbles/webannoyances/master/ultralist.txt)`, <br>`NoCoin Filter List (url: https://raw.githubusercontent.com/hoshsadiq/adblock-nocoin-list/master/nocoin.txt)`\nTracking protection: | **General**:<br>Block trackers, <br>Strip URLs from tracking parameters, <br>Hide your search queries, <br>Send Do-Not-Track header<br><br>**Tracking Methods**:<br>Self-destructing third-party cookies (180h)<br><br>**Browser API**:<br>Block WebRTC, <br>Block Push API, <br>Block Location API<br><br>**Windows Tracking**:<br>Disable Windows Telemetry, <br>Turn off Advertising ID, <br>Disable Windows Defender automatic samples submission, <br>Disable WAP Push Message Routing Service, <br>Disable Windows Recall<br><br>**Miscellaneous**:<br>Remove X-Client-Data header from HTTP requests, <br>Protect against DPI\nDNS filtering: | server: `tls://dns.adguard-dns.com`<br>filters: `AdGuard DNS Filter`, `User rules (url: none)`\nBrowsing Security: | enabled\nBrowsing Security statistics: | enabled\nUserscripts: | `[VOT] - Voice Over Translation (url: https://raw.githubusercontent.com/ilyhalight/voice-over-translation/master/dist/vot.user.js)`<br>`AdGuard Assistant (url: https://userscripts.adtidy.org/release/assistant/4.3/assistant.user.js)`<br>`AdGuard Extra (url: https://userscripts.adtidy.org/release/adguard-extra/1.0/adguard-extra.user.js)`<br>`AdGuard Popup Blocker (url: https://userscripts.adtidy.org/release/popup-blocker/2.5/popupblocker.user.js)`<br>`Web of Trust (url: https://userscripts.adtidy.org/release/adguard-wot/1.0/wot.user.js)`\nUserstyles: | disabled\n\n\n\n### Issue configuration\n[Import](https://reports.adguard.com/settings/import.html?product_type=win&amp;product_version=7.22.9+%285282%29&amp;system_version=Microsoft+Windows+NT+10.0.19045.0&amp;browser=firefox&amp;filters=1.2.3.4.5.6.11.16.17.18.19.20.22.114.207.208.234.236.243.249.251.255&amp;custom_filters=User%2520rules%2520%28url%253A%2520none%29%252CI%2520don%27t%2520care%2520about%2520cookies%2520%28url%253A%2520https%253A%252F%252Fwww.i-dont-care-about-cookies.eu%252Fabp%252F%29%252CWeb%2520Annoyances%2520Ultralist%2520%28url%253A%2520https%253A%252F%252Fraw.githubusercontent.com%252Fyourduskquibbles%252Fwebannoyances%252Fmaster%252Fultralist.txt%29%252CNoCoin%2520Filter%2520List%2520%28url%253A%2520https%253A%252F%252Fraw.githubusercontent.com%252Fhoshsadiq%252Fadblock-nocoin-list%252Fmaster%252Fnocoin.txt%29&amp;dns.servers=tls%3A%2F%2Fdns.adguard-dns.com&amp;userscripts=%255BVOT%255D%2520-%2520Voice%2520Over%2520Translation%2520%28url%253A%2520https%253A%252F%252Fraw.githubusercontent.com%252Filyhalight%252Fvoice-over-translation%252Fmaster%252Fdist%252Fvot.user.js%29%252C%250AAdGuard%2520Assistant%2520%28url%253A%2520https%253A%252F%252Fuserscripts.adtidy.org%252Frelease%252Fassistant%252F4.3%252Fassistant.user.js%29%252C%250AAdGuard%2520Extra%2520%28url%253A%2520https%253A%252F%252Fuserscripts.adtidy.org%252Frelease%252Fadguard-extra%252F1.0%252Fadguard-extra.user.js%29%252C%250AAdGuard%2520Popup%2520Blocker%2520%28url%253A%2520https%253A%252F%252Fuserscripts.adtidy.org%252Frelease%252Fpopup-blocker%252F2.5%252Fpopupblocker.user.js%29%252C%250AWeb%2520of%2520Trust%2520%28url%253A%2520https%253A%252F%252Fuserscripts.adtidy.org%252Frelease%252Fadguard-wot%252F1.0%252Fwot.user.js%29&amp;dns.filters=AdGuard%2520DNS%2520Filter%252C%250AUser%2520rules%2520%28url%253A%2520none%29&amp;dns.filters_enabled=true&amp;dns.enabled=true&amp;browsing_security.enabled=true&amp;browsing_security.statistics_enabled=true&amp;stealth.enabled=true&amp;stealth.webrtc=true&amp;stealth.push=true&amp;stealth.location=true&amp;stealth.flash=false&amp;stealth.java=false&amp;stealth.strip_url=true&amp;stealth.hide_search_queries=true&amp;stealth.DNT=true&amp;stealth.x_client=true&amp;stealth.dpi=true&amp;stealth.third_party_cookies=180&amp;stealth.disable_third_party_cache=false&amp;stealth.block_third_party_auth=false&amp;stealth.block_trackers=true&amp;stealth.disable_wap_push_message_routing_service=true&amp;stealth.disable_windows_defender=true&amp;stealth.disable_windows_telemetry=true&amp;stealth.turn_off_advertising_id=true&amp;win.wfp=true&amp;license_type=paid&amp;scheme_version=2&amp;adblocking.enabled=true&amp;dns.timeout=0&amp;dns.fallback_mode=System&amp;stealth.disable_windows_recall=true)\n",
+      "createdAt": "2026-08-11T18:45:49Z"
+    }
+  ],
+  "attachments": [
+    {
+      "kind": "issue_screenshot",
+      "sourceUrl": "https://cdn.adguardcdn.com/sitereports/2j9gpixtk1yc4cskc8cs0sog8kokoo0tcymfukh574.png?nc=1",
+      "localPath": "attachments/01-2a9dad923544a871.png",
+      "sha256": "2a9dad923544a87159fbd6b8295ded1905c85ef2a4f30aa9885dac164ebf3723",
+      "promptVisible": true,
+      "source": "body"
+    },
+    {
+      "kind": "issue_screenshot",
+      "sourceUrl": "https://cdn.adguardcdn.com/sitereports/tboctbuwcdcgcs44g4o404s8s4scsw8h78asvbkfjc.png?nc=1",
+      "localPath": "attachments/02-f1f7489ce87e57b4.png",
+      "sha256": "f1f7489ce87e57b4596424647920e229706f18f7fe1dd32a442beddc68ff24ef",
+      "promptVisible": true,
+      "source": "reporter_comment"
+    },
+    {
+      "kind": "issue_screenshot",
+      "sourceUrl": "https://cdn.adguardcdn.com/sitereports/jbyq6on9g2888g4sws84kksc4skow0gtf2dp9k6q40.png?nc=1",
+      "localPath": "attachments/03-4fa9308f414d8eef.png",
+      "sha256": "4fa9308f414d8eef471e85b2f6013fc8a80c2e9fefa6fd6f1a079eb63534c32b",
+      "promptVisible": true,
+      "source": "reporter_comment"
+    },
+    {
+      "kind": "issue_screenshot",
+      "sourceUrl": "https://cdn.adguardcdn.com/sitereports/nrdzci71pyook0c4www0csg4kwgw0coexvlel6n8gg.png?nc=1",
+      "localPath": "attachments/04-4fa9308f414d8eef.png",
+      "sha256": "4fa9308f414d8eef471e85b2f6013fc8a80c2e9fefa6fd6f1a079eb63534c32b",
+      "promptVisible": true,
+      "source": "reporter_comment"
+    },
+    {
+      "kind": "issue_screenshot",
+      "sourceUrl": "https://cdn.adguardcdn.com/sitereports/efq1bqm3aqog000ocsw0sgowc44oscwjfnjjbvjk80.png?nc=1",
+      "localPath": "attachments/05-518ed69b7478cc1f.png",
+      "sha256": "518ed69b7478cc1f382aa860dcb47f418bb24fe26126b447635bb93fa71d8af5",
+      "promptVisible": true,
+      "source": "reporter_comment"
+    },
+    {
+      "kind": "issue_screenshot",
+      "sourceUrl": "https://cdn.adguardcdn.com/sitereports/a8wx69xcixsks4k84cksgowcws8gkcbcmyvyk83qos.jpg?nc=1",
+      "localPath": "attachments/06-7dc3528f0941f5ff.jpg",
+      "sha256": "7dc3528f0941f5ff1eb0ad0caba72a1b24b7ef17e2d46a90057549aac4785f14",
+      "promptVisible": true,
+      "source": "reporter_comment"
+    },
+    {
+      "kind": "issue_screenshot",
+      "sourceUrl": "https://cdn.adguardcdn.com/sitereports/fhmf3x9xx6o0c4sso8c8c8wo4ooo4ggebi955tvdxk.png?nc=1",
+      "localPath": "attachments/07-e3ac27157568c0fb.png",
+      "sha256": "e3ac27157568c0fb90d50881735a4b6ab025bd372a4031863fb15a8377527d27",
+      "promptVisible": true,
+      "source": "reporter_comment"
+    },
+    {
+      "kind": "issue_screenshot",
+      "sourceUrl": "https://cdn.adguardcdn.com/sitereports/4r4t8cwkgpa808w08cg8wgsw8owokwgi0qoen3zfz4.png?nc=1",
+      "localPath": "attachments/08-c8d36a13684dee20.png",
+      "sha256": "c8d36a13684dee20b7098fe6dc818fed859712c11a90aaa6ebe23ec204585b3f",
+      "promptVisible": true,
+      "source": "reporter_comment"
+    },
+    {
+      "kind": "issue_screenshot",
+      "sourceUrl": "https://cdn.adguardcdn.com/sitereports/7ujv58665ns4ck08k8wogsccg8gggs02upxjwu0boq.jpg?nc=1",
+      "localPath": "attachments/09-359a07ca740c6202.jpg",
+      "sha256": "359a07ca740c6202d76a1ecb9b48905433389444b396e2924d324d5f2c67566c",
+      "promptVisible": true,
+      "source": "reporter_comment"
+    }
+  ]
+}

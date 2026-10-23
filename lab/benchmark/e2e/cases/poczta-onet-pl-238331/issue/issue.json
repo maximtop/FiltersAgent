@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "rawIssue": {
+    "number": 238331,
+    "reporterAuthor": "adguard-bot",
+    "url": "https://github.com/AdguardTeam/AdguardFilters/issues/238331",
+    "title": "poczta.onet.pl",
+    "body": "### Issue URL (Ads)\n[https://poczta.onet.pl/](https://adguardteam.github.io/AnonymousRedirect/redirect.html?url=https%3A%2F%2Fpoczta.onet.pl%2F)\n\n\n\n\n### Screenshots\n<details>\n  <summary>Screenshot 1</summary>\n\n  ![Screenshot 1](https://cdn.adguardcdn.com/sitereports/9bholoxcbcgssok4k0o0sw4k0gc8kc48fqoep6zix0.png?nc=1)\n</details>\n\n\n### System configuration\n\n| Information | Value |\n|-------------|-------|\nAdGuard product: | AdGuard Browser Extension v5.4.3.126 MV3\nSystem version: | `Windows 11`\nBrowser: | Chrome\nFilters: | **Ad Blocking:**<br>AdGuard Base filter<br><br>**Other:**<br>Filter unblocking search ads and self-promotion<br><br>**Language-specific:**<br>Official Polish filters for AdBlock, uBlock Origin & AdGuard, <br>Polish Anti Adblock Filters\nFilters last update: | 2026-08-14T09:01:03Z\nOther extensions used: | `Windows Defender`\n\n\n\n### Issue configuration\n[Import](https://reports.adguard.com/settings/import.html?scheme_version=4&amp;product_type=ext&amp;product_version=5.4.3.126&amp;system_version=Windows+11&amp;ext.manifest_version=3&amp;browser=chrome&amp;regular_filters=2%2C10%2C216%2C238&amp;filters_last_update=2026-08-14T09%3A01%3A03Z&amp;stealth.enabled=0)\n",
+    "state": "closed",
+    "labels": [
+      "T: Ads",
+      "A: Resolved",
+      "P1: Critical",
+      "N: AdGuard Browser Extension"
+    ],
+    "assignee": "AdamWr",
+    "comments": []
+  },
+  "reporterComments": [],
+  "attachments": [
+    {
+      "kind": "issue_screenshot",
+      "sourceUrl": "https://cdn.adguardcdn.com/sitereports/9bholoxcbcgssok4k0o0sw4k0gc8kc48fqoep6zix0.png?nc=1",
+      "localPath": "attachments/01-ffc5b900ff11671e.png",
+      "sha256": "ffc5b900ff11671e55c86917845832274ccfbc4988a054e257dbc9cfe931525c",
+      "promptVisible": true,
+      "source": "body"
+    }
+  ]
+}

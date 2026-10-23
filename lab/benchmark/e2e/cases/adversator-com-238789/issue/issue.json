@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "rawIssue": {
+    "number": 238789,
+    "reporterAuthor": "adguard-bot",
+    "url": "https://github.com/AdguardTeam/AdguardFilters/issues/238789",
+    "title": "www.adversator.com",
+    "body": "### Issue URL (Incorrect Blocking)\n[https://www.adversator.com/game.html](https://adguardteam.github.io/AnonymousRedirect/redirect.html?url=https%3A%2F%2Fwww.adversator.com%2Fgame.html)\n\n### Comment\n> `wowturk@gmail.com` - in case of need , good luck &amp; thanks in advance\n\n\n\n### Screenshots\n<details>\n  <summary>Screenshot 1</summary>\n\n  ![Screenshot 1](https://cdn.adguardcdn.com/sitereports/35kprbn4etgks0g8gcckkwo4ccsss04baxzbjqd22o.png?nc=1)\n</details>\n\n<details>\n  <summary>Screenshot 1 with AdGuard disabled</summary>\n\n  ![Screenshot 1](https://cdn.adguardcdn.com/sitereports/g1c6o79gcm8k08044s40kc044gckko01sp4qj37111.png?nc=1)\n</details>\n\n### System configuration\n\n| Information | Value |\n|-------------|-------|\nAdGuard product: | AdGuard Browser Extension v5.4.3.129 MV3\nSystem version: | `Windows 11`\nBrowser: | Chrome\nFilters: | **Ad Blocking:**<br>AdGuard Base filter<br><br>**Privacy:**<br>AdGuard Tracking Protection filter<br><br>**Social Widgets:**<br>AdGuard Social Media filter<br><br>**Language-specific:**<br>AdGuard Russian filter, <br>AdGuard Japanese filter, <br>AdGuard Spanish/Portuguese filter, <br>AdGuard Turkish filter, <br>AdGuard French filter, <br>EasyList Italy, <br>Estonian List, <br>AdGuard Chinese filter, <br>Dandelion Sprout's Nordic Filters\nFilters last update: | 2026-08-17T09:01:01Z\nOther extensions used: | `none`\n\n\n\n### Issue configuration\n[Import](https://reports.adguard.com/settings/import.html?scheme_version=4&amp;product_type=ext&amp;product_version=5.4.3.129&amp;system_version=Windows+11&amp;ext.manifest_version=3&amp;browser=chrome&amp;regular_filters=1%2C2%2C3%2C4%2C7%2C9%2C13%2C16%2C109%2C218%2C224%2C249&amp;filters_last_update=2026-08-17T09%3A01%3A01Z&amp;stealth.enabled=0)\n",
+    "state": "closed",
+    "labels": [
+      "T: Anti Adblock Script",
+      "A: In progress",
+      "N: AdGuard Browser Extension"
+    ],
+    "assignee": "zloyden",
+    "comments": []
+  },
+  "reporterComments": [],
+  "attachments": [
+    {
+      "kind": "issue_screenshot",
+      "sourceUrl": "https://cdn.adguardcdn.com/sitereports/35kprbn4etgks0g8gcckkwo4ccsss04baxzbjqd22o.png?nc=1",
+      "localPath": "attachments/01-51fe8337e3fea4d1.png",
+      "sha256": "51fe8337e3fea4d14f5394f085c06d0a83ad2e2cd28921f6528b0bb626e8177f",
+      "promptVisible": true,
+      "source": "body"
+    },
+    {
+      "kind": "issue_screenshot",
+      "sourceUrl": "https://cdn.adguardcdn.com/sitereports/g1c6o79gcm8k08044s40kc044gckko01sp4qj37111.png?nc=1",
+      "localPath": "attachments/02-5af7439aeb4e882a.png",
+      "sha256": "5af7439aeb4e882acbe50f124117f50f588a3ef85a77c292de0ea7a9ecf6ed65",
+      "promptVisible": true,
+      "source": "body"
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "rawIssue": {
+    "number": 237647,
+    "reporterAuthor": "adguard-bot",
+    "url": "https://github.com/AdguardTeam/AdguardFilters/issues/237647",
+    "title": "www.crew.sk",
+    "body": "### Issue URL (Incorrect Blocking)\n[https://www.crew.sk/](https://adguardteam.github.io/AnonymousRedirect/redirect.html?url=https%3A%2F%2Fwww.crew.sk%2F)\n\n### Comment\n> Its not possible to interact with the page when adguard is on, because it blocks the buttons to accept/setup cookies. \n\n\n\n### Screenshots\n<details>\n  <summary>Screenshot 1</summary>\n\n  ![Screenshot 1](https://cdn.adguardcdn.com/sitereports/fydd17scfjswwoss0wckowkwsscgwo0fvnh86ymgps.png?nc=1)\n</details>\n\n<details>\n  <summary>Screenshot 1 with AdGuard disabled</summary>\n\n  ![Screenshot 1](https://cdn.adguardcdn.com/sitereports/5o2vies3gdwccs0gk0goo4k4g4s0kg87vpqyxr8b2k.png?nc=1)\n</details>\n\n### System configuration\n\n| Information | Value |\n|-------------|-------|\nAdGuard product: | AdGuard Browser Extension v5.4.3.117 MV3\nSystem version: | `Mac OS 26.5.2`\nBrowser: | Chrome\nFilters: | **Ad Blocking:**<br>AdGuard Base filter, <br>AdGuard Mobile Ads filter<br><br>**Privacy:**<br>AdGuard Tracking Protection filter, <br>AdGuard URL Tracking filter<br><br>**Annoyances:**<br>AdGuard Cookie Notices filter<br><br>**Language-specific:**<br>EasyList Czech and Slovak\nFilters last update: | 2026-08-05T09:00:54Z\n\n\n\n### Issue configuration\n[Import](https://reports.adguard.com/settings/import.html?scheme_version=4&amp;product_type=ext&amp;product_version=5.4.3.117&amp;system_version=Mac+OS+26.5.2&amp;ext.manifest_version=3&amp;browser=chrome&amp;regular_filters=2%2C3%2C11%2C17%2C18%2C105&amp;filters_last_update=2026-08-05T09%3A00%3A54Z&amp;stealth.enabled=0)\n",
+    "state": "closed",
+    "labels": [
+      "T: Incorrect Blocking",
+      "A: Resolved",
+      "P1: Critical",
+      "N: AdGuard Browser Extension"
+    ],
+    "assignee": "AdamWr",
+    "comments": []
+  },
+  "reporterComments": [],
+  "attachments": [
+    {
+      "kind": "issue_screenshot",
+      "sourceUrl": "https://cdn.adguardcdn.com/sitereports/fydd17scfjswwoss0wckowkwsscgwo0fvnh86ymgps.png?nc=1",
+      "localPath": "attachments/01-f9cad2d202cd03c9.png",
+      "sha256": "f9cad2d202cd03c920ecb6efd097bacc685d99415d30f62f695badc2a3cb74a5",
+      "promptVisible": true,
+      "source": "body"
+    },
+    {
+      "kind": "issue_screenshot",
+      "sourceUrl": "https://cdn.adguardcdn.com/sitereports/5o2vies3gdwccs0gk0goo4k4g4s0kg87vpqyxr8b2k.png?nc=1",
+      "localPath": "attachments/02-9ab26f13dc6d0c5e.png",
+      "sha256": "9ab26f13dc6d0c5ed31867d0dffb4f665b964008ee3b3cc04a25139469924341",
+      "promptVisible": true,
+      "source": "body"
+    }
+  ]
+}

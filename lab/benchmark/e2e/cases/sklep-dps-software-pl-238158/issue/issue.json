@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "rawIssue": {
+    "number": 238158,
+    "reporterAuthor": "adguard-bot",
+    "url": "https://github.com/AdguardTeam/AdguardFilters/issues/238158",
+    "title": "sklep.dps-software.pl",
+    "body": "### Issue URL (Annoyance)\n[https://sklep.dps-software.pl/](https://adguardteam.github.io/AnonymousRedirect/redirect.html?url=https%3A%2F%2Fsklep.dps-software.pl%2F)\n\n\n\n\n### Screenshots\n<details>\n  <summary>Screenshot 1</summary>\n\n  ![Screenshot 1](https://cdn.adguardcdn.com/sitereports/1n2am63g2rvo8g880w4k8g80k04wkowfao0kavdyu8.png?nc=1)\n</details>\n\n\n### System configuration\n\n| Information | Value |\n|-------------|-------|\nAdGuard product: | AdGuard Browser Extension v5.4.3.123 MV3\nBrowser: | Chrome\nFilters: | **Ad Blocking:**<br>AdGuard Base filter<br><br>**Privacy:**<br>AdGuard Tracking Protection filter, <br>AdGuard URL Tracking filter<br><br>**Social Widgets:**<br>AdGuard Social Media filter<br><br>**Annoyances:**<br>AdGuard Cookie Notices filter, <br>AdGuard Popups filter, <br>AdGuard Mobile App Banners filter, <br>AdGuard Other Annoyances filter, <br>AdGuard Widgets filter<br><br>**Security:**<br>Online Malicious URL Blocklist, <br>Phishing URL Blocklist, <br>Scam Blocklist by DurableNapkin, <br>uBlock Origin – Badware risks, <br>Dandelion Sprout's Anti-Malware List<br><br>**Language-specific:**<br>Official Polish filters for AdBlock, uBlock Origin & AdGuard, <br>Polish GDPR-Cookies Filters, <br>Polish Anti Adblock Filters\nFilters last update: | 2026-08-11T09:00:55Z\n\n\n\n### Issue configuration\n[Import](https://reports.adguard.com/settings/import.html?scheme_version=4&amp;product_type=ext&amp;product_version=5.4.3.123&amp;system_version=&amp;ext.manifest_version=3&amp;browser=chrome&amp;regular_filters=2%2C3%2C4%2C17%2C18%2C19%2C20%2C21%2C22%2C208%2C216%2C217%2C238%2C255%2C256%2C257%2C259&amp;filters_last_update=2026-08-11T09%3A00%3A55Z&amp;stealth.enabled=0)\n",
+    "state": "closed",
+    "labels": [
+      "A: Resolved",
+      "T: Annoyance",
+      "P4: Low",
+      "N: AdGuard Browser Extension"
+    ],
+    "assignee": "piquark6046",
+    "comments": []
+  },
+  "reporterComments": [],
+  "attachments": [
+    {
+      "kind": "issue_screenshot",
+      "sourceUrl": "https://cdn.adguardcdn.com/sitereports/1n2am63g2rvo8g880w4k8g80k04wkowfao0kavdyu8.png?nc=1",
+      "localPath": "attachments/01-0d731e5739a341c8.png",
+      "sha256": "0d731e5739a341c892e48f8ee85924bec0c953375daf2a0bc5fa08e8bd55a81f",
+      "promptVisible": true,
+      "source": "body"
+    }
+  ]
+}

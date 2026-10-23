@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "rawIssue": {
+    "number": 238324,
+    "reporterAuthor": "adguard-bot",
+    "url": "https://github.com/AdguardTeam/AdguardFilters/issues/238324",
+    "title": "codepen.io",
+    "body": "### Issue URL (Ads)\n[https://codepen.io/pen/*](https://adguardteam.github.io/AnonymousRedirect/redirect.html?url=https%3A%2F%2Fcodepen.io%2Fpen%2F%2A)\n\n### Comment\n> It appears when domcontentloaded event fires\n\n```\nUsername: @ko5tin1\n```\n\n\n### Screenshots\n<details>\n  <summary>Screenshot 1</summary>\n\n  ![Screenshot 1](https://cdn.adguardcdn.com/sitereports/ce32h1f5ujw48os8kcowc004wwc4k4c9n5hzq6513c.png?nc=1)\n</details>\n\n\n### System configuration\n\n| Information | Value |\n|-------------|-------|\nAdGuard product: | AdGuard Browser Extension v5.4.3.125 MV3\nSystem version: | `Windows 10`\nBrowser: | Chrome\nFilters: | **Ad Blocking:**<br>AdGuard Base filter<br><br>**Privacy:**<br>AdGuard Tracking Protection filter<br><br>**Social Widgets:**<br>AdGuard Social Media filter<br><br>**Language-specific:**<br>AdGuard Russian filter\nFilters last update: | 2026-08-13T08:01:27Z\n\n\n\n### Issue configuration\n[Import](https://reports.adguard.com/settings/import.html?scheme_version=4&amp;product_type=ext&amp;product_version=5.4.3.125&amp;system_version=Windows+10&amp;ext.manifest_version=3&amp;browser=chrome&amp;regular_filters=1%2C2%2C3%2C4&amp;filters_last_update=2026-08-13T08%3A01%3A27Z&amp;stealth.enabled=0)\n",
+    "state": "closed",
+    "labels": [
+      "T: Ads",
+      "P2: High",
+      "A: In progress",
+      "N: AdGuard Browser Extension"
+    ],
+    "assignee": "zloyden",
+    "comments": [
+      {
+        "author": "ko5tin1",
+        "body": "there s no * in the url, just [https://codepen.io/pen/](https://adguardteam.github.io/AnonymousRedirect/redirect.html?url=https%3A%2F%2Fcodepen.io%2Fpen%2F)",
+        "createdAt": "2026-08-14T10:17:04Z"
+      }
+    ]
+  },
+  "reporterComments": [],
+  "attachments": [
+    {
+      "kind": "issue_screenshot",
+      "sourceUrl": "https://cdn.adguardcdn.com/sitereports/ce32h1f5ujw48os8kcowc004wwc4k4c9n5hzq6513c.png?nc=1",
+      "localPath": "attachments/01-bf6c9d2482ea50bc.png",
+      "sha256": "bf6c9d2482ea50bc657779b6ffa54e1dadd174780bace88c2aeecd320c18a61f",
+      "promptVisible": true,
+      "source": "body"
+    }
+  ]
+}

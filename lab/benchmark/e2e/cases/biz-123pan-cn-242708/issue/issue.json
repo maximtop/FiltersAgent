@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "rawIssue": {
+    "number": 242708,
+    "reporterAuthor": "adguard-bot",
+    "url": "https://github.com/AdguardTeam/AdguardFilters/issues/242708",
+    "title": "biz.123pan.cn",
+    "body": "### Issue URL (Annoyance)\n[https://biz.123pan.cn/](https://adguardteam.github.io/AnonymousRedirect/redirect.html?url=https%3A%2F%2Fbiz.123pan.cn%2F)\n\n\n\n\n### Screenshots\n<details>\n  <summary>Screenshot 1</summary>\n\n  ![Screenshot 1](https://reports.adguard.info/stcdn/sitereports/jnee35bu43cw800400ok0wkgwgwksgkcq73nyt2q7c.png?nc=1)\n</details>\n\n\n### System configuration\n\n| Information | Value |\n|-------------|-------|\nAdGuard product: | AdGuard Browser Extension v5.4.3.14 MV3\nSystem version: | `Windows 11`\nBrowser: | Chrome\nFilters: | **Ad Blocking:**<br>AdGuard Base filter<br><br>**Privacy:**<br>AdGuard Tracking Protection filter<br><br>**Social Widgets:**<br>AdGuard Social Media filter<br><br>**Annoyances:**<br>AdGuard Cookie Notices filter, <br>AdGuard Popups filter, <br>AdGuard Mobile App Banners filter, <br>AdGuard Other Annoyances filter, <br>AdGuard Widgets filter<br><br>**Security:**<br>Online Malicious URL Blocklist<br><br>**Language-specific:**<br>AdGuard Chinese filter\nFilters last update: | 2026-05-19T22:00:57Z\n\n\n\n### Issue configuration\n[Import](https://reports.adguard.info/settings/import.html?scheme_version=4&product_type=ext&product_version=5.4.3.14&system_version=Windows+11&ext.manifest_version=3&browser=chrome&regular_filters=2%2C3%2C4%2C18%2C19%2C20%2C21%2C22%2C208%2C224&filters_last_update=2026-05-19T22%3A00%3A57Z&stealth.enabled=1&stealth.block_trackers=1&stealth.x_client=1&stealth.referrer=&stealth.hide_search_queries=1&stealth.send_dnt=1)\n",
+    "state": "closed",
+    "labels": [
+      "T: Annoyance",
+      "P3: Medium",
+      "A: In progress",
+      "N: AdGuard Browser Extension"
+    ],
+    "assignee": "ghajini",
+    "comments": []
+  },
+  "reporterComments": [],
+  "attachments": [
+    {
+      "kind": "issue_screenshot",
+      "sourceUrl": "https://reports.adguard.info/stcdn/sitereports/jnee35bu43cw800400ok0wkgwgwksgkcq73nyt2q7c.png?nc=1",
+      "localPath": "attachments/01-8ada9fa108b58bd5.png",
+      "sha256": "8ada9fa108b58bd590cb57021e219d71068c12d7c00589bd29a1aa7305ecdb72",
+      "promptVisible": true,
+      "source": "body"
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "rawIssue": {
+    "number": 239068,
+    "reporterAuthor": "adguard-bot",
+    "url": "https://github.com/AdguardTeam/AdguardFilters/issues/239068",
+    "title": "www.tradeatlas.com",
+    "body": "### Issue URL (Annoyance)\n[https://www.tradeatlas.com/en](https://adguardteam.github.io/AnonymousRedirect/redirect.html?url=https%3A%2F%2Fwww.tradeatlas.com%2Fen)\n\n\n\n\n### Screenshots\n<details>\n  <summary>Screenshot 1</summary>\n\n  ![Screenshot 1](https://cdn.adguardcdn.com/sitereports/ffa5oblon688ok4ssgowggwkso0o0oor3h9yvo6t0g.png?nc=1)\n</details>\n\n\n### System configuration\n\n| Information | Value |\n|-------------|-------|\nAdGuard product: | AdGuard Browser Extension v5.4.3.127 MV3\nSystem version: | `Windows 11`\nBrowser: | Chrome\nFilters: | **Ad Blocking:**<br>AdGuard Base filter, <br>AdGuard Mobile Ads filter<br><br>**Privacy:**<br>AdGuard Tracking Protection filter, <br>AdGuard URL Tracking filter<br><br>**Annoyances:**<br>AdGuard Cookie Notices filter, <br>AdGuard Popups filter, <br>AdGuard Mobile App Banners filter, <br>AdGuard Other Annoyances filter, <br>AdGuard Widgets filter<br><br>**Security:**<br>Online Malicious URL Blocklist, <br>Phishing URL Blocklist, <br>Dandelion Sprout's Anti-Malware List<br><br>**Language-specific:**<br>AdGuard Russian filter, <br>AdGuard German filter, <br>AdGuard Turkish filter, <br>AdGuard Ukrainian filter\nFilters last update: | 2026-08-15T08:00:55Z\n\n\n\n### Issue configuration\n[Import](https://reports.adguard.com/settings/import.html?scheme_version=4&amp;product_type=ext&amp;product_version=5.4.3.127&amp;system_version=Windows+11&amp;ext.manifest_version=3&amp;browser=chrome&amp;regular_filters=1%2C2%2C3%2C6%2C11%2C13%2C17%2C18%2C19%2C20%2C21%2C22%2C23%2C208%2C255%2C259&amp;filters_last_update=2026-08-15T08%3A00%3A55Z&amp;stealth.enabled=1&amp;stealth.block_trackers=1&amp;stealth.x_client=1&amp;stealth.referrer=&amp;stealth.strip_url=1&amp;stealth.hide_search_queries=1&amp;stealth.send_dnt=1)\n",
+    "state": "closed",
+    "labels": [
+      "T: Annoyance",
+      "P3: Medium",
+      "A: In progress",
+      "N: AdGuard Browser Extension"
+    ],
+    "assignee": "ghajini",
+    "comments": []
+  },
+  "reporterComments": [],
+  "attachments": [
+    {
+      "kind": "issue_screenshot",
+      "sourceUrl": "https://cdn.adguardcdn.com/sitereports/ffa5oblon688ok4ssgowggwkso0o0oor3h9yvo6t0g.png?nc=1",
+      "localPath": "attachments/01-e25b7ae268c35594.png",
+      "sha256": "e25b7ae268c355940a2a40c25f1583fcecf4cbc5072cae8808cbb2d1d3b9db50",
+      "promptVisible": true,
+      "source": "body"
+    }
+  ]
+}
